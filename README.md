@@ -18,7 +18,8 @@ Asynchronous client for the Open-Meteo API.
 
 ## About
 
-In progress Python client library for the Open-Meteo API.
+Open-Meteo offers free weather forecast APIs for open-source developers and
+non-commercial use. No API key is required. You can start using it immediately!
 
 ## Installation
 
@@ -29,7 +30,35 @@ pip install open-meteo
 ## Usage
 
 ```python
-# TODO: Need example
+import asyncio
+
+from open_meteo import OpenMeteo
+from open_meteo.models import DailyParameters, HourlyParameters
+
+
+async def main():
+    """Show example on using the Open-Meteo API client."""
+    async with OpenMeteo() as ope_meteo:
+
+        # Weather forecast example
+        forecast = await open_meteo.forecast(
+            latitude=52.27,
+            longitude=6.87417,
+            current_weather=True,
+            daily=list(DailyParameters),
+            hourly=list(HourlyParameters),
+        )
+        print(forecast)
+
+        # Geocoding example
+        geocoding = await open_meteo.geocoding(
+            name="Enschede",
+        )
+        print(geocoding)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ## Changelog & Releases
