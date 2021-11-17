@@ -6,10 +6,11 @@ from open_meteo import OpenMeteo
 
 async def main():
     """Show example on using the Open-Meteo API client."""
-    open_meteo = OpenMeteo(
-        test="test",
-    )
-    print(open_meteo.test)
+    async with OpenMeteo() as open_meteo:
+        search = await open_meteo.geocoding(
+            name="Enschede",
+        )
+        print(search)
 
 
 if __name__ == "__main__":
