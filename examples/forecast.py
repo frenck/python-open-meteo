@@ -12,8 +12,14 @@ async def main():
             latitude=52.27,
             longitude=6.87417,
             current_weather=True,
-            daily=list(DailyParameters),
-            hourly=list(HourlyParameters),
+            daily=[
+                DailyParameters.SUNRISE,
+                DailyParameters.SUNSET,
+            ],
+            hourly=[
+                HourlyParameters.TEMPERATURE_2M,
+                HourlyParameters.RELATIVE_HUMIDITY_2M,
+            ],
         )
         print(forecast)
 
