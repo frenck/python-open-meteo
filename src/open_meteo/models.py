@@ -173,19 +173,21 @@ class HourlyForecast(BaseModel):
     """Hourly weather data."""
 
     apparent_temperature: Optional[List[float]]
-    cloudcover_high: Optional[List[int]]
-    cloudcover_low: Optional[List[int]]
-    cloudcover_mid: Optional[List[int]]
-    cloudcover: Optional[List[int]]
-    dewpoint_2m: Optional[List[float]]
+    cloud_cover_high: Optional[List[int]] = Field(None, alias="cloudcover_high")
+    cloud_cover_low: Optional[List[int]] = Field(None, alias="cloudcover_low")
+    cloud_cover_mid: Optional[List[int]] = Field(None, alias="cloudcover_mid")
+    cloud_cover: Optional[List[int]] = Field(None, alias="cloudcover")
+    dew_point_2m: Optional[List[float]] = Field(None, alias="dewpoint_2m")
     diffuse_radiation: Optional[List[float]]
     direct_normal_irradiance: Optional[List[float]]
     direct_radiation: Optional[List[float]]
     evapotranspiration: Optional[List[float]]
-    freezinglevel_height: Optional[List[int]]
+    freezing_level_height: Optional[List[int]] = Field(
+        None, alias="freezinglevel_height"
+    )
     precipitation: Optional[List[float]]
     pressure_msl: Optional[List[float]]
-    relativehumidity_2m: Optional[List[int]]
+    relative_humidity_2m: Optional[List[int]] = Field(None, alias="relativehumidity_2m")
     shortwave_radiation: Optional[List[float]]
     snow_depth: Optional[List[int]]
     soil_moisture_0_1cm: Optional[List[float]]
@@ -200,16 +202,16 @@ class HourlyForecast(BaseModel):
     temperature_2m: Optional[List[float]]
     time: List[datetime]
     vapor_pressure_deficit: Optional[List[float]]
-    weathercode: Optional[List[int]]
-    winddirection_10m: Optional[List[int]]
-    winddirection_120m: Optional[List[int]]
-    winddirection_180m: Optional[List[int]]
-    winddirection_80m: Optional[List[int]]
-    windgusts_10m: Optional[List[float]]
-    windspeed_10m: Optional[List[float]]
-    windspeed_120m: Optional[List[float]]
-    windspeed_180m: Optional[List[float]]
-    windspeed_80m: Optional[List[float]]
+    weather_code: Optional[List[int]] = Field(None, alias="weathercode")
+    wind_direction_10m: Optional[List[int]] = Field(None, alias="winddirection_10m")
+    wind_direction_120m: Optional[List[int]] = Field(None, alias="winddirection_120m")
+    wind_direction_180m: Optional[List[int]] = Field(None, alias="winddirection_180m")
+    wind_direction_80m: Optional[List[int]] = Field(None, alias="winddirection_80m")
+    wind_gusts_10m: Optional[List[float]] = Field(None, alias="windgusts_10m")
+    wind_speed_10m: Optional[List[float]] = Field(None, alias="windspeed_10m")
+    wind_speed_120m: Optional[List[float]] = Field(None, alias="windspeed_120m")
+    wind_speed_180m: Optional[List[float]] = Field(None, alias="windspeed_180m")
+    wind_speed_80m: Optional[List[float]] = Field(None, alias="windspeed_80m")
 
 
 class DailyForecast(BaseModel):
@@ -226,28 +228,30 @@ class DailyForecast(BaseModel):
     temperature_2m_min: Optional[List[float]]
     time: List[date]
     weathercode: Optional[List[int]]
-    winddirection_10m_dominant: Optional[List[int]]
-    windgusts_10m_max: Optional[List[float]]
-    windspeed_10m_max: Optional[List[float]]
+    wind_direction_10m_dominant: Optional[List[int]] = Field(
+        None, alias="winddirection_10m_dominant"
+    )
+    wind_gusts_10m_max: Optional[List[float]] = Field(None, alias="windgusts_10m_max")
+    wind_speed_10m_max: Optional[List[float]] = Field(None, alias="windspeed_10m_max")
 
 
 class HourlyForecastUnits(BaseModel):
     """Hourly weather data units."""
 
     apparent_temperature: Optional[str]
-    cloudcover_high: Optional[str]
-    cloudcover_low: Optional[str]
-    cloudcover_mid: Optional[str]
-    cloudcover: Optional[str]
-    dewpoint_2m: Optional[str]
+    cloud_cover_high: Optional[str] = Field(None, alias="cloudcover_high")
+    cloud_cover_low: Optional[str] = Field(None, alias="cloudcover_low")
+    cloud_cover_mid: Optional[str] = Field(None, alias="cloudcover_mid")
+    cloud_cover: Optional[str] = Field(None, alias="cloudcover")
+    dew_point_2m: Optional[str] = Field(None, alias="dewpoint_2m")
     diffuse_radiation: Optional[str]
     direct_normal_irradiance: Optional[str]
     direct_radiation: Optional[str]
     evapotranspiration: Optional[str]
-    freezinglevel_height: Optional[str]
+    freezing_level_height: Optional[str] = Field(None, alias="freezinglevel_height")
     precipitation: Optional[str]
     pressure_msl: Optional[str]
-    relativehumidity_2m: Optional[str]
+    relative_humidity_2m: Optional[str] = Field(None, alias="relativehumidity_2m")
     shortwave_radiation: Optional[str]
     snow_depth: Optional[str]
     soil_moisture_0_1cm: Optional[str]
@@ -262,26 +266,26 @@ class HourlyForecastUnits(BaseModel):
     temperature_2m: Optional[str]
     time: Optional[TimeFormat]
     vapor_pressure_deficit: Optional[str]
-    weathercode: Optional[str]
-    winddirection_10m: Optional[str]
-    winddirection_120m: Optional[str]
-    winddirection_180m: Optional[str]
-    winddirection_80m: Optional[str]
-    windgusts_10m: Optional[str]
-    windspeed_10m: Optional[str]
-    windspeed_120m: Optional[str]
-    windspeed_180m: Optional[str]
-    windspeed_80m: Optional[str]
+    weather_code: Optional[str] = Field(None, alias="weathercode")
+    wind_direction_10m: Optional[str] = Field(None, alias="winddirection_10m")
+    wind_direction_120m: Optional[str] = Field(None, alias="winddirection_120m")
+    wind_direction_180m: Optional[str] = Field(None, alias="winddirection_180m")
+    wind_direction_80m: Optional[str] = Field(None, alias="winddirection_80m")
+    wind_gusts_10m: Optional[str] = Field(None, alias="windgusts_10m")
+    wind_speed_10m: Optional[str] = Field(None, alias="windspeed_10m")
+    wind_speed_120m: Optional[str] = Field(None, alias="windspeed_120m")
+    wind_speed_180m: Optional[str] = Field(None, alias="windspeed_180m")
+    wind_speed_80m: Optional[str] = Field(None, alias="windspeed_80m")
 
 
 class CurrentWeather(BaseModel):
     """Current weather data."""
 
-    time: str
-    windspeed: float
-    winddirection: int
+    time: datetime
+    wind_speed: float = Field(..., alias="windspeed")
+    wind_direction: int = Field(..., alias="winddirection")
     temperature: float
-    weathercode: int
+    weather_code: int = Field(..., alias="weathercode")
 
 
 class DailyForecastUnits(BaseModel):
@@ -297,10 +301,12 @@ class DailyForecastUnits(BaseModel):
     temperature_2m_max: Optional[str]
     temperature_2m_min: Optional[str]
     time: Optional[TimeFormat]
-    weathercode: Optional[str]
-    winddirection_10m_dominant: Optional[str]
-    windgusts_10m_max: Optional[str]
-    windspeed_10m_max: Optional[str]
+    weather_code: Optional[str] = Field(None, alias="weathercode")
+    wind_direction_10m_dominant: Optional[str] = Field(
+        None, alias="winddirection_10m_dominant"
+    )
+    wind_gusts_10m_max: Optional[str] = Field(None, alias="windgusts_10m_max")
+    wind_speed_10m_max: Optional[str] = Field(None, alias="windspeed_10m_max")
 
 
 class Forecast(BaseModel):
@@ -310,7 +316,7 @@ class Forecast(BaseModel):
     daily_units: Optional[DailyForecastUnits]
     daily: Optional[DailyForecast]
     elevation: float
-    generationtime_ms: float
+    generation_time_ms: float = Field(..., alias="generationtime_ms")
     hourly_units: Optional[HourlyForecastUnits]
     hourly: Optional[HourlyForecast]
     latitude: float
@@ -348,4 +354,4 @@ class Geocoding(BaseModel):
     """Geocoding search result."""
 
     results: Optional[List[GeocodingResult]]
-    generationtime_ms: float
+    generation_time_ms: float = Field(..., alias="generationtime_ms")
