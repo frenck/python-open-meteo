@@ -38,23 +38,21 @@ from open_meteo.models import DailyParameters, HourlyParameters
 
 async def main():
     """Show example on using the Open-Meteo API client."""
-    async with OpenMeteo() as ope_meteo:
-
-        # Weather forecast example
+    async with OpenMeteo() as open_meteo:
         forecast = await open_meteo.forecast(
             latitude=52.27,
             longitude=6.87417,
             current_weather=True,
-            daily=list(DailyParameters),
-            hourly=list(HourlyParameters),
+            daily=[
+                DailyParameters.SUNRISE,
+                DailyParameters.SUNSET,
+            ],
+            hourly=[
+                HourlyParameters.TEMPERATURE_2M,
+                HourlyParameters.RELATIVE_HUMIDITY_2M,
+            ],
         )
         print(forecast)
-
-        # Geocoding example
-        geocoding = await open_meteo.geocoding(
-            name="Enschede",
-        )
-        print(geocoding)
 
 
 if __name__ == "__main__":
