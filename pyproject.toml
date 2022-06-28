@@ -34,7 +34,7 @@ python = "^3.8"
 [tool.poetry.dev-dependencies]
 aresponses = "^2.1.5"
 bandit = "^1.7.4"
-black = "^22.3"
+black = "^22.6"
 blacken-docs = "^1.12.1"
 codespell = "^2.1.0"
 coverage = {version = "^6.4", extras = ["toml"]}
