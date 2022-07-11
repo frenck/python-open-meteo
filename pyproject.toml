@@ -59,7 +59,7 @@ pytest-cov = "^3.0.0"
 pyupgrade = "^2.37.0"
 safety = "^2.0.0"
 vulture = "^2.5"
-yamllint = "^1.26.3"
+yamllint = "^1.27.1"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/frenck/python-open-meteo/issues"
