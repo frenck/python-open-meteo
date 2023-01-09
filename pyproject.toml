@@ -58,7 +58,7 @@ pytest-asyncio = "^0.20.3"
 pytest-cov = "^4.0.0"
 pyupgrade = "^3.3.1"
 safety = "^2.3.5"
-vulture = "^2.6"
+vulture = "^2.7"
 yamllint = "^1.28.0"
 
 [tool.poetry.urls]
