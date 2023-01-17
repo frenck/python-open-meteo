@@ -35,7 +35,7 @@ python = "^3.8"
 aresponses = "^2.1.6"
 bandit = "^1.7.4"
 black = "^22.12"
-blacken-docs = "^1.12.1"
+blacken-docs = "^1.13.0"
 codespell = "^2.2.2"
 coverage = {version = "^7.0", extras = ["toml"]}
 darglint = "^1.8.1"
