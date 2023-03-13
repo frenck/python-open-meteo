@@ -41,7 +41,7 @@ coverage = {version = "^7.2", extras = ["toml"]}
 darglint = "^1.8.1"
 flake8 = "^4.0.1"
 flake8-bandit = "^3.0.0"
-flake8-bugbear = "^23.2.13"
+flake8-bugbear = "^23.3.12"
 flake8-builtins = "^2.1.0"
 flake8-comprehensions = "^3.10.1"
 flake8-docstrings = "^1.7.0"
