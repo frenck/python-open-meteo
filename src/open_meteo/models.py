@@ -395,16 +395,16 @@ class DailyForecastUnits(DataClassORJSONMixin):
 class Forecast(DataClassORJSONMixin):
     """Weather forecast."""
 
-    current_weather: CurrentWeather | None
-    daily_units: DailyForecastUnits | None
-    daily: DailyForecast | None
     elevation: float
     generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
-    hourly_units: HourlyForecastUnits | None
-    hourly: HourlyForecast | None
     latitude: float
     longitude: float
     utc_offset_seconds: int
+    current_weather: CurrentWeather | None = field(default=None)
+    daily_units: DailyForecastUnits | None = field(default=None)
+    daily: DailyForecast | None = field(default=None)
+    hourly_units: HourlyForecastUnits | None = field(default=None)
+    hourly: HourlyForecast | None = field(default=None)
 
 
 @dataclass
