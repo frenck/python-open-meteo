@@ -27,7 +27,8 @@ packages = [
 
 [tool.poetry.dependencies]
 aiohttp = ">=3.8.1"
-pydantic = ">=1.8,<3.0"
+mashumaro = ">=3.10"
+orjson = ">=3.9.8"
 python = "^3.11"
 
 [tool.poetry.urls]
@@ -153,7 +154,9 @@ fixture-parentheses = false
 known-first-party = ["open_meteo"]
 
 [tool.ruff.lint.flake8-type-checking]
-runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+runtime-evaluated-base-classes = [
+  "mashumaro.mixins.orjson.DataClassORJSONMixin",
+]
 
 [tool.ruff.mccabe]
 max-complexity = 25
