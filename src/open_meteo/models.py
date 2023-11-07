@@ -1,10 +1,13 @@
 """Asynchronous client for the Open-Meteo API."""
+# pylint: disable=too-many-instance-attributes
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from datetime import date, datetime
 from enum import StrEnum, auto
 
-from pydantic import BaseModel, Field
+from mashumaro import field_options
+from mashumaro.mixins.orjson import DataClassORJSONMixin
 
 
 class TemperatureUnit(StrEnum):
@@ -166,23 +169,17 @@ class DailyParameters(StrEnum):
     WIND_SPEED_10M_MAX = "windspeed_10m_max"
 
 
-class HourlyForecast(BaseModel):
+@dataclass
+class HourlyForecast(DataClassORJSONMixin):
     """Hourly weather data."""
 
     apparent_temperature: list[float] | None
-    cloud_cover_high: list[int] | None = Field(None, alias="cloudcover_high")
-    cloud_cover_low: list[int] | None = Field(None, alias="cloudcover_low")
-    cloud_cover_mid: list[int] | None = Field(None, alias="cloudcover_mid")
-    cloud_cover: list[int] | None = Field(None, alias="cloudcover")
-    dew_point_2m: list[float] | None = Field(None, alias="dewpoint_2m")
     diffuse_radiation: list[float] | None
     direct_normal_irradiance: list[float] | None
     direct_radiation: list[float] | None
     evapotranspiration: list[float] | None
-    freezing_level_height: list[int] | None = Field(None, alias="freezinglevel_height")
     precipitation: list[float] | None
     pressure_msl: list[float] | None
-    relative_humidity_2m: list[int] | None = Field(None, alias="relativehumidity_2m")
     shortwave_radiation: list[float] | None
     snow_depth: list[int] | None
     soil_moisture_0_1cm: list[float] | None
@@ -197,19 +194,61 @@ class HourlyForecast(BaseModel):
     temperature_2m: list[float] | None
     time: list[datetime]
     vapor_pressure_deficit: list[float] | None
-    weather_code: list[int] | None = Field(None, alias="weathercode")
-    wind_direction_10m: list[int] | None = Field(None, alias="winddirection_10m")
-    wind_direction_120m: list[int] | None = Field(None, alias="winddirection_120m")
-    wind_direction_180m: list[int] | None = Field(None, alias="winddirection_180m")
-    wind_direction_80m: list[int] | None = Field(None, alias="winddirection_80m")
-    wind_gusts_10m: list[float] | None = Field(None, alias="windgusts_10m")
-    wind_speed_10m: list[float] | None = Field(None, alias="windspeed_10m")
-    wind_speed_120m: list[float] | None = Field(None, alias="windspeed_120m")
-    wind_speed_180m: list[float] | None = Field(None, alias="windspeed_180m")
-    wind_speed_80m: list[float] | None = Field(None, alias="windspeed_80m")
+    cloud_cover_high: list[int] | None = field(
+        default=None, metadata=field_options(alias="cloudcover_high")
+    )
+    cloud_cover_low: list[int] | None = field(
+        default=None, metadata=field_options(alias="cloudcover_low")
+    )
+    cloud_cover_mid: list[int] | None = field(
+        default=None, metadata=field_options(alias="cloudcover_mid")
+    )
+    cloud_cover: list[int] | None = field(
+        default=None, metadata=field_options(alias="cloudcover")
+    )
+    dew_point_2m: list[float] | None = field(
+        default=None, metadata=field_options(alias="dewpoint_2m")
+    )
+    freezing_level_height: list[int] | None = field(
+        default=None, metadata=field_options(alias="freezinglevel_height")
+    )
+    relative_humidity_2m: list[int] | None = field(
+        default=None, metadata=field_options(alias="relativehumidity_2m")
+    )
+    weather_code: list[int] | None = field(
+        default=None, metadata=field_options(alias="weathercode")
+    )
+    wind_direction_10m: list[int] | None = field(
+        default=None, metadata=field_options(alias="winddirection_10m")
+    )
+    wind_direction_120m: list[int] | None = field(
+        default=None, metadata=field_options(alias="winddirection_120m")
+    )
+    wind_direction_180m: list[int] | None = field(
+        default=None, metadata=field_options(alias="winddirection_180m")
+    )
+    wind_direction_80m: list[int] | None = field(
+        default=None, metadata=field_options(alias="winddirection_80m")
+    )
+    wind_gusts_10m: list[float] | None = field(
+        default=None, metadata=field_options(alias="windgusts_10m")
+    )
+    wind_speed_10m: list[float] | None = field(
+        default=None, metadata=field_options(alias="windspeed_10m")
+    )
+    wind_speed_120m: list[float] | None = field(
+        default=None, metadata=field_options(alias="windspeed_120m")
+    )
+    wind_speed_180m: list[float] | None = field(
+        default=None, metadata=field_options(alias="windspeed_180m")
+    )
+    wind_speed_80m: list[float] | None = field(
+        default=None, metadata=field_options(alias="windspeed_80m")
+    )
 
 
-class DailyForecast(BaseModel):
+@dataclass
+class DailyForecast(DataClassORJSONMixin):
     """Daily weather data."""
 
     apparent_temperature_max: list[float] | None
@@ -223,30 +262,28 @@ class DailyForecast(BaseModel):
     temperature_2m_min: list[float] | None
     time: list[date]
     weathercode: list[int] | None
-    wind_direction_10m_dominant: list[int] | None = Field(
-        None, alias="winddirection_10m_dominant"
+    wind_direction_10m_dominant: list[int] | None = field(
+        default=None, metadata=field_options(alias="winddirection_10m_dominant")
     )
-    wind_gusts_10m_max: list[float] | None = Field(None, alias="windgusts_10m_max")
-    wind_speed_10m_max: list[float] | None = Field(None, alias="windspeed_10m_max")
+    wind_gusts_10m_max: list[float] | None = field(
+        default=None, metadata=field_options(alias="windgusts_10m_max")
+    )
+    wind_speed_10m_max: list[float] | None = field(
+        default=None, metadata=field_options(alias="windspeed_10m_max")
+    )
 
 
-class HourlyForecastUnits(BaseModel):
+@dataclass
+class HourlyForecastUnits(DataClassORJSONMixin):
     """Hourly weather data units."""
 
     apparent_temperature: str | None
-    cloud_cover_high: str | None = Field(None, alias="cloudcover_high")
-    cloud_cover_low: str | None = Field(None, alias="cloudcover_low")
-    cloud_cover_mid: str | None = Field(None, alias="cloudcover_mid")
-    cloud_cover: str | None = Field(None, alias="cloudcover")
-    dew_point_2m: str | None = Field(None, alias="dewpoint_2m")
     diffuse_radiation: str | None
     direct_normal_irradiance: str | None
     direct_radiation: str | None
     evapotranspiration: str | None
-    freezing_level_height: str | None = Field(None, alias="freezinglevel_height")
     precipitation: str | None
     pressure_msl: str | None
-    relative_humidity_2m: str | None = Field(None, alias="relativehumidity_2m")
     shortwave_radiation: str | None
     snow_depth: str | None
     soil_moisture_0_1cm: str | None
@@ -261,29 +298,72 @@ class HourlyForecastUnits(BaseModel):
     temperature_2m: str | None
     time: TimeFormat | None
     vapor_pressure_deficit: str | None
-    weather_code: str | None = Field(None, alias="weathercode")
-    wind_direction_10m: str | None = Field(None, alias="winddirection_10m")
-    wind_direction_120m: str | None = Field(None, alias="winddirection_120m")
-    wind_direction_180m: str | None = Field(None, alias="winddirection_180m")
-    wind_direction_80m: str | None = Field(None, alias="winddirection_80m")
-    wind_gusts_10m: str | None = Field(None, alias="windgusts_10m")
-    wind_speed_10m: str | None = Field(None, alias="windspeed_10m")
-    wind_speed_120m: str | None = Field(None, alias="windspeed_120m")
-    wind_speed_180m: str | None = Field(None, alias="windspeed_180m")
-    wind_speed_80m: str | None = Field(None, alias="windspeed_80m")
+    cloud_cover_high: str | None = field(
+        default=None, metadata=field_options(alias="cloudcover_high")
+    )
+    cloud_cover_low: str | None = field(
+        default=None, metadata=field_options(alias="cloudcover_low")
+    )
+    cloud_cover_mid: str | None = field(
+        default=None, metadata=field_options(alias="cloudcover_mid")
+    )
+    cloud_cover: str | None = field(
+        default=None, metadata=field_options(alias="cloudcover")
+    )
+    dew_point_2m: str | None = field(
+        default=None, metadata=field_options(alias="dewpoint_2m")
+    )
+    freezing_level_height: str | None = field(
+        default=None, metadata=field_options(alias="freezinglevel_height")
+    )
+    relative_humidity_2m: str | None = field(
+        default=None, metadata=field_options(alias="relativehumidity_2m")
+    )
+    weather_code: str | None = field(
+        default=None, metadata=field_options(alias="weathercode")
+    )
+    wind_direction_10m: str | None = field(
+        default=None, metadata=field_options(alias="winddirection_10m")
+    )
+    wind_direction_120m: str | None = field(
+        default=None, metadata=field_options(alias="winddirection_120m")
+    )
+    wind_direction_180m: str | None = field(
+        default=None, metadata=field_options(alias="winddirection_180m")
+    )
+    wind_direction_80m: str | None = field(
+        default=None, metadata=field_options(alias="winddirection_80m")
+    )
+    wind_gusts_10m: str | None = field(
+        default=None, metadata=field_options(alias="windgusts_10m")
+    )
+    wind_speed_10m: str | None = field(
+        default=None, metadata=field_options(alias="windspeed_10m")
+    )
+    wind_speed_120m: str | None = field(
+        default=None, metadata=field_options(alias="windspeed_120m")
+    )
+    wind_speed_180m: str | None = field(
+        default=None, metadata=field_options(alias="windspeed_180m")
+    )
+    wind_speed_80m: str | None = field(
+        default=None, metadata=field_options(alias="windspeed_80m")
+    )
 
 
-class CurrentWeather(BaseModel):
+@dataclass
+class CurrentWeather(DataClassORJSONMixin):
     """Current weather data."""
 
     time: datetime
-    wind_speed: float = Field(..., alias="windspeed")
-    wind_direction: int = Field(..., alias="winddirection")
     temperature: float
-    weather_code: int = Field(..., alias="weathercode")
+    wind_speed: float = field(metadata=field_options(alias="windspeed"))
+    wind_direction: int = field(metadata=field_options(alias="winddirection"))
+    weather_code: int = field(metadata=field_options(alias="weathercode"))
 
 
-class DailyForecastUnits(BaseModel):
+@dataclass
+class DailyForecastUnits(DataClassORJSONMixin):
     """Daily weather data units."""
 
     apparent_temperature_max: str | None
@@ -296,22 +376,30 @@ class DailyForecastUnits(BaseModel):
     temperature_2m_max: str | None
     temperature_2m_min: str | None
     time: TimeFormat | None
-    weather_code: str | None = Field(None, alias="weathercode")
-    wind_direction_10m_dominant: str | None = Field(
-        None, alias="winddirection_10m_dominant"
+    weather_code: str | None = field(
+        default=None, metadata=field_options(alias="weathercode")
     )
-    wind_gusts_10m_max: str | None = Field(None, alias="windgusts_10m_max")
-    wind_speed_10m_max: str | None = Field(None, alias="windspeed_10m_max")
+    wind_direction_10m_dominant: str | None = field(
+        default=None,
+        metadata=field_options(alias="winddirection_10m_dominant"),
+    )
+    wind_gusts_10m_max: str | None = field(
+        default=None, metadata=field_options(alias="windgusts_10m_max")
+    )
+    wind_speed_10m_max: str | None = field(
+        default=None, metadata=field_options(alias="windspeed_10m_max")
+    )
 
 
-class Forecast(BaseModel):
+@dataclass
+class Forecast(DataClassORJSONMixin):
     """Weather forecast."""
 
     current_weather: CurrentWeather | None
     daily_units: DailyForecastUnits | None
     daily: DailyForecast | None
     elevation: float
-    generation_time_ms: float = Field(..., alias="generationtime_ms")
+    generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
     hourly_units: HourlyForecastUnits | None
     hourly: HourlyForecast | None
     latitude: float
@@ -319,10 +407,11 @@ class Forecast(BaseModel):
     utc_offset_seconds: int
 
 
-class GeocodingResult(BaseModel):
+@dataclass
+class GeocodingResult(DataClassORJSONMixin):
     """Geocoding result item."""
 
-    geo_id: int = Field(..., alias="id")
+    geo_id: int = field(metadata=field_options(alias="id"))
     admin1_id: int | None
     admin1: str | None
     admin2_id: int | None
@@ -339,14 +428,15 @@ class GeocodingResult(BaseModel):
     latitude: float
     longitude: float
     name: str
+    timezone: str
     population: int | None = None
     postcodes: list[str] | None = None
     ranking: float | None = None
-    timezone: str
 
 
-class Geocoding(BaseModel):
+@dataclass
+class Geocoding(DataClassORJSONMixin):
     """Geocoding search result."""
 
     results: list[GeocodingResult] | None
-    generation_time_ms: float = Field(..., alias="generationtime_ms")
+    generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))

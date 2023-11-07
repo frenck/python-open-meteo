@@ -4,7 +4,7 @@ from __future__ import annotations
 import asyncio
 import socket
 from dataclasses import dataclass
-from typing import Any, Self, cast
+from typing import Self
 
 from aiohttp.client import ClientError, ClientResponseError, ClientSession
 from yarl import URL
@@ -34,7 +34,7 @@ class OpenMeteo:
 
     _close_session: bool = False
 
-    async def _request(self, url: URL) -> dict[str, Any]:
+    async def _request(self, url: URL) -> str:
         """Handle a request to the Open-Meteo API.
 
         A generic method for sending/handling HTTP requests done against
@@ -85,15 +85,15 @@ class OpenMeteo:
             response.close()
             raise OpenMeteoError(response.status, {"message": contents.decode("utf8")})
 
+        text = await response.text()
         if "application/json" not in content_type:
-            text = await response.text()
             msg = "Unexpected response from the Open-Meteo API"
             raise OpenMeteoError(
                 msg,
                 {"Content-Type": content_type, "response": text},
             )
 
-        return cast(dict[str, Any], await response.json())
+        return text
 
     # pylint: disable-next=too-many-arguments
     async def forecast(  # noqa: PLR0913
@@ -147,7 +147,7 @@ class OpenMeteo:
             windspeed_unit=wind_speed_unit,
         )
         data = await self._request(url=url)
-        return Forecast.parse_obj(data)
+        return Forecast.from_json(data)
 
     async def geocoding(
         self,
@@ -181,7 +181,7 @@ class OpenMeteo:
             language=language,
         )
         data = await self._request(url=url)
-        return Geocoding.parse_obj(data)
+        return Geocoding.from_json(data)
 
     async def close(self) -> None:
         """Close open client session."""

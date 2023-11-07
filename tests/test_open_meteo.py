@@ -26,7 +26,7 @@ async def test_json_request(aresponses: ResponsesMockServer) -> None:
     async with aiohttp.ClientSession() as session:
         open_meteo = OpenMeteo(session=session)
         response = await open_meteo._request(URL("http://example.com/api/"))
-        assert response["status"] == "ok"
+        assert response == '{"status": "ok"}'
 
 
 async def test_internal_session(aresponses: ResponsesMockServer) -> None:
@@ -43,7 +43,7 @@ async def test_internal_session(aresponses: ResponsesMockServer) -> None:
     )
     async with OpenMeteo() as open_meteo:
         response = await open_meteo._request(URL("http://example.com/api/"))
-        assert response["status"] == "ok"
+        assert response == '{"status": "ok"}'
 
 
 async def test_timeout(aresponses: ResponsesMockServer) -> None:
