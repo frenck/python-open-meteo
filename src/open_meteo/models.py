@@ -173,27 +173,8 @@ class DailyParameters(StrEnum):
 class HourlyForecast(DataClassORJSONMixin):
     """Hourly weather data."""
 
-    apparent_temperature: list[float] | None
-    diffuse_radiation: list[float] | None
-    direct_normal_irradiance: list[float] | None
-    direct_radiation: list[float] | None
-    evapotranspiration: list[float] | None
-    precipitation: list[float] | None
-    pressure_msl: list[float] | None
-    shortwave_radiation: list[float] | None
-    snow_depth: list[int] | None
-    soil_moisture_0_1cm: list[float] | None
-    soil_moisture_1_3cm: list[float] | None
-    soil_moisture_27_81cm: list[float] | None
-    soil_moisture_3_9cm: list[float] | None
-    soil_moisture_9_27cm: list[float] | None
-    soil_temperature_0cm: list[float] | None
-    soil_temperature_18cm: list[float] | None
-    soil_temperature_54cm: list[float] | None
-    soil_temperature_6cm: list[float] | None
-    temperature_2m: list[float] | None
     time: list[datetime]
-    vapor_pressure_deficit: list[float] | None
+    apparent_temperature: list[float] | None = field(default=None)
     cloud_cover_high: list[int] | None = field(
         default=None, metadata=field_options(alias="cloudcover_high")
     )
@@ -209,12 +190,31 @@ class HourlyForecast(DataClassORJSONMixin):
     dew_point_2m: list[float] | None = field(
         default=None, metadata=field_options(alias="dewpoint_2m")
     )
+    diffuse_radiation: list[float] | None = field(default=None)
+    direct_normal_irradiance: list[float] | None = field(default=None)
+    direct_radiation: list[float] | None = field(default=None)
+    evapotranspiration: list[float] | None = field(default=None)
     freezing_level_height: list[int] | None = field(
         default=None, metadata=field_options(alias="freezinglevel_height")
     )
+    precipitation: list[float] | None = field(default=None)
+    pressure_msl: list[float] | None = field(default=None)
     relative_humidity_2m: list[int] | None = field(
         default=None, metadata=field_options(alias="relativehumidity_2m")
     )
+    shortwave_radiation: list[float] | None = field(default=None)
+    snow_depth: list[int] | None = field(default=None)
+    soil_moisture_0_1cm: list[float] | None = field(default=None)
+    soil_moisture_1_3cm: list[float] | None = field(default=None)
+    soil_moisture_27_81cm: list[float] | None = field(default=None)
+    soil_moisture_3_9cm: list[float] | None = field(default=None)
+    soil_moisture_9_27cm: list[float] | None = field(default=None)
+    soil_temperature_0cm: list[float] | None = field(default=None)
+    soil_temperature_18cm: list[float] | None = field(default=None)
+    soil_temperature_54cm: list[float] | None = field(default=None)
+    soil_temperature_6cm: list[float] | None = field(default=None)
+    temperature_2m: list[float] | None = field(default=None)
+    vapor_pressure_deficit: list[float] | None = field(default=None)
     weather_code: list[int] | None = field(
         default=None, metadata=field_options(alias="weathercode")
     )
@@ -251,17 +251,17 @@ class HourlyForecast(DataClassORJSONMixin):
 class DailyForecast(DataClassORJSONMixin):
     """Daily weather data."""
 
-    apparent_temperature_max: list[float] | None
-    apparent_temperature_min: list[float] | None
-    precipitation_hours: list[int] | None
-    precipitation_sum: list[float] | None
-    shortwave_radiation_sum: list[float] | None
-    sunrise: list[datetime] | None
-    sunset: list[datetime] | None
-    temperature_2m_max: list[float] | None
-    temperature_2m_min: list[float] | None
     time: list[date]
-    weathercode: list[int] | None
+    apparent_temperature_max: list[float] | None = field(default=None)
+    apparent_temperature_min: list[float] | None = field(default=None)
+    precipitation_hours: list[int] | None = field(default=None)
+    precipitation_sum: list[float] | None = field(default=None)
+    shortwave_radiation_sum: list[float] | None = field(default=None)
+    sunrise: list[datetime] | None = field(default=None)
+    sunset: list[datetime] | None = field(default=None)
+    temperature_2m_max: list[float] | None = field(default=None)
+    temperature_2m_min: list[float] | None = field(default=None)
+    weathercode: list[int] | None = field(default=None)
     wind_direction_10m_dominant: list[int] | None = field(
         default=None, metadata=field_options(alias="winddirection_10m_dominant")
     )
@@ -277,27 +277,7 @@ class DailyForecast(DataClassORJSONMixin):
 class HourlyForecastUnits(DataClassORJSONMixin):
     """Hourly weather data units."""
 
-    apparent_temperature: str | None
-    diffuse_radiation: str | None
-    direct_normal_irradiance: str | None
-    direct_radiation: str | None
-    evapotranspiration: str | None
-    precipitation: str | None
-    pressure_msl: str | None
-    shortwave_radiation: str | None
-    snow_depth: str | None
-    soil_moisture_0_1cm: str | None
-    soil_moisture_1_3cm: str | None
-    soil_moisture_27_81cm: str | None
-    soil_moisture_3_9cm: str | None
-    soil_moisture_9_27cm: str | None
-    soil_temperature_0cm: str | None
-    soil_temperature_18cm: str | None
-    soil_temperature_54cm: str | None
-    soil_temperature_6cm: str | None
-    temperature_2m: str | None
-    time: TimeFormat | None
-    vapor_pressure_deficit: str | None
+    apparent_temperature: str | None = field(default=None)
     cloud_cover_high: str | None = field(
         default=None, metadata=field_options(alias="cloudcover_high")
     )
@@ -313,12 +293,32 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     dew_point_2m: str | None = field(
         default=None, metadata=field_options(alias="dewpoint_2m")
     )
+    diffuse_radiation: str | None = field(default=None)
+    direct_normal_irradiance: str | None = field(default=None)
+    direct_radiation: str | None = field(default=None)
+    evapotranspiration: str | None = field(default=None)
     freezing_level_height: str | None = field(
         default=None, metadata=field_options(alias="freezinglevel_height")
     )
+    precipitation: str | None = field(default=None)
+    pressure_msl: str | None = field(default=None)
     relative_humidity_2m: str | None = field(
         default=None, metadata=field_options(alias="relativehumidity_2m")
     )
+    shortwave_radiation: str | None = field(default=None)
+    snow_depth: str | None = field(default=None)
+    soil_moisture_0_1cm: str | None = field(default=None)
+    soil_moisture_1_3cm: str | None = field(default=None)
+    soil_moisture_27_81cm: str | None = field(default=None)
+    soil_moisture_3_9cm: str | None = field(default=None)
+    soil_moisture_9_27cm: str | None = field(default=None)
+    soil_temperature_0cm: str | None = field(default=None)
+    soil_temperature_18cm: str | None = field(default=None)
+    soil_temperature_54cm: str | None = field(default=None)
+    soil_temperature_6cm: str | None = field(default=None)
+    temperature_2m: str | None = field(default=None)
+    time: TimeFormat | None = field(default=None)
+    vapor_pressure_deficit: str | None = field(default=None)
     weather_code: str | None = field(
         default=None, metadata=field_options(alias="weathercode")
     )
@@ -366,16 +366,16 @@ class CurrentWeather(DataClassORJSONMixin):
 class DailyForecastUnits(DataClassORJSONMixin):
     """Daily weather data units."""
 
-    apparent_temperature_max: str | None
-    apparent_temperature_min: str | None
-    precipitation_hours: str | None
-    precipitation_sum: str | None
-    shortwave_radiation_sum: str | None
-    sunrise: TimeFormat | None
-    sunset: TimeFormat | None
-    temperature_2m_max: str | None
-    temperature_2m_min: str | None
-    time: TimeFormat | None
+    apparent_temperature_max: str | None = field(default=None)
+    apparent_temperature_min: str | None = field(default=None)
+    precipitation_hours: str | None = field(default=None)
+    precipitation_sum: str | None = field(default=None)
+    shortwave_radiation_sum: str | None = field(default=None)
+    sunrise: TimeFormat | None = field(default=None)
+    sunset: TimeFormat | None = field(default=None)
+    temperature_2m_max: str | None = field(default=None)
+    temperature_2m_min: str | None = field(default=None)
+    time: TimeFormat | None = field(default=None)
     weather_code: str | None = field(
         default=None, metadata=field_options(alias="weathercode")
     )
@@ -412,14 +412,6 @@ class GeocodingResult(DataClassORJSONMixin):
     """Geocoding result item."""
 
     geo_id: int = field(metadata=field_options(alias="id"))
-    admin1_id: int | None
-    admin1: str | None
-    admin2_id: int | None
-    admin2: str | None
-    admin3_id: int | None
-    admin3: str | None
-    admin4_id: int | None
-    admin4: str | None
     country_code: str
     country_id: int
     country: str
@@ -429,14 +421,22 @@ class GeocodingResult(DataClassORJSONMixin):
     longitude: float
     name: str
     timezone: str
-    population: int | None = None
-    postcodes: list[str] | None = None
-    ranking: float | None = None
+    admin1_id: int | None = field(default=None)
+    admin1: str | None = field(default=None)
+    admin2_id: int | None = field(default=None)
+    admin2: str | None = field(default=None)
+    admin3_id: int | None = field(default=None)
+    admin3: str | None = field(default=None)
+    admin4_id: int | None = field(default=None)
+    admin4: str | None = field(default=None)
+    population: int | None = field(default=None)
+    postcodes: list[str] | None = field(default=None)
+    ranking: float | None = field(default=None)
 
 
 @dataclass
 class Geocoding(DataClassORJSONMixin):
     """Geocoding search result."""
 
-    results: list[GeocodingResult] | None
     generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
+    results: list[GeocodingResult] | None = field(default=None)
