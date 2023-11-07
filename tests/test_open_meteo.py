@@ -4,14 +4,14 @@ import asyncio
 
 import aiohttp
 import pytest
+from aresponses import Response, ResponsesMockServer
 from yarl import URL
 
 from open_meteo import OpenMeteo
 from open_meteo.exceptions import OpenMeteoConnectionError, OpenMeteoError
 
 
-@pytest.mark.asyncio
-async def test_json_request(aresponses):
+async def test_json_request(aresponses: ResponsesMockServer) -> None:
     """Test JSON response is handled correctly."""
     aresponses.add(
         "example.com",
@@ -29,8 +29,7 @@ async def test_json_request(aresponses):
         assert response["status"] == "ok"
 
 
-@pytest.mark.asyncio
-async def test_internal_session(aresponses):
+async def test_internal_session(aresponses: ResponsesMockServer) -> None:
     """Test JSON response is handled correctly."""
     aresponses.add(
         "example.com",
@@ -47,11 +46,11 @@ async def test_internal_session(aresponses):
         assert response["status"] == "ok"
 
 
-@pytest.mark.asyncio
-async def test_timeout(aresponses):
+async def test_timeout(aresponses: ResponsesMockServer) -> None:
     """Test request timeout."""
+
     # Faking a timeout by sleeping
-    async def response_handler(_):
+    async def response_handler(_: aiohttp.ClientResponse) -> Response:
         await asyncio.sleep(2)
         return aresponses.Response(body="Goodmorning!")
 
@@ -66,8 +65,7 @@ async def test_timeout(aresponses):
             assert await open_meteo._request(URL("http://example.com/api/"))
 
 
-@pytest.mark.asyncio
-async def test_http_error400(aresponses):
+async def test_http_error400(aresponses: ResponsesMockServer) -> None:
     """Test HTTP 404 response handling."""
     aresponses.add(
         "example.com",
@@ -82,8 +80,7 @@ async def test_http_error400(aresponses):
             assert await open_meteo._request(URL("http://example.com/api/"))
 
 
-@pytest.mark.asyncio
-async def test_http_error500(aresponses):
+async def test_http_error500(aresponses: ResponsesMockServer) -> None:
     """Test HTTP 500 response handling."""
     aresponses.add(
         "example.com",

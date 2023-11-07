@@ -4,9 +4,8 @@ from __future__ import annotations
 import asyncio
 import socket
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self, cast
 
-import async_timeout
 from aiohttp.client import ClientError, ClientResponseError, ClientSession
 from yarl import URL
 
@@ -42,13 +41,16 @@ class OpenMeteo:
         the public Open-Meteo API.
 
         Args:
+        ----
             url: URL to call.
 
         Returns:
+        -------
             A Python dictionary (JSON decoded) with the response from
             the API.
 
         Raises:
+        ------
             OpenMeteoConnectionError: An error occurred while communicating with
                 the Open-Meteo API.
             OpenMeteoError: Received an unexpected response from the Open-Meteo
@@ -59,20 +61,18 @@ class OpenMeteo:
             self._close_session = True
 
         try:
-            async with async_timeout.timeout(self.request_timeout):
+            async with asyncio.timeout(self.request_timeout):
                 response = await self.session.get(url)
         except asyncio.TimeoutError as exception:
-            raise OpenMeteoConnectionError(
-                "Timeout occurred while connecting to the Open-Meteo API"
-            ) from exception
+            msg = "Timeout occurred while connecting to the Open-Meteo API"
+            raise OpenMeteoConnectionError(msg) from exception
         except (
             ClientError,
             ClientResponseError,
             socket.gaierror,
         ) as exception:
-            raise OpenMeteoConnectionError(
-                "Error occurred while communicating with Open-Meteo API"
-            ) from exception
+            msg = "Error occurred while communicating with Open-Meteo API"
+            raise OpenMeteoConnectionError(msg) from exception
         content_type = response.headers.get("Content-Type", "")
         if (response.status // 100) in [4, 5]:
             if "application/json" in content_type:
@@ -87,14 +87,16 @@ class OpenMeteo:
 
         if "application/json" not in content_type:
             text = await response.text()
+            msg = "Unexpected response from the Open-Meteo API"
             raise OpenMeteoError(
-                "Unexpected response from the Open-Meteo API",
+                msg,
                 {"Content-Type": content_type, "response": text},
             )
 
-        return await response.json()
+        return cast(dict[str, Any], await response.json())
 
-    async def forecast(
+    # pylint: disable-next=too-many-arguments
+    async def forecast(  # noqa: PLR0913
         self,
         *,
         latitude: float,
@@ -112,6 +114,7 @@ class OpenMeteo:
         """Get weather forecast.
 
         Args:
+        ----
             latitude: Latitude of the location.
             longitude: Longitude of the location.
             current_weather: Include current weather conditions.
@@ -127,6 +130,7 @@ class OpenMeteo:
             wind_speed_unit: Wind speed unit.
 
         Returns:
+        -------
             A forecast object.
         """
         url = URL("https://api.open-meteo.com/v1/forecast").with_query(
@@ -155,6 +159,7 @@ class OpenMeteo:
         """Get geocoding result.
 
         Args:
+        ----
             name: String to search for. An empty string or only 1 character
                 will return an empty resultset. 2 characters will only match
                 exact matching locations. 3 and more locations will perform
@@ -166,6 +171,7 @@ class OpenMeteo:
                 english or the native location name. Lower-cased.
 
         Returns:
+        -------
             An Geocoding object.
         """
         url = URL("https://geocoding-api.open-meteo.com/v1/search").with_query(
@@ -182,18 +188,20 @@ class OpenMeteo:
         if self.session and self._close_session:
             await self.session.close()
 
-    async def __aenter__(self) -> OpenMeteo:
+    async def __aenter__(self) -> Self:
         """Async enter.
 
-        Returns:
+        Returns
+        -------
             The OpenMeteo object.
         """
         return self
 
-    async def __aexit__(self, *_exc_info) -> None:
+    async def __aexit__(self, *_exc_info: object) -> None:
         """Async exit.
 
         Args:
+        ----
             _exc_info: Exec type.
         """
         await self.close()

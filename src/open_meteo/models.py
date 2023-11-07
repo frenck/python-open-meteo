@@ -2,12 +2,9 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from enum import auto
-from typing import List, Optional
+from enum import StrEnum, auto
 
 from pydantic import BaseModel, Field
-
-from .util import StrEnum
 
 
 class TemperatureUnit(StrEnum):
@@ -172,110 +169,108 @@ class DailyParameters(StrEnum):
 class HourlyForecast(BaseModel):
     """Hourly weather data."""
 
-    apparent_temperature: Optional[List[float]]
-    cloud_cover_high: Optional[List[int]] = Field(None, alias="cloudcover_high")
-    cloud_cover_low: Optional[List[int]] = Field(None, alias="cloudcover_low")
-    cloud_cover_mid: Optional[List[int]] = Field(None, alias="cloudcover_mid")
-    cloud_cover: Optional[List[int]] = Field(None, alias="cloudcover")
-    dew_point_2m: Optional[List[float]] = Field(None, alias="dewpoint_2m")
-    diffuse_radiation: Optional[List[float]]
-    direct_normal_irradiance: Optional[List[float]]
-    direct_radiation: Optional[List[float]]
-    evapotranspiration: Optional[List[float]]
-    freezing_level_height: Optional[List[int]] = Field(
-        None, alias="freezinglevel_height"
-    )
-    precipitation: Optional[List[float]]
-    pressure_msl: Optional[List[float]]
-    relative_humidity_2m: Optional[List[int]] = Field(None, alias="relativehumidity_2m")
-    shortwave_radiation: Optional[List[float]]
-    snow_depth: Optional[List[int]]
-    soil_moisture_0_1cm: Optional[List[float]]
-    soil_moisture_1_3cm: Optional[List[float]]
-    soil_moisture_27_81cm: Optional[List[float]]
-    soil_moisture_3_9cm: Optional[List[float]]
-    soil_moisture_9_27cm: Optional[List[float]]
-    soil_temperature_0cm: Optional[List[float]]
-    soil_temperature_18cm: Optional[List[float]]
-    soil_temperature_54cm: Optional[List[float]]
-    soil_temperature_6cm: Optional[List[float]]
-    temperature_2m: Optional[List[float]]
-    time: List[datetime]
-    vapor_pressure_deficit: Optional[List[float]]
-    weather_code: Optional[List[int]] = Field(None, alias="weathercode")
-    wind_direction_10m: Optional[List[int]] = Field(None, alias="winddirection_10m")
-    wind_direction_120m: Optional[List[int]] = Field(None, alias="winddirection_120m")
-    wind_direction_180m: Optional[List[int]] = Field(None, alias="winddirection_180m")
-    wind_direction_80m: Optional[List[int]] = Field(None, alias="winddirection_80m")
-    wind_gusts_10m: Optional[List[float]] = Field(None, alias="windgusts_10m")
-    wind_speed_10m: Optional[List[float]] = Field(None, alias="windspeed_10m")
-    wind_speed_120m: Optional[List[float]] = Field(None, alias="windspeed_120m")
-    wind_speed_180m: Optional[List[float]] = Field(None, alias="windspeed_180m")
-    wind_speed_80m: Optional[List[float]] = Field(None, alias="windspeed_80m")
+    apparent_temperature: list[float] | None
+    cloud_cover_high: list[int] | None = Field(None, alias="cloudcover_high")
+    cloud_cover_low: list[int] | None = Field(None, alias="cloudcover_low")
+    cloud_cover_mid: list[int] | None = Field(None, alias="cloudcover_mid")
+    cloud_cover: list[int] | None = Field(None, alias="cloudcover")
+    dew_point_2m: list[float] | None = Field(None, alias="dewpoint_2m")
+    diffuse_radiation: list[float] | None
+    direct_normal_irradiance: list[float] | None
+    direct_radiation: list[float] | None
+    evapotranspiration: list[float] | None
+    freezing_level_height: list[int] | None = Field(None, alias="freezinglevel_height")
+    precipitation: list[float] | None
+    pressure_msl: list[float] | None
+    relative_humidity_2m: list[int] | None = Field(None, alias="relativehumidity_2m")
+    shortwave_radiation: list[float] | None
+    snow_depth: list[int] | None
+    soil_moisture_0_1cm: list[float] | None
+    soil_moisture_1_3cm: list[float] | None
+    soil_moisture_27_81cm: list[float] | None
+    soil_moisture_3_9cm: list[float] | None
+    soil_moisture_9_27cm: list[float] | None
+    soil_temperature_0cm: list[float] | None
+    soil_temperature_18cm: list[float] | None
+    soil_temperature_54cm: list[float] | None
+    soil_temperature_6cm: list[float] | None
+    temperature_2m: list[float] | None
+    time: list[datetime]
+    vapor_pressure_deficit: list[float] | None
+    weather_code: list[int] | None = Field(None, alias="weathercode")
+    wind_direction_10m: list[int] | None = Field(None, alias="winddirection_10m")
+    wind_direction_120m: list[int] | None = Field(None, alias="winddirection_120m")
+    wind_direction_180m: list[int] | None = Field(None, alias="winddirection_180m")
+    wind_direction_80m: list[int] | None = Field(None, alias="winddirection_80m")
+    wind_gusts_10m: list[float] | None = Field(None, alias="windgusts_10m")
+    wind_speed_10m: list[float] | None = Field(None, alias="windspeed_10m")
+    wind_speed_120m: list[float] | None = Field(None, alias="windspeed_120m")
+    wind_speed_180m: list[float] | None = Field(None, alias="windspeed_180m")
+    wind_speed_80m: list[float] | None = Field(None, alias="windspeed_80m")
 
 
 class DailyForecast(BaseModel):
     """Daily weather data."""
 
-    apparent_temperature_max: Optional[List[float]]
-    apparent_temperature_min: Optional[List[float]]
-    precipitation_hours: Optional[List[int]]
-    precipitation_sum: Optional[List[float]]
-    shortwave_radiation_sum: Optional[List[float]]
-    sunrise: Optional[List[datetime]]
-    sunset: Optional[List[datetime]]
-    temperature_2m_max: Optional[List[float]]
-    temperature_2m_min: Optional[List[float]]
-    time: List[date]
-    weathercode: Optional[List[int]]
-    wind_direction_10m_dominant: Optional[List[int]] = Field(
+    apparent_temperature_max: list[float] | None
+    apparent_temperature_min: list[float] | None
+    precipitation_hours: list[int] | None
+    precipitation_sum: list[float] | None
+    shortwave_radiation_sum: list[float] | None
+    sunrise: list[datetime] | None
+    sunset: list[datetime] | None
+    temperature_2m_max: list[float] | None
+    temperature_2m_min: list[float] | None
+    time: list[date]
+    weathercode: list[int] | None
+    wind_direction_10m_dominant: list[int] | None = Field(
         None, alias="winddirection_10m_dominant"
     )
-    wind_gusts_10m_max: Optional[List[float]] = Field(None, alias="windgusts_10m_max")
-    wind_speed_10m_max: Optional[List[float]] = Field(None, alias="windspeed_10m_max")
+    wind_gusts_10m_max: list[float] | None = Field(None, alias="windgusts_10m_max")
+    wind_speed_10m_max: list[float] | None = Field(None, alias="windspeed_10m_max")
 
 
 class HourlyForecastUnits(BaseModel):
     """Hourly weather data units."""
 
-    apparent_temperature: Optional[str]
-    cloud_cover_high: Optional[str] = Field(None, alias="cloudcover_high")
-    cloud_cover_low: Optional[str] = Field(None, alias="cloudcover_low")
-    cloud_cover_mid: Optional[str] = Field(None, alias="cloudcover_mid")
-    cloud_cover: Optional[str] = Field(None, alias="cloudcover")
-    dew_point_2m: Optional[str] = Field(None, alias="dewpoint_2m")
-    diffuse_radiation: Optional[str]
-    direct_normal_irradiance: Optional[str]
-    direct_radiation: Optional[str]
-    evapotranspiration: Optional[str]
-    freezing_level_height: Optional[str] = Field(None, alias="freezinglevel_height")
-    precipitation: Optional[str]
-    pressure_msl: Optional[str]
-    relative_humidity_2m: Optional[str] = Field(None, alias="relativehumidity_2m")
-    shortwave_radiation: Optional[str]
-    snow_depth: Optional[str]
-    soil_moisture_0_1cm: Optional[str]
-    soil_moisture_1_3cm: Optional[str]
-    soil_moisture_27_81cm: Optional[str]
-    soil_moisture_3_9cm: Optional[str]
-    soil_moisture_9_27cm: Optional[str]
-    soil_temperature_0cm: Optional[str]
-    soil_temperature_18cm: Optional[str]
-    soil_temperature_54cm: Optional[str]
-    soil_temperature_6cm: Optional[str]
-    temperature_2m: Optional[str]
-    time: Optional[TimeFormat]
-    vapor_pressure_deficit: Optional[str]
-    weather_code: Optional[str] = Field(None, alias="weathercode")
-    wind_direction_10m: Optional[str] = Field(None, alias="winddirection_10m")
-    wind_direction_120m: Optional[str] = Field(None, alias="winddirection_120m")
-    wind_direction_180m: Optional[str] = Field(None, alias="winddirection_180m")
-    wind_direction_80m: Optional[str] = Field(None, alias="winddirection_80m")
-    wind_gusts_10m: Optional[str] = Field(None, alias="windgusts_10m")
-    wind_speed_10m: Optional[str] = Field(None, alias="windspeed_10m")
-    wind_speed_120m: Optional[str] = Field(None, alias="windspeed_120m")
-    wind_speed_180m: Optional[str] = Field(None, alias="windspeed_180m")
-    wind_speed_80m: Optional[str] = Field(None, alias="windspeed_80m")
+    apparent_temperature: str | None
+    cloud_cover_high: str | None = Field(None, alias="cloudcover_high")
+    cloud_cover_low: str | None = Field(None, alias="cloudcover_low")
+    cloud_cover_mid: str | None = Field(None, alias="cloudcover_mid")
+    cloud_cover: str | None = Field(None, alias="cloudcover")
+    dew_point_2m: str | None = Field(None, alias="dewpoint_2m")
+    diffuse_radiation: str | None
+    direct_normal_irradiance: str | None
+    direct_radiation: str | None
+    evapotranspiration: str | None
+    freezing_level_height: str | None = Field(None, alias="freezinglevel_height")
+    precipitation: str | None
+    pressure_msl: str | None
+    relative_humidity_2m: str | None = Field(None, alias="relativehumidity_2m")
+    shortwave_radiation: str | None
+    snow_depth: str | None
+    soil_moisture_0_1cm: str | None
+    soil_moisture_1_3cm: str | None
+    soil_moisture_27_81cm: str | None
+    soil_moisture_3_9cm: str | None
+    soil_moisture_9_27cm: str | None
+    soil_temperature_0cm: str | None
+    soil_temperature_18cm: str | None
+    soil_temperature_54cm: str | None
+    soil_temperature_6cm: str | None
+    temperature_2m: str | None
+    time: TimeFormat | None
+    vapor_pressure_deficit: str | None
+    weather_code: str | None = Field(None, alias="weathercode")
+    wind_direction_10m: str | None = Field(None, alias="winddirection_10m")
+    wind_direction_120m: str | None = Field(None, alias="winddirection_120m")
+    wind_direction_180m: str | None = Field(None, alias="winddirection_180m")
+    wind_direction_80m: str | None = Field(None, alias="winddirection_80m")
+    wind_gusts_10m: str | None = Field(None, alias="windgusts_10m")
+    wind_speed_10m: str | None = Field(None, alias="windspeed_10m")
+    wind_speed_120m: str | None = Field(None, alias="windspeed_120m")
+    wind_speed_180m: str | None = Field(None, alias="windspeed_180m")
+    wind_speed_80m: str | None = Field(None, alias="windspeed_80m")
 
 
 class CurrentWeather(BaseModel):
@@ -291,34 +286,34 @@ class CurrentWeather(BaseModel):
 class DailyForecastUnits(BaseModel):
     """Daily weather data units."""
 
-    apparent_temperature_max: Optional[str]
-    apparent_temperature_min: Optional[str]
-    precipitation_hours: Optional[str]
-    precipitation_sum: Optional[str]
-    shortwave_radiation_sum: Optional[str]
-    sunrise: Optional[TimeFormat]
-    sunset: Optional[TimeFormat]
-    temperature_2m_max: Optional[str]
-    temperature_2m_min: Optional[str]
-    time: Optional[TimeFormat]
-    weather_code: Optional[str] = Field(None, alias="weathercode")
-    wind_direction_10m_dominant: Optional[str] = Field(
+    apparent_temperature_max: str | None
+    apparent_temperature_min: str | None
+    precipitation_hours: str | None
+    precipitation_sum: str | None
+    shortwave_radiation_sum: str | None
+    sunrise: TimeFormat | None
+    sunset: TimeFormat | None
+    temperature_2m_max: str | None
+    temperature_2m_min: str | None
+    time: TimeFormat | None
+    weather_code: str | None = Field(None, alias="weathercode")
+    wind_direction_10m_dominant: str | None = Field(
         None, alias="winddirection_10m_dominant"
     )
-    wind_gusts_10m_max: Optional[str] = Field(None, alias="windgusts_10m_max")
-    wind_speed_10m_max: Optional[str] = Field(None, alias="windspeed_10m_max")
+    wind_gusts_10m_max: str | None = Field(None, alias="windgusts_10m_max")
+    wind_speed_10m_max: str | None = Field(None, alias="windspeed_10m_max")
 
 
 class Forecast(BaseModel):
     """Weather forecast."""
 
-    current_weather: Optional[CurrentWeather]
-    daily_units: Optional[DailyForecastUnits]
-    daily: Optional[DailyForecast]
+    current_weather: CurrentWeather | None
+    daily_units: DailyForecastUnits | None
+    daily: DailyForecast | None
     elevation: float
     generation_time_ms: float = Field(..., alias="generationtime_ms")
-    hourly_units: Optional[HourlyForecastUnits]
-    hourly: Optional[HourlyForecast]
+    hourly_units: HourlyForecastUnits | None
+    hourly: HourlyForecast | None
     latitude: float
     longitude: float
     utc_offset_seconds: int
@@ -328,14 +323,14 @@ class GeocodingResult(BaseModel):
     """Geocoding result item."""
 
     geo_id: int = Field(..., alias="id")
-    admin1_id: Optional[int]
-    admin1: Optional[str]
-    admin2_id: Optional[int]
-    admin2: Optional[str]
-    admin3_id: Optional[int]
-    admin3: Optional[str]
-    admin4_id: Optional[int]
-    admin4: Optional[str]
+    admin1_id: int | None
+    admin1: str | None
+    admin2_id: int | None
+    admin2: str | None
+    admin3_id: int | None
+    admin3: str | None
+    admin4_id: int | None
+    admin4: str | None
     country_code: str
     country_id: int
     country: str
@@ -344,14 +339,14 @@ class GeocodingResult(BaseModel):
     latitude: float
     longitude: float
     name: str
-    population: Optional[int] = None
-    postcodes: Optional[List[str]] = None
-    ranking: Optional[float] = None
+    population: int | None = None
+    postcodes: list[str] | None = None
+    ranking: float | None = None
     timezone: str
 
 
 class Geocoding(BaseModel):
     """Geocoding search result."""
 
-    results: Optional[List[GeocodingResult]]
+    results: list[GeocodingResult] | None
     generation_time_ms: float = Field(..., alias="generationtime_ms")
