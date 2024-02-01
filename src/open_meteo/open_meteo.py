@@ -55,6 +55,7 @@ class OpenMeteo:
                 the Open-Meteo API.
             OpenMeteoError: Received an unexpected response from the Open-Meteo
                 API.
+
         """
         if self.session is None:
             self.session = ClientSession()
@@ -132,6 +133,7 @@ class OpenMeteo:
         Returns:
         -------
             A forecast object.
+
         """
         url = URL("https://api.open-meteo.com/v1/forecast").with_query(
             current_weather="true" if current_weather else "false",
@@ -173,6 +175,7 @@ class OpenMeteo:
         Returns:
         -------
             An Geocoding object.
+
         """
         url = URL("https://geocoding-api.open-meteo.com/v1/search").with_query(
             name=name,
@@ -194,6 +197,7 @@ class OpenMeteo:
         Returns
         -------
             The OpenMeteo object.
+
         """
         return self
 
@@ -203,5 +207,6 @@ class OpenMeteo:
         Args:
         ----
             _exc_info: Exec type.
+
         """
         await self.close()
