@@ -1,4 +1,5 @@
 """Asynchronous client for the Open-Meteo API."""
+
 import asyncio
 
 from open_meteo import OpenMeteo

@@ -1,4 +1,5 @@
 """Asynchronous client for the Open-Meteo API."""
+
 from pathlib import Path
 
 
