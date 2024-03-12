@@ -1,4 +1,5 @@
 """Asynchronous client for the Open-Meteo API."""
+
 from __future__ import annotations
 
 import asyncio

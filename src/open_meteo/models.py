@@ -1,4 +1,5 @@
 """Asynchronous client for the Open-Meteo API."""
+
 # pylint: disable=too-many-instance-attributes
 from __future__ import annotations
 

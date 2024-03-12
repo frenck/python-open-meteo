@@ -1,4 +1,5 @@
 """Asynchronous client for the Open-Meteo API."""
+
 # pylint: disable=protected-access
 import asyncio
 
