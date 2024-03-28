@@ -79,6 +79,7 @@ class HourlyParameters(StrEnum):
 
     # Total precipitation (rain, showers, snow) sum of the preceding hour
     PRECIPITATION = "precipitation"
+    PRECIPITATION_PROBABILITY = "precipitation_probability"
 
     # Atmospheric air pressure reduced to sea level (hPa)
     PRESSURE_MSL = "pressure_msl"
@@ -199,6 +200,7 @@ class HourlyForecast(DataClassORJSONMixin):
         default=None, metadata=field_options(alias="freezinglevel_height")
     )
     precipitation: list[float] | None = field(default=None)
+    precipitation_probability: list[int] | None = field(default=None)
     pressure_msl: list[float] | None = field(default=None)
     relative_humidity_2m: list[int] | None = field(
         default=None, metadata=field_options(alias="relativehumidity_2m")
@@ -302,6 +304,7 @@ class HourlyForecastUnits(DataClassORJSONMixin):
         default=None, metadata=field_options(alias="freezinglevel_height")
     )
     precipitation: str | None = field(default=None)
+    precipitation_probability: str | None = field(default=None) 
     pressure_msl: str | None = field(default=None)
     relative_humidity_2m: str | None = field(
         default=None, metadata=field_options(alias="relativehumidity_2m")
