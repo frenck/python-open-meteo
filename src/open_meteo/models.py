@@ -41,6 +41,31 @@ class TimeFormat(StrEnum):
     UNIXTIME = "unixtime"
 
 
+class CurrentParameters(StrEnum):
+    """Enum to represent the current parameters available."""
+
+    # Air temperature at 2 meters above ground
+    TEMPERATURE_2M = "temperature_2m"
+
+    # Is day or night
+    IS_DAY = "is_day"
+
+    # Precipitation
+    PRECIPITATION = "precipitation"
+
+    # Maximum wind speed
+    WIND_SPEED_10M = "wind_speed_10m"
+
+    # Wind direction
+    WIND_DIRECTION_10M = "wind_direction_10m"
+
+    # Wind gusts at 10 meters above ground
+    WIND_GUSTS_10M = "wind_gusts_10m"
+
+    # WMO numeric weather code
+    WEATHER_CODE = "weather_code"
+
+
 class HourlyParameters(StrEnum):
     """Enum to represent the hourly parameters available."""
 
@@ -354,13 +379,35 @@ class HourlyForecastUnits(DataClassORJSONMixin):
 
 @dataclass
 class CurrentWeather(DataClassORJSONMixin):
-    """Current weather data."""
+    """Default current weather data."""
 
     time: datetime
     temperature: float
     wind_speed: float = field(metadata=field_options(alias="windspeed"))
     wind_direction: int = field(metadata=field_options(alias="winddirection"))
     weather_code: int = field(metadata=field_options(alias="weathercode"))
+
+
+@dataclass
+class Current(DataClassORJSONMixin):
+    """List of current weather data."""
+
+    time: datetime
+    temperature: float | None = field(
+        default=None, metadata=field_options(alias="temperature_2m")
+    )
+    is_day: bool | None = field(default=None)
+    precipitation: float | None = field(default=None)
+    wind_speed: float | None = field(
+        default=None, metadata=field_options(alias="wind_speed_10m")
+    )
+    wind_direction: int | None = field(
+        default=None, metadata=field_options(alias="wind_direction_10m")
+    )
+    wind_gusts: float | None = field(
+        default=None, metadata=field_options(alias="wind_gusts_10m")
+    )
+    weather_code: int | None = field(default=None)
 
 
 @dataclass
@@ -402,6 +449,7 @@ class Forecast(DataClassORJSONMixin):
     longitude: float
     utc_offset_seconds: int
     current_weather: CurrentWeather | None = field(default=None)
+    current: Current | None = field(default=None)
     daily_units: DailyForecastUnits | None = field(default=None)
     daily: DailyForecast | None = field(default=None)
     hourly_units: HourlyForecastUnits | None = field(default=None)
