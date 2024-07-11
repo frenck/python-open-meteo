@@ -12,6 +12,7 @@ from yarl import URL
 
 from .exceptions import OpenMeteoConnectionError, OpenMeteoError
 from .models import (
+    CurrentParameters,
     DailyParameters,
     Forecast,
     Geocoding,
@@ -105,6 +106,7 @@ class OpenMeteo:
         longitude: float,
         timezone: str = "UTC",
         current_weather: bool = False,
+        current: list[CurrentParameters] | None = None,
         daily: list[DailyParameters] | None = None,
         hourly: list[HourlyParameters] | None = None,
         past_days: int = 0,
@@ -120,6 +122,7 @@ class OpenMeteo:
             latitude: Latitude of the location.
             longitude: Longitude of the location.
             current_weather: Include current weather conditions.
+            current: A list of weather variables to query for.
             daily: A list of weather variables to query for.
             hourly: A list of weather variables to query for.
             past_days: If set, yesterdays or the day before yesterdays are also
@@ -138,6 +141,7 @@ class OpenMeteo:
         """
         url = URL("https://api.open-meteo.com/v1/forecast").with_query(
             current_weather="true" if current_weather else "false",
+            current=",".join(current) if current is not None else [],
             daily=",".join(daily) if daily is not None else [],
             hourly=",".join(hourly) if hourly is not None else [],
             latitude=latitude,

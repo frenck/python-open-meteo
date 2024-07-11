@@ -41,6 +41,43 @@ class TimeFormat(StrEnum):
     UNIXTIME = "unixtime"
 
 
+class CurrentParameters(StrEnum):
+    """Enum to represent the current parameters available."""
+
+    # Air temperature at 2 meters above ground
+    APPARENT_TEMPERATURE = "apparent_temperature"
+
+    # Total cloud cover as an area fraction
+    CLOUD_COVER = "cloudcover"
+
+    # Status for is day or night
+    IS_DAY = "is_day"
+
+    # Total precipitation (rain, showers, snow) sum of the preceding hour
+    PRECIPITATION = "precipitation"
+
+    # Atmospheric air pressure reduced to sea level (hPa)
+    PRESSURE_MSL = "pressure_msl"
+
+    # Relative humidity at 2 meters above ground
+    RELATIVE_HUMIDITY_2M = "relativehumidity_2m"
+
+    # Air temperature at 2 meters above ground
+    TEMPERATURE_2M = "temperature_2m"
+
+    # Weather condition as a WMO numeric weather code.
+    WEATHER_CODE = "weathercode"
+
+    # Wind direction at 10 meters above ground
+    WIND_DIRECTION_10M = "winddirection_10m"
+
+    # Gusts at 10 meters above ground as a maximum of the preceding hour
+    WIND_GUSTS_10M = "windgusts_10m"
+
+    # Wind speed at 10 meters above ground.
+    WIND_SPEED_10M = "windspeed_10m"
+
+
 class HourlyParameters(StrEnum):
     """Enum to represent the hourly parameters available."""
 
@@ -171,6 +208,35 @@ class DailyParameters(StrEnum):
 
 
 @dataclass
+class Current(DataClassORJSONMixin):
+    """Current data."""
+
+    time: datetime
+    apparent_temperature: float | None = field(default=None)
+    cloud_cover: int | None = field(
+        default=None, metadata=field_options(alias="cloudcover")
+    )
+    precipitation: float | None = field(default=None)
+    pressure_msl: float | None = field(default=None)
+    relative_humidity_2m: int | None = field(
+        default=None, metadata=field_options(alias="relativehumidity_2m")
+    )
+    temperature_2m: float | None = field(default=None)
+    weather_code: int | None = field(
+        default=None, metadata=field_options(alias="weathercode")
+    )
+    wind_direction_10m: int | None = field(
+        default=None, metadata=field_options(alias="winddirection_10m")
+    )
+    wind_gusts_10m: float | None = field(
+        default=None, metadata=field_options(alias="windgusts_10m")
+    )
+    wind_speed_10m: float | None = field(
+        default=None, metadata=field_options(alias="windspeed_10m")
+    )
+
+
+@dataclass
 class HourlyForecast(DataClassORJSONMixin):
     """Hourly weather data."""
 
@@ -271,6 +337,35 @@ class DailyForecast(DataClassORJSONMixin):
     )
     wind_speed_10m_max: list[float] | None = field(
         default=None, metadata=field_options(alias="windspeed_10m_max")
+    )
+
+
+@dataclass
+class CurrentUnits(DataClassORJSONMixin):
+    """Current data units."""
+
+    apparent_temperature: str | None = field(default=None)
+    cloud_cover: str | None = field(
+        default=None, metadata=field_options(alias="cloudcover")
+    )
+    precipitation: str | None = field(default=None)
+    pressure_msl: str | None = field(default=None)
+    relative_humidity_2m: str | None = field(
+        default=None, metadata=field_options(alias="relativehumidity_2m")
+    )
+    temperature_2m: str | None = field(default=None)
+    time: TimeFormat | None = field(default=None)
+    weather_code: str | None = field(
+        default=None, metadata=field_options(alias="weathercode")
+    )
+    wind_direction_10m: str | None = field(
+        default=None, metadata=field_options(alias="winddirection_10m")
+    )
+    wind_gusts_10m: str | None = field(
+        default=None, metadata=field_options(alias="windgusts_10m")
+    )
+    wind_speed_10m: str | None = field(
+        default=None, metadata=field_options(alias="windspeed_10m")
     )
 
 
@@ -402,6 +497,8 @@ class Forecast(DataClassORJSONMixin):
     longitude: float
     utc_offset_seconds: int
     current_weather: CurrentWeather | None = field(default=None)
+    current_units: CurrentUnits | None = field(default=None)
+    current: Current | None = field(default=None)
     daily_units: DailyForecastUnits | None = field(default=None)
     daily: DailyForecast | None = field(default=None)
     hourly_units: HourlyForecastUnits | None = field(default=None)

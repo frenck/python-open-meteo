@@ -2,6 +2,9 @@
 
 from .exceptions import OpenMeteoConnectionError, OpenMeteoError
 from .models import (
+    Current,
+    CurrentParameters,
+    CurrentUnits,
     CurrentWeather,
     DailyForecast,
     DailyForecastUnits,
@@ -20,6 +23,9 @@ from .models import (
 from .open_meteo import OpenMeteo
 
 __all__ = [
+    "Current",
+    "CurrentUnits",
+    "CurrentParameters",
     "CurrentWeather",
     "DailyForecast",
     "DailyForecastUnits",
