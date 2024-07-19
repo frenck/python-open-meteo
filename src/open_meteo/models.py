@@ -71,7 +71,7 @@ class HourlyParameters(StrEnum):
     DIRECT_RADIATION = "direct_radiation"
 
     # Sum of evapotranspration of the preceding hour
-    # from lands urface and plants
+    # from lands surface and plants
     EVAPOTRANSPIRATION = "evapotranspiration"
 
     # Altitude above sea level of the 0°C level
