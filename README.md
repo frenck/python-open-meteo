@@ -34,7 +34,7 @@ pip install open-meteo
 import asyncio
 
 from open_meteo import OpenMeteo
-from open_meteo.models import DailyParameters, HourlyParameters
+from open_meteo.models import CurrentParameters, DailyParameters, HourlyParameters
 
 
 async def main():
@@ -43,7 +43,12 @@ async def main():
         forecast = await open_meteo.forecast(
             latitude=52.27,
             longitude=6.87417,
-            current_weather=True,
+            current_weather=False,
+            current=[
+                CurrentParameters.TEMPERATURE_2M,
+                CurrentParameters.WEATHER_CODE,
+                CurrentParameters.APPARENT_TEMPERATURE,
+            ],
             daily=[
                 DailyParameters.SUNRISE,
                 DailyParameters.SUNSET,
