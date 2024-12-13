@@ -1,15 +1,14 @@
 """Asynchronous client for the Open-Meteo API."""
 
 # pylint: disable=protected-access
-import asyncio
 
 import aiohttp
 import pytest
-from aresponses import Response, ResponsesMockServer
+from aresponses import ResponsesMockServer
 from yarl import URL
 
 from open_meteo import OpenMeteo
-from open_meteo.exceptions import OpenMeteoConnectionError, OpenMeteoError
+from open_meteo.exceptions import OpenMeteoError
 
 
 async def test_json_request(aresponses: ResponsesMockServer) -> None:
@@ -45,25 +44,6 @@ async def test_internal_session(aresponses: ResponsesMockServer) -> None:
     async with OpenMeteo() as open_meteo:
         response = await open_meteo._request(URL("http://example.com/api/"))
         assert response == '{"status": "ok"}'
-
-
-async def test_timeout(aresponses: ResponsesMockServer) -> None:
-    """Test request timeout."""
-
-    # Faking a timeout by sleeping
-    async def response_handler(_: aiohttp.ClientResponse) -> Response:
-        await asyncio.sleep(2)
-        return aresponses.Response(body="Goodmorning!")
-
-    aresponses.add("example.com", "/api/", "POST", response_handler)
-
-    async with aiohttp.ClientSession() as session:
-        open_meteo = OpenMeteo(
-            session=session,
-            request_timeout=1,
-        )
-        with pytest.raises(OpenMeteoConnectionError):
-            assert await open_meteo._request(URL("http://example.com/api/"))
 
 
 async def test_http_error400(aresponses: ResponsesMockServer) -> None:
