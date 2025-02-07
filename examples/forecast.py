@@ -3,7 +3,7 @@
 import asyncio
 
 from open_meteo import OpenMeteo
-from open_meteo.models import DailyParameters, HourlyParameters
+from open_meteo.models import CurrentParameters, DailyParameters, HourlyParameters
 
 
 async def main() -> None:
@@ -12,7 +12,10 @@ async def main() -> None:
         forecast = await open_meteo.forecast(
             latitude=52.27,
             longitude=6.87417,
-            current_weather=True,
+            current=[
+                CurrentParameters.APPARENT_TEMPERATURE,
+                CurrentParameters.PRECIPITATION,
+            ],
             daily=[
                 DailyParameters.SUNRISE,
                 DailyParameters.SUNSET,
