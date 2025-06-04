@@ -12,6 +12,7 @@ from yarl import URL
 
 from .exceptions import OpenMeteoConnectionError, OpenMeteoError
 from .models import (
+    AirQuality,
     DailyParameters,
     Forecast,
     Geocoding,
@@ -151,6 +152,50 @@ class OpenMeteo:
         )
         data = await self._request(url=url)
         return Forecast.from_json(data)
+
+
+    async def air_quality(
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        timezone: str = "UTC",
+        current: list[CurrentParameters] | None = None,
+        hourly: list[HourlyParameters] | None = None,
+        past_days: int = 0,
+        timeformat: TimeFormat = TimeFormat.ISO_8601,
+    ) -> Forecast:
+        """Get air-quality forecast.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            current_air_quality: Include current weather conditions.
+            daily: A list of air quality variables to query for.
+            hourly: A list of air quality variables to query for.
+            past_days: If set, yesterdays or the day before yesterdays are also
+                returned (0-2).
+            timeformat: Timeformat.
+            timezone: All timestamps are returned as local-time and data is
+                returned starting at 0:00 local-time.
+
+        Returns:
+        -------
+            A air quality object.
+
+        """
+        url = URL("https://air-quality-api.open-meteo.com/v1/air-quality").with_query(
+            current=",".join(current) if current is not None else [],
+            hourly=",".join(hourly) if hourly is not None else [],
+            latitude=latitude,
+            longitude=longitude,
+            past_days=past_days,
+            timeformat=timeformat,
+            timezone=timezone,
+        )
+        data = await self._request(url=url)
+        return AirQuality.from_json(data)
 
     async def geocoding(
         self,
