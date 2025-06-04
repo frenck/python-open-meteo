@@ -13,6 +13,7 @@ from yarl import URL
 from .exceptions import OpenMeteoConnectionError, OpenMeteoError
 from .models import (
     AirQuality,
+    AirQualityParameters,
     DailyParameters,
     Forecast,
     Geocoding,
@@ -154,17 +155,18 @@ class OpenMeteo:
         return Forecast.from_json(data)
 
 
-    async def air_quality(
+    # pylint: disable-next=too-many-arguments
+    async def air_quality(  # noqa: PLR0913
         self,
         *,
         latitude: float,
         longitude: float,
         timezone: str = "UTC",
-        current: list[CurrentParameters] | None = None,
-        hourly: list[HourlyParameters] | None = None,
+        current: list[AirQualityParameters] | None = None,
+        hourly: list[AirQualityParameters] | None = None,
         past_days: int = 0,
         timeformat: TimeFormat = TimeFormat.ISO_8601,
-    ) -> Forecast:
+    ) -> AirQuality:
         """Get air-quality forecast.
 
         Args:

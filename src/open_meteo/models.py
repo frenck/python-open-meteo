@@ -411,7 +411,8 @@ class Forecast(DataClassORJSONMixin):
 class AirQualityParameters(StrEnum):
     """Enum to represent the hourly air quality parameters available."""
 
-    # Particulate matter with diameter smaller than 10 µm (PM10) and smaller than 2.5 µm (PM2.5) close to surface (10 meter above ground)
+    # Particulate matter with diameter smaller than 10 µm (PM10) and smaller
+    # than 2.5 µm (PM2.5) close to surface (10 meter above ground).
     PM10 = "pm10"
     PM2_5 = "pm2_5"
 
@@ -440,7 +441,8 @@ class AirQualityParameters(StrEnum):
     UV_INDEX = "uv_index"
     UV_INDEX_CLEAR_SKY = "uv_index_clear_sky"
 
-    # Pollen for various plants. Only available in Europe as provided by CAMS European Air Quality forecast
+    # Pollen for various plants. Only available in Europe as provided by
+    # CAMS European Air Quality forecast.
     ALDER_POLLEN = "alder_pollen"
     BIRCH_POLLEN = "birch_pollen"
     GRASS_POLLEN = "grass_pollen"
@@ -448,9 +450,11 @@ class AirQualityParameters(StrEnum):
     OLIVE_POLLEN = "olive_pollen"
     RAGWEED_POLLEN = "ragweed_pollen"
 
-    # European Air Quality Index (AQI) calculated for different particulate matter and gases individually.
-    # The consolidated european_aqi returns the maximum of all individual indices.
-    # Ranges from 0-20 (good), 20-40 (fair), 40-60 (moderate), 60-80 (poor), 80-100 (very poor) and exceeds 100 for extremely poor conditions.
+    # European Air Quality Index (AQI) calculated for different particulate
+    # matter and gases individually. The consolidated european_aqi returns
+    # the maximum of all individual indices. Ranges from 0-20 (good), 20-40
+    # (fair), 40-60 (moderate), 60-80 (poor), 80-100 (very poor) and exceeds
+    # 100 for extremely poor conditions.
     EUROPEAN_AQI = "european_aqi"
     EUROPEAN_AQI_PM2_5 = "european_aqi_pm2_5"
     EUROPEAN_AQI_PM10 = "european_aqi_pm10"
@@ -458,9 +462,11 @@ class AirQualityParameters(StrEnum):
     EUROPEAN_AQI_OZONE = "european_aqi_ozone"
     EUROPEAN_AQI_SULPHUR_DIOXID = "european_aqi_sulphur_dioxide"
 
-    # United States Air Quality Index (AQI) calculated for different particulate matter and gases individually.
-    # The consolidated us_aqi returns the maximum of all individual indices.
-    # Ranges from 0-50 (good), 51-100 (moderate), 101-150 (unhealthy for sensitive groups), 151-200 (unhealthy), 201-300 (very unhealthy) and 301-500 (hazardous).
+    # United States Air Quality Index (AQI) calculated for different particulate
+    # matter and gases individually. The consolidated us_aqi returns the maximum
+    # of all individual indices. Ranges from 0-50 (good), 51-100 (moderate),
+    # 101-150 (unhealthy for sensitive groups), 151-200 (unhealthy), 201-300
+    # (very unhealthy) and 301-500 (hazardous).
     US_AQI = "us_aqi"
     US_AQI_PM2_5 = "us_aqi_pm2_5"
     US_AQI_PM10 = "us_aqi_pm10"
