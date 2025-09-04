@@ -2,7 +2,11 @@
 
 from .exceptions import OpenMeteoConnectionError, OpenMeteoError
 from .models import (
+    AirQuality,
+    AirQualityParameters,
     CurrentWeather,
+    CurrentAirQuality,
+    CurrentAirQualityUnits,
     DailyForecast,
     DailyForecastUnits,
     DailyParameters,
@@ -12,6 +16,8 @@ from .models import (
     HourlyForecast,
     HourlyForecastUnits,
     HourlyParameters,
+    HourlyAirQuality,
+    HourlyAirQualityUnits,
     PrecipitationUnit,
     TemperatureUnit,
     TimeFormat,
@@ -20,7 +26,11 @@ from .models import (
 from .open_meteo import OpenMeteo
 
 __all__ = [
+    "AirQuality",
+    "AirQualityParameters",
     "CurrentWeather",
+    "CurrentAirQuality",
+    "CurrentAirQualityUnits",
     "DailyForecast",
     "DailyForecastUnits",
     "DailyParameters",
@@ -30,6 +40,8 @@ __all__ = [
     "HourlyForecast",
     "HourlyForecastUnits",
     "HourlyParameters",
+    "HourlyAirQuality",
+    "HourlyAirQualityUnits",
     "OpenMeteo",
     "OpenMeteoConnectionError",
     "OpenMeteoError",
