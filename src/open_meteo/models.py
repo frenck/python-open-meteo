@@ -502,6 +502,7 @@ class CurrentAirQuality(DataClassORJSONMixin):
     olive_pollen: float | None = None
     ragweed_pollen: float | None = None
 
+
 @dataclass
 class HourlyAirQuality(DataClassORJSONMixin):
     """Current air quality data."""
