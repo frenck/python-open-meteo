@@ -408,6 +408,194 @@ class Forecast(DataClassORJSONMixin):
     hourly: HourlyForecast | None = field(default=None)
 
 
+class AirQualityParameters(StrEnum):
+    """Enum to represent the hourly air quality parameters available."""
+
+    # Particulate matter with diameter smaller than 10 µm (PM10) and smaller
+    # than 2.5 µm (PM2.5) close to surface (10 meter above ground).
+    PM10 = "pm10"
+    PM2_5 = "pm2_5"
+
+    # Atmospheric gases close to surface (10 meter above ground)
+    CARBON_MONOXIDE = "carbon_monoxide"
+    NITROGEN_DIOXIDE = "nitrogen_dioxide"
+    SULPHUR_DIOXIDE = "sulphur_dioxide"
+    OZONE = "ozone"
+
+    # CO2 close to surface (10 meter above ground)
+    CARBON_DIOXIDE = "carbon_dioxide"
+
+    # Ammonia concentration. Only available for Europe
+    AMMONIA = "ammonia"
+
+    # Aerosol optical depth at 550 nm of the entire atmosphere to indicate haze
+    AEROSOL_OPTICAL_DEPTH = "aerosol_optical_depth"
+
+    # Methane close to surface (10 meter above ground)
+    METHANE = "methane"
+
+    # Saharan dust particles close to surface level (10 meter above ground)
+    DUST = "dust"
+
+    # UV index considering clouds and clear sky
+    UV_INDEX = "uv_index"
+    UV_INDEX_CLEAR_SKY = "uv_index_clear_sky"
+
+    # Pollen for various plants. Only available in Europe as provided by
+    # CAMS European Air Quality forecast.
+    ALDER_POLLEN = "alder_pollen"
+    BIRCH_POLLEN = "birch_pollen"
+    GRASS_POLLEN = "grass_pollen"
+    MUGWORT_POLLEN = "mugwort_pollen"
+    OLIVE_POLLEN = "olive_pollen"
+    RAGWEED_POLLEN = "ragweed_pollen"
+
+    # European Air Quality Index (AQI) calculated for different particulate
+    # matter and gases individually. The consolidated european_aqi returns
+    # the maximum of all individual indices. Ranges from 0-20 (good), 20-40
+    # (fair), 40-60 (moderate), 60-80 (poor), 80-100 (very poor) and exceeds
+    # 100 for extremely poor conditions.
+    EUROPEAN_AQI = "european_aqi"
+    EUROPEAN_AQI_PM2_5 = "european_aqi_pm2_5"
+    EUROPEAN_AQI_PM10 = "european_aqi_pm10"
+    EUROPEAN_AQI_NITROGEN_DIOXIDE = "european_aqi_nitrogen_dioxide"
+    EUROPEAN_AQI_OZONE = "european_aqi_ozone"
+    EUROPEAN_AQI_SULPHUR_DIOXID = "european_aqi_sulphur_dioxide"
+
+    # United States Air Quality Index (AQI) calculated for different particulate
+    # matter and gases individually. The consolidated us_aqi returns the maximum
+    # of all individual indices. Ranges from 0-50 (good), 51-100 (moderate),
+    # 101-150 (unhealthy for sensitive groups), 151-200 (unhealthy), 201-300
+    # (very unhealthy) and 301-500 (hazardous).
+    US_AQI = "us_aqi"
+    US_AQI_PM2_5 = "us_aqi_pm2_5"
+    US_AQI_PM10 = "us_aqi_pm10"
+    US_AQI_NITROGEN_DIOXIDE = "us_aqi_nitrogen_dioxide"
+    US_AQI_OZONE = "us_aqi_ozone"
+    US_AQI_SULPHUR_DIOXIDE = "us_aqi_sulphur_dioxide"
+    US_AQI_CARBON_MONOXIDE = "us_aqi_carbon_monoxide"
+
+
+@dataclass
+class CurrentAirQuality(DataClassORJSONMixin):
+    """Current air quality data."""
+
+    time: datetime
+    interval: int
+    european_aqi: int | None = None
+    us_aqi: int | None = None
+    pm2_5: float | None = None
+    pm10: float | None = None
+    carbon_monoxide: float | None = None
+    nitrogen_dioxide: float | None = None
+    sulphur_dioxide: float | None = None
+    ozone: float | None = None
+    aerosol_optical_depth: float | None = None
+    dust: float | None = None
+    uv_index: float | None = None
+    uv_index_clear_sky: float | None = None
+    ammonia: float | None = None
+    alder_pollen: float | None = None
+    birch_pollen: float | None = None
+    grass_pollen: float | None = None
+    mugwort_pollen: float | None = None
+    olive_pollen: float | None = None
+    ragweed_pollen: float | None = None
+
+@dataclass
+class HourlyAirQuality(DataClassORJSONMixin):
+    """Current air quality data."""
+
+    time: list[datetime]
+    european_aqi: list[int | None] | None = None
+    us_aqi: list[int | None] | None = None
+    pm2_5: list[float | None] | None = None
+    pm10: list[float | None] | None = None
+    carbon_monoxide: list[float | None] | None = None
+    nitrogen_dioxide: list[float | None] | None = None
+    sulphur_dioxide: list[float | None] | None = None
+    ozone: list[float | None] | None = None
+    aerosol_optical_depth: list[float | None] | None = None
+    dust: list[float | None] | None = None
+    uv_index: list[float | None] | None = None
+    uv_index_clear_sky: list[float | None] | None = None
+    ammonia: list[float | None] | None = None
+    alder_pollen: list[float | None] | None = None
+    birch_pollen: list[float | None] | None = None
+    grass_pollen: list[float | None] | None = None
+    mugwort_pollen: list[float | None] | None = None
+    olive_pollen: list[float | None] | None = None
+    ragweed_pollen: list[float | None] | None = None
+
+
+@dataclass
+class CurrentAirQualityUnits(DataClassORJSONMixin):
+    """Current air quality data."""
+
+    time: str
+    interval: str
+    european_aqi: str | None = None
+    us_aqi: str | None = None
+    pm2_5: str | None = None
+    pm10: str | None = None
+    carbon_monoxide: str | None = None
+    nitrogen_dioxide: str | None = None
+    sulphur_dioxide: str | None = None
+    ozone: str | None = None
+    aerosol_optical_depth: str | None = None
+    dust: str | None = None
+    uv_index: str | None = None
+    uv_index_clear_sky: str | None = None
+    ammonia: str | None = None
+    alder_pollen: str | None = None
+    birch_pollen: str | None = None
+    grass_pollen: str | None = None
+    mugwort_pollen: str | None = None
+    olive_pollen: str | None = None
+    ragweed_pollen: str | None = None
+
+
+@dataclass
+class HourlyAirQualityUnits(DataClassORJSONMixin):
+    """Hourly air quality data."""
+
+    time: str
+    european_aqi: str | None = None
+    us_aqi: str | None = None
+    pm2_5: str | None = None
+    pm10: str | None = None
+    carbon_monoxide: str | None = None
+    nitrogen_dioxide: str | None = None
+    sulphur_dioxide: str | None = None
+    ozone: str | None = None
+    aerosol_optical_depth: str | None = None
+    dust: str | None = None
+    uv_index: str | None = None
+    uv_index_clear_sky: str | None = None
+    ammonia: str | None = None
+    alder_pollen: str | None = None
+    birch_pollen: str | None = None
+    grass_pollen: str | None = None
+    mugwort_pollen: str | None = None
+    olive_pollen: str | None = None
+    ragweed_pollen: str | None = None
+
+
+@dataclass
+class AirQuality(DataClassORJSONMixin):
+    """Air Quality forecast."""
+
+    elevation: float
+    generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
+    latitude: float
+    longitude: float
+    utc_offset_seconds: int
+    current_units: CurrentAirQualityUnits | None = field(default=None)
+    current: CurrentAirQuality | None = field(default=None)
+    hourly_units: HourlyAirQualityUnits | None = field(default=None)
+    hourly: HourlyAirQuality | None = field(default=None)
+
+
 @dataclass
 class GeocodingResult(DataClassORJSONMixin):
     """Geocoding result item."""
