@@ -154,7 +154,6 @@ class OpenMeteo:
         data = await self._request(url=url)
         return Forecast.from_json(data)
 
-
     # pylint: disable-next=too-many-arguments
     async def air_quality(  # noqa: PLR0913
         self,

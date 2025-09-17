@@ -23,7 +23,6 @@ async def main() -> None:
                 AirQualityParameters.MUGWORT_POLLEN,
                 AirQualityParameters.OLIVE_POLLEN,
                 AirQualityParameters.RAGWEED_POLLEN,
-
             ],
         )
         print(air_quality)
