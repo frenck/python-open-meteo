@@ -151,6 +151,12 @@ class DailyParameters(StrEnum):
     APPARENT_TEMPERATURE_MAX = "apparent_temperature_max"
     APPARENT_TEMPERATURE_MIN = "apparent_temperature_min"
 
+    # Total cloud cover as an area fraction
+    CLOUD_COVER_MEAN = "cloud_cover_mean"
+
+    # Dew point temperature at 2 meters above ground
+    DEW_POINT_2M = "dew_point_2m"
+
     # The number of hours with rain,
     PRECIPITATION_HOURS = "precipitation_hours"
 
@@ -161,6 +167,12 @@ class DailyParameters(StrEnum):
     PRECIPITATION_PROBABILITY_MAX = "precipitation_probability_max"
     PRECIPITATION_PROBABILITY_MEAN = "precipitation_probability_mean"
     PRECIPITATION_PROBABILITY_MIN = "precipitation_probability_min"
+
+    # Atmospheric air pressure reduced to sea level (hPa)
+    PRESSURE_MSL_MEAN = "pressure_msl_mean"
+
+    # Relative humidity at 2 meters above ground
+    RELATIVE_HUMIDITY_2M_MEAN = "relative_humidity_2m_mean"
 
     # The sum of solar radiation on a given day in Mega Joules.
     SHORTWAVE_RADIATION_SUM = "shortwave_radiation_sum"
@@ -276,11 +288,15 @@ class DailyForecast(DataClassORJSONMixin):
     time: list[date]
     apparent_temperature_max: list[float] | None = field(default=None)
     apparent_temperature_min: list[float] | None = field(default=None)
+    cloud_cover_mean: list[int] | None = field(default=None)
+    dew_point_2m: list[float] | None = field(default=None)
     precipitation_hours: list[int] | None = field(default=None)
     precipitation_sum: list[float] | None = field(default=None)
     precipitation_probability_max: list[int] | None = field(default=None)
     precipitation_probability_mean: list[float] | None = field(default=None)
     precipitation_probability_min: list[float] | None = field(default=None)
+    pressure_msl_mean: list[float] | None = field(default=None)
+    relative_humidity_2m_mean: list[int] | None = field(default=None)
     shortwave_radiation_sum: list[float] | None = field(default=None)
     sunrise: list[datetime] | None = field(default=None)
     sunset: list[datetime] | None = field(default=None)
@@ -398,11 +414,15 @@ class DailyForecastUnits(DataClassORJSONMixin):
 
     apparent_temperature_max: str | None = field(default=None)
     apparent_temperature_min: str | None = field(default=None)
+    cloud_cover_mean: str | None = field(default=None)
+    dew_point_2m: str | None = field(default=None)
     precipitation_hours: str | None = field(default=None)
     precipitation_sum: str | None = field(default=None)
     precipitation_probability_max: str | None = field(default=None)
     precipitation_probability_mean: str | None = field(default=None)
     precipitation_probability_min: str | None = field(default=None)
+    pressure_msl_mean: str | None = field(default=None)
+    relative_humidity_2m_mean: str | None = field(default=None)
     shortwave_radiation_sum: str | None = field(default=None)
     sunrise: TimeFormat | None = field(default=None)
     sunset: TimeFormat | None = field(default=None)
