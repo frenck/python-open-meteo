@@ -77,6 +77,9 @@ class HourlyParameters(StrEnum):
     # Altitude above sea level of the 0°C level
     FREEZING_LEVEL_HEIGHT = "freezinglevel_height"
 
+    # Boolean value indicating if it is day (1) or night (0) at the location.
+    IS_DAY = "is_day"
+
     # Total precipitation (rain, showers, snow) sum of the preceding hour
     PRECIPITATION = "precipitation"
 
@@ -228,6 +231,7 @@ class HourlyForecast(DataClassORJSONMixin):
     freezing_level_height: list[int] | None = field(
         default=None, metadata=field_options(alias="freezinglevel_height")
     )
+    is_day: list[bool] | None = field(default=None)
     precipitation: list[float] | None = field(default=None)
     precipitation_probability: list[int] | None = field(default=None)
     pressure_msl: list[float] | None = field(default=None)
@@ -343,6 +347,7 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     freezing_level_height: str | None = field(
         default=None, metadata=field_options(alias="freezinglevel_height")
     )
+    is_day: str | None = field(default=None)
     precipitation: str | None = field(default=None)
     precipitation_probability: str | None = field(default=None)
     pressure_msl: str | None = field(default=None)
