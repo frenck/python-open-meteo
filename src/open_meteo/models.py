@@ -336,6 +336,7 @@ class CurrentWeather(DataClassORJSONMixin):
     apparent_temperature: float
     cloud_cover: int = field(metadata=field_options(alias="cloudcover"))
     dew_point: float = field(metadata=field_options(alias="dewpoint_2m"))
+    is_day: bool
     precipitation_probability: int
     precipitation: float
     pressure_msl: float
@@ -467,6 +468,7 @@ class CurrentWeatherUnit(DataClassORJSONMixin):
     dew_point: str | None = field(
         default=None, metadata=field_options(alias="dewpoint_2m")
     )
+    is_day: str | None = field(default=None)
     precipitation_probability: str | None = field(
         default=None, metadata=field_options(alias="precipitation_probability")
     )
