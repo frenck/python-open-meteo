@@ -155,7 +155,7 @@ class DailyParameters(StrEnum):
     CLOUD_COVER_MEAN = "cloud_cover_mean"
 
     # Dew point temperature at 2 meters above ground
-    DEW_POINT_2M = "dew_point_2m"
+    DEW_POINT_2M_MEAN = "dew_point_2m_mean"
 
     # The number of hours with rain,
     PRECIPITATION_HOURS = "precipitation_hours"
@@ -289,7 +289,7 @@ class DailyForecast(DataClassORJSONMixin):
     apparent_temperature_max: list[float] | None = field(default=None)
     apparent_temperature_min: list[float] | None = field(default=None)
     cloud_cover_mean: list[int] | None = field(default=None)
-    dew_point_2m: list[float] | None = field(default=None)
+    dew_point_2m_mean: list[float] | None = field(default=None)
     precipitation_hours: list[int] | None = field(default=None)
     precipitation_sum: list[float] | None = field(default=None)
     precipitation_probability_max: list[int] | None = field(default=None)
@@ -415,7 +415,7 @@ class DailyForecastUnits(DataClassORJSONMixin):
     apparent_temperature_max: str | None = field(default=None)
     apparent_temperature_min: str | None = field(default=None)
     cloud_cover_mean: str | None = field(default=None)
-    dew_point_2m: str | None = field(default=None)
+    dew_point_2m_mean: str | None = field(default=None)
     precipitation_hours: str | None = field(default=None)
     precipitation_sum: str | None = field(default=None)
     precipitation_probability_max: str | None = field(default=None)
