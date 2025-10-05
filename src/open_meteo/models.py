@@ -225,6 +225,28 @@ class DailyParameters(StrEnum):
 
 
 @dataclass
+class CurrentWeather(DataClassORJSONMixin):
+    """Current weather data."""
+
+    time: datetime
+    apparent_temperature: float
+    cloud_cover: int = field(metadata=field_options(alias="cloudcover"))
+    dew_point: float = field(metadata=field_options(alias="dewpoint_2m"))
+    is_day: bool
+    precipitation_probability: int
+    precipitation: float
+    pressure_msl: float
+    relative_humidity: int = field(metadata=field_options(alias="relativehumidity_2m"))
+    temperature: float = field(metadata=field_options(alias="temperature_2m"))
+    uv_index: float
+    visibility: float
+    weather_code: int = field(metadata=field_options(alias="weathercode"))
+    wind_direction: int = field(metadata=field_options(alias="winddirection_10m"))
+    wind_gusts: float = field(metadata=field_options(alias="windgusts_10m"))
+    wind_speed: float = field(metadata=field_options(alias="windspeed_10m"))
+
+
+@dataclass
 class HourlyForecast(DataClassORJSONMixin):
     """Hourly weather data."""
 
@@ -329,25 +351,47 @@ class DailyForecast(DataClassORJSONMixin):
 
 
 @dataclass
-class CurrentWeather(DataClassORJSONMixin):
-    """Current weather data."""
+class CurrentWeatherUnit(DataClassORJSONMixin):
+    """Current weather data units."""
 
-    time: datetime
-    apparent_temperature: float
-    cloud_cover: int = field(metadata=field_options(alias="cloudcover"))
-    dew_point: float = field(metadata=field_options(alias="dewpoint_2m"))
-    is_day: bool
-    precipitation_probability: int
-    precipitation: float
-    pressure_msl: float
-    relative_humidity: int = field(metadata=field_options(alias="relativehumidity_2m"))
-    temperature: float = field(metadata=field_options(alias="temperature_2m"))
-    uv_index: float
-    visibility: float
-    weather_code: int = field(metadata=field_options(alias="weathercode"))
-    wind_direction: int = field(metadata=field_options(alias="winddirection_10m"))
-    wind_gusts: float = field(metadata=field_options(alias="windgusts_10m"))
-    wind_speed: float = field(metadata=field_options(alias="windspeed_10m"))
+    apparent_temperature: str | None = field(default=None)
+    cloud_cover: str | None = field(
+        default=None, metadata=field_options(alias="cloudcover")
+    )
+    dew_point: str | None = field(
+        default=None, metadata=field_options(alias="dewpoint_2m")
+    )
+    is_day: str | None = field(default=None)
+    precipitation_probability: str | None = field(
+        default=None, metadata=field_options(alias="precipitation_probability")
+    )
+    precipitation: str | None = field(
+        default=None, metadata=field_options(alias="precipitation")
+    )
+    pressure_msl: str | None = field(
+        default=None, metadata=field_options(alias="pressure_msl")
+    )
+    relative_humidity: str | None = field(
+        default=None, metadata=field_options(alias="relativehumidity_2m")
+    )
+    temperature: str | None = field(
+        default=None, metadata=field_options(alias="temperature_2m")
+    )
+    time: TimeFormat | None = field(default=None)
+    uv_index: str | None = field(default=None)
+    visibility: str | None = field(default=None)
+    weather_code: str | None = field(
+        default=None, metadata=field_options(alias="weathercode")
+    )
+    wind_direction: str | None = field(
+        default=None, metadata=field_options(alias="winddirection_10m")
+    )
+    wind_gusts: str | None = field(
+        default=None, metadata=field_options(alias="windgusts_10m")
+    )
+    wind_speed: str | None = field(
+        default=None, metadata=field_options(alias="windspeed_10m")
+    )
 
 
 @dataclass
@@ -454,50 +498,6 @@ class DailyForecastUnits(DataClassORJSONMixin):
     )
     wind_speed_10m_max: str | None = field(
         default=None, metadata=field_options(alias="windspeed_10m_max")
-    )
-
-
-@dataclass
-class CurrentWeatherUnit(DataClassORJSONMixin):
-    """Current weather data units."""
-
-    apparent_temperature: str | None = field(default=None)
-    cloud_cover: str | None = field(
-        default=None, metadata=field_options(alias="cloudcover")
-    )
-    dew_point: str | None = field(
-        default=None, metadata=field_options(alias="dewpoint_2m")
-    )
-    is_day: str | None = field(default=None)
-    precipitation_probability: str | None = field(
-        default=None, metadata=field_options(alias="precipitation_probability")
-    )
-    precipitation: str | None = field(
-        default=None, metadata=field_options(alias="precipitation")
-    )
-    pressure_msl: str | None = field(
-        default=None, metadata=field_options(alias="pressure_msl")
-    )
-    relative_humidity: str | None = field(
-        default=None, metadata=field_options(alias="relativehumidity_2m")
-    )
-    temperature: str | None = field(
-        default=None, metadata=field_options(alias="temperature_2m")
-    )
-    time: TimeFormat | None = field(default=None)
-    uv_index: str | None = field(default=None)
-    visibility: str | None = field(default=None)
-    weather_code: str | None = field(
-        default=None, metadata=field_options(alias="weathercode")
-    )
-    wind_direction: str | None = field(
-        default=None, metadata=field_options(alias="winddirection_10m")
-    )
-    wind_gusts: str | None = field(
-        default=None, metadata=field_options(alias="windgusts_10m")
-    )
-    wind_speed: str | None = field(
-        default=None, metadata=field_options(alias="windspeed_10m")
     )
 
 
