@@ -14,6 +14,7 @@ from .exceptions import OpenMeteoConnectionError, OpenMeteoError
 from .models import (
     AirQuality,
     AirQualityParameters,
+    CurrentWeatherParameters,
     DailyParameters,
     Forecast,
     Geocoding,
@@ -139,7 +140,7 @@ class OpenMeteo:
 
         """
         url = URL("https://api.open-meteo.com/v1/forecast").with_query(
-            current_weather="true" if current_weather else "false",
+            current=",".join(list(CurrentWeatherParameters)) if current_weather else [],
             daily=",".join(daily) if daily is not None else [],
             hourly=",".join(hourly) if hourly is not None else [],
             latitude=latitude,
