@@ -15,6 +15,7 @@ from .models import (
     AirQuality,
     AirQualityParameters,
     DailyParameters,
+    Elevation,
     Forecast,
     Geocoding,
     HourlyParameters,
@@ -232,6 +233,32 @@ class OpenMeteo:
         )
         data = await self._request(url=url)
         return Geocoding.from_json(data)
+
+    async def elevation(
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+    ) -> Elevation:
+        """Get elevation above sea level for a coordinate.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+
+        Returns:
+        -------
+            An Elevation object containing the elevation in meters.
+            It is always a list of floats, but for a single coordinate, it will contain only one value.
+
+        """
+        url = URL("https://api.open-meteo.com/v1/elevation").with_query(
+            latitude=latitude,
+            longitude=longitude,
+        )
+        data = await self._request(url=url)
+        return Elevation.from_json(data)
 
     async def close(self) -> None:
         """Close open client session."""

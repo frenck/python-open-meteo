@@ -630,3 +630,10 @@ class Geocoding(DataClassORJSONMixin):
 
     generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
     results: list[GeocodingResult] | None = field(default=None)
+
+
+@dataclass
+class Elevation(DataClassORJSONMixin):
+    """Elevation lookup result."""
+
+    elevation: list[float]
