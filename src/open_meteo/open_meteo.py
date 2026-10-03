@@ -14,6 +14,7 @@ from yarl import URL
 from .exceptions import OpenMeteoConnectionError, OpenMeteoError
 from .models import (
     AirQuality,
+    AirQualityDomain,
     AirQualityParameters,
     CellSelection,
     DailyParameters,
@@ -245,7 +246,7 @@ class OpenMeteo:
         data = await self._request(url=url)
         return Forecast.from_json(data)
 
-    # pylint: disable-next=too-many-arguments
+    # pylint: disable-next=too-many-arguments,too-many-locals
     async def air_quality(  # noqa: PLR0913
         self,
         *,
@@ -256,6 +257,15 @@ class OpenMeteo:
         hourly: list[AirQualityParameters] | None = None,
         forecast_days: int | None = None,
         past_days: int = 0,
+        forecast_hours: int | None = None,
+        past_hours: int | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
+        start_hour: datetime | None = None,
+        end_hour: datetime | None = None,
+        temporal_resolution: TemporalResolution | None = None,
+        domains: AirQualityDomain | None = None,
+        cell_selection: CellSelection | None = None,
         timeformat: TimeFormat = TimeFormat.ISO_8601,
     ) -> AirQuality:
         """Get air quality forecast.
@@ -272,6 +282,22 @@ class OpenMeteo:
             forecast_days: Number of days to forecast (0-7). Leave unset for
                 the API default of 5 days.
             past_days: Number of past days to include as well.
+            forecast_hours: Number of hourly steps to return from now on,
+                instead of whole days.
+            past_hours: Number of past hourly steps to include, instead of
+                whole days.
+            start_date: First day of the time interval to return. Use it
+                together with end_date, instead of forecast_days.
+            end_date: Last day of the time interval to return.
+            start_hour: First hour of the time interval to return. Use it
+                together with end_hour. This is local time in the requested
+                timezone; tzinfo is not used.
+            end_hour: Last hour of the time interval to return.
+            temporal_resolution: Aggregate hourly data into larger time steps.
+            domains: Which air quality model to use. Leave unset to combine
+                the European and global domain automatically.
+            cell_selection: How to match the location to a grid cell of the
+                air quality model.
             timeformat: Format of the returned timestamps.
 
         Returns:
@@ -287,6 +313,15 @@ class OpenMeteo:
             hourly=hourly,
             forecast_days=forecast_days,
             past_days=past_days,
+            forecast_hours=forecast_hours,
+            past_hours=past_hours,
+            start_date=start_date,
+            end_date=end_date,
+            start_hour=start_hour,
+            end_hour=end_hour,
+            temporal_resolution=temporal_resolution,
+            domains=domains,
+            cell_selection=cell_selection,
             timeformat=timeformat,
         )
         url = URL("https://air-quality-api.open-meteo.com/v1/air-quality").with_query(

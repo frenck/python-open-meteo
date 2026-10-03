@@ -3,6 +3,7 @@
 from .exceptions import OpenMeteoConnectionError, OpenMeteoError
 from .models import (
     AirQuality,
+    AirQualityDomain,
     AirQualityParameters,
     CellSelection,
     CurrentAirQuality,
@@ -33,6 +34,7 @@ from .open_meteo import OpenMeteo
 
 __all__ = [
     "AirQuality",
+    "AirQualityDomain",
     "AirQualityParameters",
     "CellSelection",
     "CurrentAirQuality",

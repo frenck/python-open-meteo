@@ -1310,6 +1310,19 @@ class Forecast(DataClassORJSONMixin):
     minutely_15: Minutely15Forecast | None = None
 
 
+class AirQualityDomain(StrEnum):
+    """Enum to represent the air quality model domains available."""
+
+    # Combine both domains automatically (the API default)
+    AUTO = "auto"
+
+    # CAMS European air quality forecast, about 11 km resolution
+    CAMS_EUROPE = "cams_europe"
+
+    # CAMS global atmospheric composition forecast, about 45 km resolution
+    CAMS_GLOBAL = "cams_global"
+
+
 class AirQualityParameters(StrEnum):
     """Enum to represent the air quality parameters available.
 
@@ -1345,6 +1358,27 @@ class AirQualityParameters(StrEnum):
     # UV index considering clouds and clear sky
     UV_INDEX = "uv_index"
     UV_INDEX_CLEAR_SKY = "uv_index_clear_sky"
+
+    # Whether it is day (1) or night (0) at the location
+    IS_DAY = "is_day"
+
+    # Additional gases close to surface (10 meter above ground)
+    FORMALDEHYDE = "formaldehyde"
+    GLYOXAL = "glyoxal"
+    NITROGEN_MONOXIDE = "nitrogen_monoxide"
+    PEROXYACYL_NITRATES = "peroxyacyl_nitrates"
+
+    # Sea salt aerosol close to surface (10 meter above ground)
+    SEA_SALT_AEROSOL = "sea_salt_aerosol"
+
+    # Additional compounds and aerosols close to surface (10 meter above
+    # ground). Only available for Europe.
+    NON_METHANE_VOLATILE_ORGANIC_COMPOUNDS = "non_methane_volatile_organic_compounds"
+    PM10_WILDFIRES = "pm10_wildfires"
+    PM2_5_TOTAL_ORGANIC_MATTER = "pm2_5_total_organic_matter"
+    RESIDENTIAL_ELEMENTARY_CARBON = "residential_elementary_carbon"
+    SECONDARY_INORGANIC_AEROSOL = "secondary_inorganic_aerosol"
+    TOTAL_ELEMENTARY_CARBON = "total_elementary_carbon"
 
     # Pollen for various plants. Only available in Europe as provided by
     # CAMS European Air Quality forecast.
@@ -1400,6 +1434,18 @@ class CurrentAirQuality(DataClassORJSONMixin):
     dust: float | None = None
     uv_index: float | None = None
     uv_index_clear_sky: float | None = None
+    is_day: bool | None = None
+    formaldehyde: float | None = None
+    glyoxal: float | None = None
+    nitrogen_monoxide: float | None = None
+    peroxyacyl_nitrates: float | None = None
+    sea_salt_aerosol: float | None = None
+    non_methane_volatile_organic_compounds: float | None = None
+    pm10_wildfires: float | None = None
+    pm2_5_total_organic_matter: float | None = None
+    residential_elementary_carbon: float | None = None
+    secondary_inorganic_aerosol: float | None = None
+    total_elementary_carbon: float | None = None
     alder_pollen: float | None = None
     birch_pollen: float | None = None
     grass_pollen: float | None = None
@@ -1440,6 +1486,18 @@ class CurrentAirQualityUnits(DataClassORJSONMixin):
     dust: str | None = None
     uv_index: str | None = None
     uv_index_clear_sky: str | None = None
+    is_day: str | None = None
+    formaldehyde: str | None = None
+    glyoxal: str | None = None
+    nitrogen_monoxide: str | None = None
+    peroxyacyl_nitrates: str | None = None
+    sea_salt_aerosol: str | None = None
+    non_methane_volatile_organic_compounds: str | None = None
+    pm10_wildfires: str | None = None
+    pm2_5_total_organic_matter: str | None = None
+    residential_elementary_carbon: str | None = None
+    secondary_inorganic_aerosol: str | None = None
+    total_elementary_carbon: str | None = None
     alder_pollen: str | None = None
     birch_pollen: str | None = None
     grass_pollen: str | None = None
@@ -1479,6 +1537,18 @@ class HourlyAirQuality(DataClassORJSONMixin):
     dust: list[float | None] | None = None
     uv_index: list[float | None] | None = None
     uv_index_clear_sky: list[float | None] | None = None
+    is_day: list[bool | None] | None = None
+    formaldehyde: list[float | None] | None = None
+    glyoxal: list[float | None] | None = None
+    nitrogen_monoxide: list[float | None] | None = None
+    peroxyacyl_nitrates: list[float | None] | None = None
+    sea_salt_aerosol: list[float | None] | None = None
+    non_methane_volatile_organic_compounds: list[float | None] | None = None
+    pm10_wildfires: list[float | None] | None = None
+    pm2_5_total_organic_matter: list[float | None] | None = None
+    residential_elementary_carbon: list[float | None] | None = None
+    secondary_inorganic_aerosol: list[float | None] | None = None
+    total_elementary_carbon: list[float | None] | None = None
     alder_pollen: list[float | None] | None = None
     birch_pollen: list[float | None] | None = None
     grass_pollen: list[float | None] | None = None
@@ -1518,6 +1588,18 @@ class HourlyAirQualityUnits(DataClassORJSONMixin):
     dust: str | None = None
     uv_index: str | None = None
     uv_index_clear_sky: str | None = None
+    is_day: str | None = None
+    formaldehyde: str | None = None
+    glyoxal: str | None = None
+    nitrogen_monoxide: str | None = None
+    peroxyacyl_nitrates: str | None = None
+    sea_salt_aerosol: str | None = None
+    non_methane_volatile_organic_compounds: str | None = None
+    pm10_wildfires: str | None = None
+    pm2_5_total_organic_matter: str | None = None
+    residential_elementary_carbon: str | None = None
+    secondary_inorganic_aerosol: str | None = None
+    total_elementary_carbon: str | None = None
     alder_pollen: str | None = None
     birch_pollen: str | None = None
     grass_pollen: str | None = None
