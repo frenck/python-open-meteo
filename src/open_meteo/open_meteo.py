@@ -749,6 +749,88 @@ class OpenMeteo:
         )
 
     # pylint: disable-next=too-many-arguments
+    async def climate(  # noqa: PLR0913
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        start_date: date,
+        end_date: date,
+        daily: list[DailyParameters],
+        timezone: str = "UTC",
+        disable_bias_correction: bool = False,
+        cell_selection: CellSelection | None = None,
+        models: list[str] | None = None,
+        precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
+        temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
+        wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
+    ) -> Forecast:
+        """Get climate projections, from 1950 up to 2050.
+
+        Climate projections come from high resolution climate models, and are
+        downscaled to 10 km and bias corrected onto ERA5-Land by default.
+        Climate models have uncertainties and biases: they are meant for long
+        term trends, like the temperature anomaly over decades, not for the
+        weather of a specific day. Only daily data is available, for a
+        subset of the daily variables.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            start_date: First day of the time interval to return, from
+                1950-01-01 on.
+            end_date: Last day of the time interval to return, up to
+                2050-12-31.
+            daily: A list of daily weather variables to query for.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            disable_bias_correction: Return the raw climate model data,
+                without downscaling and bias correction onto ERA5-Land.
+            cell_selection: How to match the location to a grid cell of the
+                climate model.
+            models: Climate models to use, by their exact, case sensitive
+                Open-Meteo name, like "EC_Earth3P_HR" or "MRI_AGCM3_2_S".
+                Works the same as for the forecast, except that best_match
+                can't be combined with other models.
+            precipitation_unit: Precipitation unit.
+            temperature_unit: Temperature unit.
+            wind_speed_unit: Wind speed unit.
+
+        Returns:
+        -------
+            A Forecast object, as the response has the same shape.
+
+        Raises:
+        ------
+            ValueError: best_match is combined with other models.
+
+        """
+        # The climate API returns best_match data under the name of the model
+        # it picked for the location, so there is no telling it apart
+        if models is not None and "best_match" in models and len(set(models)) > 1:
+            msg = "best_match can't be combined with other climate models"
+            raise ValueError(msg)
+
+        return await self._request_with_models(
+            "https://climate-api.open-meteo.com/v1/climate",
+            Forecast,
+            models=models,
+            latitude=latitude,
+            longitude=longitude,
+            start_date=start_date,
+            end_date=end_date,
+            daily=daily,
+            timezone=timezone,
+            # Only sent when asked for, so the API default applies otherwise
+            disable_bias_correction=disable_bias_correction or None,
+            cell_selection=cell_selection,
+            precipitation_unit=precipitation_unit,
+            temperature_unit=temperature_unit,
+            wind_speed_unit=wind_speed_unit,
+        )
+
+    # pylint: disable-next=too-many-arguments
     async def flood(  # noqa: PLR0913
         self,
         *,

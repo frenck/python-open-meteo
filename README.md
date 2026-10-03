@@ -163,6 +163,30 @@ async with OpenMeteo() as open_meteo:
     print(weather.daily.wind_gusts_10m_max)
 ```
 
+### Climate projections
+
+The climate API has climate projections from 1950 up to 2050, from high
+resolution climate models. These are meant for long term trends, like the
+change in temperature over decades, not for the weather of a specific day.
+
+```python
+from datetime import date
+
+from open_meteo import DailyParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    climate = await open_meteo.climate(
+        latitude=52.27,
+        longitude=6.87417,
+        start_date=date(2050, 7, 1),
+        end_date=date(2050, 7, 31),
+        daily=[DailyParameters.TEMPERATURE_2M_MAX],
+        models=["MRI_AGCM3_2_S"],
+    )
+
+    print(climate.daily.temperature_2m_max)
+```
+
 ### Marine
 
 The marine API forecasts waves, swell, ocean currents, sea surface temperature,

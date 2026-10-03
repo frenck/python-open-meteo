@@ -42,6 +42,7 @@ GEOCODING_BY_ID_URL = "https://geocoding-api.open-meteo.com/v1/get"
 ELEVATION_URL = "https://api.open-meteo.com/v1/elevation"
 MARINE_URL = "https://marine-api.open-meteo.com/v1/marine"
 FLOOD_URL = "https://flood-api.open-meteo.com/v1/flood"
+CLIMATE_URL = "https://climate-api.open-meteo.com/v1/climate"
 
 
 def mock_endpoint(
@@ -795,6 +796,88 @@ async def test_flood_ensemble_with_models(
     units = flood.models["best_match"].daily_units
     assert units is not None
     assert units.river_discharge == "m³/s"
+
+
+async def test_climate(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test requesting climate projections for 2050."""
+    mock_endpoint(responses, CLIMATE_URL, "climate.json")
+
+    climate = await open_meteo_client.climate(
+        latitude=52.27,
+        longitude=6.87417,
+        start_date=date(2050, 7, 1),
+        end_date=date(2050, 7, 3),
+        daily=[DailyParameters.TEMPERATURE_2M_MAX, DailyParameters.PRECIPITATION_SUM],
+        models=["MRI_AGCM3_2_S"],
+        disable_bias_correction=True,
+    )
+
+    query = requested_query(responses)
+    assert query["start_date"] == "2050-07-01"
+    assert query["end_date"] == "2050-07-03"
+    assert query["models"] == "MRI_AGCM3_2_S"
+    assert query["disable_bias_correction"] == "true"
+
+    assert climate.daily is not None
+    assert climate.daily.time == [date(2050, 7, 1), date(2050, 7, 2), date(2050, 7, 3)]
+    assert climate.daily.temperature_2m_max is not None
+    assert climate == snapshot
+
+
+async def test_climate_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the data of each climate model ends up in a response of its own."""
+    mock_endpoint(responses, CLIMATE_URL, "climate_models.json")
+
+    climate = await open_meteo_client.climate(
+        latitude=52.27,
+        longitude=6.87417,
+        start_date=date(2050, 7, 1),
+        end_date=date(2050, 7, 3),
+        daily=[DailyParameters.TEMPERATURE_2M_MAX, DailyParameters.PRECIPITATION_SUM],
+        models=["MRI_AGCM3_2_S", "MPI_ESM1_2_XR"],
+        precipitation_unit=PrecipitationUnit.INCHES,
+    )
+
+    query = requested_query(responses)
+    assert query["precipitation_unit"] == "inch"
+    # Only sent when asked for
+    assert "disable_bias_correction" not in query
+
+    assert climate.models is not None
+    mri = climate.models["MRI_AGCM3_2_S"].daily
+    mpi = climate.models["MPI_ESM1_2_XR"].daily
+    assert mri is not None
+    assert mpi is not None
+    assert mri.temperature_2m_max != mpi.temperature_2m_max
+    units = climate.models["MRI_AGCM3_2_S"].daily_units
+    assert units is not None
+    assert units.precipitation_sum == "inch"
+
+
+async def test_climate_best_match_with_other_models(
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test best_match can't be combined with other climate models.
+
+    The climate API returns best_match data under the name of the model it
+    picked, so there is no telling it apart.
+    """
+    with pytest.raises(ValueError, match="best_match can't be combined"):
+        await open_meteo_client.climate(
+            latitude=52.27,
+            longitude=6.87417,
+            start_date=date(2050, 7, 1),
+            end_date=date(2050, 7, 1),
+            daily=[DailyParameters.TEMPERATURE_2M_MAX],
+            models=["best_match", "MPI_ESM1_2_XR"],
+        )
 
 
 async def test_air_quality(
