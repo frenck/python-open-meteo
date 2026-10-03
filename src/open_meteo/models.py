@@ -492,8 +492,9 @@ class DailyParameters(StrEnum):
     WET_BULB_TEMPERATURE_2M_MEAN = "wet_bulb_temperature_2m_mean"
     WET_BULB_TEMPERATURE_2M_MIN = "wet_bulb_temperature_2m_min"
 
-    # Dominant wind direction
+    # Dominant wind direction at 10 and 100 meters above ground
     WIND_DIRECTION_10M_DOMINANT = "wind_direction_10m_dominant"
+    WIND_DIRECTION_100M_DOMINANT = "wind_direction_100m_dominant"
 
     # Maximum, mean, and minimum wind gusts on a day
     WIND_GUSTS_10M_MAX = "wind_gusts_10m_max"
@@ -504,6 +505,11 @@ class DailyParameters(StrEnum):
     WIND_SPEED_10M_MAX = "wind_speed_10m_max"
     WIND_SPEED_10M_MEAN = "wind_speed_10m_mean"
     WIND_SPEED_10M_MIN = "wind_speed_10m_min"
+
+    # Maximum, mean, and minimum wind speed at 100 meters above ground
+    WIND_SPEED_100M_MAX = "wind_speed_100m_max"
+    WIND_SPEED_100M_MEAN = "wind_speed_100m_mean"
+    WIND_SPEED_100M_MIN = "wind_speed_100m_min"
 
 
 @dataclass
@@ -832,6 +838,42 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     wind_speed_80m: str | None = None
 
 
+# The API returns ensemble members as one variable per member, like
+# river_discharge_member01
+ENSEMBLE_MEMBER_KEY = re.compile(r"^(?P<variable>[A-Za-z0-9_]+)_member(?P<member>\d+)$")
+
+
+def _split_members(data: dict[Any, Any]) -> dict[Any, Any]:
+    """Group the ensemble members of a section by member number.
+
+    river_discharge_member01 ends up as the river_discharge of members[1].
+    The regular variables hold the control run, which is member 0.
+    """
+    data = dict(data)
+    members: dict[int, dict[str, Any]] = {}
+    for key in list(data):
+        match = ENSEMBLE_MEMBER_KEY.match(key)
+        if match is None:
+            continue
+
+        members.setdefault(int(match["member"]), {})[match["variable"]] = data.pop(key)
+
+    if members:
+        # Each member gets the timestamps, so it parses as a section of its own
+        for member in members.values():
+            member["time"] = data["time"]
+        data["members"] = members
+
+    return data
+
+
+def _drop_members(data: dict[Any, Any]) -> dict[Any, Any]:
+    """Drop the units of ensemble members; they are the same for every member."""
+    return {
+        key: value for key, value in data.items() if not ENSEMBLE_MEMBER_KEY.match(key)
+    }
+
+
 class PressureLevelVariable(StrEnum):
     """Enum to represent the variables available on pressure levels.
 
@@ -1085,10 +1127,18 @@ class HourlyForecast(DataClassORJSONMixin):
     # Pressure level data, keyed by the pressure level in hPa
     pressure_levels: dict[int, PressureLevelForecast] | None = None
 
+    # Only set for ensemble data, keyed by member number
+    members: dict[int, HourlyForecast] | None = None
+
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the pressure level variables by pressure level."""
-        return _split_pressure_levels(d)
+        """Group the ensemble members, and the pressure level variables.
+
+        Members come first, as their variables can be on a pressure level,
+        like temperature_850hPa_member01; each member then groups its own
+        pressure levels.
+        """
+        return _split_pressure_levels(_split_members(d))
 
 
 @dataclass
@@ -1257,8 +1307,8 @@ class HourlyForecastUnits(DataClassORJSONMixin):
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the pressure level variables by pressure level."""
-        return _split_pressure_levels(d)
+        """Group the pressure level variables, and drop ensemble member units."""
+        return _split_pressure_levels(_drop_members(d))
 
 
 @dataclass
@@ -1350,13 +1400,25 @@ class DailyForecast(DataClassORJSONMixin):
     wet_bulb_temperature_2m_max: list[float | None] | None = None
     wet_bulb_temperature_2m_mean: list[float | None] | None = None
     wet_bulb_temperature_2m_min: list[float | None] | None = None
+    wind_direction_100m_dominant: list[int | None] | None = None
     wind_direction_10m_dominant: list[int | None] | None = None
     wind_gusts_10m_max: list[float | None] | None = None
     wind_gusts_10m_mean: list[float | None] | None = None
     wind_gusts_10m_min: list[float | None] | None = None
+    wind_speed_100m_max: list[float | None] | None = None
+    wind_speed_100m_mean: list[float | None] | None = None
+    wind_speed_100m_min: list[float | None] | None = None
     wind_speed_10m_max: list[float | None] | None = None
     wind_speed_10m_mean: list[float | None] | None = None
     wind_speed_10m_min: list[float | None] | None = None
+
+    # Only set for ensemble data, keyed by member number
+    members: dict[int, DailyForecast] | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the ensemble members by member number."""
+        return _split_members(d)
 
 
 @dataclass
@@ -1434,13 +1496,22 @@ class DailyForecastUnits(DataClassORJSONMixin):
     wet_bulb_temperature_2m_max: str | None = None
     wet_bulb_temperature_2m_mean: str | None = None
     wet_bulb_temperature_2m_min: str | None = None
+    wind_direction_100m_dominant: str | None = None
     wind_direction_10m_dominant: str | None = None
     wind_gusts_10m_max: str | None = None
     wind_gusts_10m_mean: str | None = None
     wind_gusts_10m_min: str | None = None
+    wind_speed_100m_max: str | None = None
+    wind_speed_100m_mean: str | None = None
+    wind_speed_100m_min: str | None = None
     wind_speed_10m_max: str | None = None
     wind_speed_10m_mean: str | None = None
     wind_speed_10m_min: str | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Drop the units of the ensemble members."""
+        return _drop_members(d)
 
 
 @dataclass
@@ -2066,42 +2137,6 @@ class Marine(DataClassORJSONMixin):
 
     # Only set when multiple models were requested, keyed by the model name
     models: dict[str, Marine] | None = None
-
-
-# The API returns ensemble members as one variable per member, like
-# river_discharge_member01
-ENSEMBLE_MEMBER_KEY = re.compile(r"^(?P<variable>[a-z0-9_]+)_member(?P<member>\d+)$")
-
-
-def _split_members(data: dict[Any, Any]) -> dict[Any, Any]:
-    """Group the ensemble members of a section by member number.
-
-    river_discharge_member01 ends up as the river_discharge of members[1].
-    The regular variables hold the control run, which is member 0.
-    """
-    data = dict(data)
-    members: dict[int, dict[str, Any]] = {}
-    for key in list(data):
-        match = ENSEMBLE_MEMBER_KEY.match(key)
-        if match is None:
-            continue
-
-        members.setdefault(int(match["member"]), {})[match["variable"]] = data.pop(key)
-
-    if members:
-        # Each member gets the timestamps, so it parses as a section of its own
-        for member in members.values():
-            member["time"] = data["time"]
-        data["members"] = members
-
-    return data
-
-
-def _drop_members(data: dict[Any, Any]) -> dict[Any, Any]:
-    """Drop the units of ensemble members; they are the same for every member."""
-    return {
-        key: value for key, value in data.items() if not ENSEMBLE_MEMBER_KEY.match(key)
-    }
 
 
 class FloodParameters(StrEnum):
