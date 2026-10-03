@@ -33,7 +33,7 @@ class PrecipitationUnit(StrEnum):
     """Enum to represent the precipitation units available."""
 
     MILLIMETERS = "mm"
-    INCHES = "in"
+    INCHES = "inch"
 
 
 class TimeFormat(StrEnum):
