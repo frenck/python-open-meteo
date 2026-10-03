@@ -25,6 +25,7 @@ from .models import (
     GeocodingResult,
     HourlyParameters,
     PrecipitationUnit,
+    PressureLevelVariable,
     TemperatureUnit,
     TemporalResolution,
     TimeFormat,
@@ -213,6 +214,8 @@ class OpenMeteo:
         current: list[HourlyParameters] | None = None,
         minutely_15: list[HourlyParameters] | None = None,
         hourly: list[HourlyParameters] | None = None,
+        pressure_level_variables: list[PressureLevelVariable] | None = None,
+        pressure_levels: list[int] | None = None,
         daily: list[DailyParameters] | None = None,
         forecast_days: int | None = None,
         past_days: int = 0,
@@ -248,6 +251,13 @@ class OpenMeteo:
             minutely_15: A list of weather variables to get 15-minutely data
                 for. Every hourly variable is available.
             hourly: A list of hourly weather variables to query for.
+            pressure_level_variables: A list of hourly weather variables to
+                query for on each of the pressure levels. They end up in
+                hourly.pressure_levels, keyed by the pressure level.
+            pressure_levels: The pressure levels in hPa to query the pressure
+                level variables for, like 850 or 500. Which levels have data
+                depends on the weather model, from 10 up to 1000 hPa; levels
+                a model doesn't have return no data instead of an error.
             daily: A list of daily weather variables to query for.
             forecast_days: Number of days to forecast (0-16). Leave unset for
                 the API default of 7 days.
@@ -296,14 +306,33 @@ class OpenMeteo:
         -------
             A Forecast object.
 
+        Raises:
+        ------
+            ValueError: Only one of pressure_level_variables and
+                pressure_levels is given; nothing would be requested.
+
         """
+        if (pressure_level_variables is None) != (pressure_levels is None):
+            msg = "Both pressure_level_variables and pressure_levels are needed"
+            raise ValueError(msg)
+
+        # The API takes pressure level data as one variable per level, like
+        # temperature_850hPa, so every variable is combined with every level
+        hourly_variables: list[str] = list(hourly or [])
+        if pressure_level_variables and pressure_levels:
+            hourly_variables += [
+                f"{variable}_{level}hPa"
+                for variable in pressure_level_variables
+                for level in pressure_levels
+            ]
+
         query = _build_query(
             latitude=latitude,
             longitude=longitude,
             timezone=timezone,
             current=current,
             minutely_15=minutely_15,
-            hourly=hourly,
+            hourly=hourly_variables or None,
             daily=daily,
             forecast_days=forecast_days,
             past_days=past_days,

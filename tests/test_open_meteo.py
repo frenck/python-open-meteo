@@ -20,6 +20,7 @@ from open_meteo import (
     HourlyParameters,
     OpenMeteo,
     PrecipitationUnit,
+    PressureLevelVariable,
     TemperatureUnit,
     TemporalResolution,
     TimeFormat,
@@ -364,6 +365,98 @@ async def test_forecast_models_with_one_covering(
     assert forecast.models is None
     assert forecast.hourly is not None
     assert forecast.hourly.temperature_2m is not None
+
+
+async def test_forecast_pressure_levels(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test pressure level data is grouped by pressure level."""
+    mock_endpoint(responses, FORECAST_URL, "forecast_pressure_levels.json")
+
+    forecast = await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        pressure_level_variables=[
+            PressureLevelVariable.TEMPERATURE,
+            PressureLevelVariable.WIND_SPEED,
+        ],
+        pressure_levels=[850, 500],
+    )
+
+    # Every variable is combined with every level, next to the regular ones
+    assert requested_query(responses)["hourly"] == (
+        "temperature_2m,temperature_850hPa,temperature_500hPa,"
+        "wind_speed_850hPa,wind_speed_500hPa"
+    )
+
+    assert forecast.hourly is not None
+    assert forecast.hourly.temperature_2m is not None
+    assert forecast.hourly.pressure_levels is not None
+    assert list(forecast.hourly.pressure_levels) == [850, 500]
+    level = forecast.hourly.pressure_levels[850]
+    assert level.temperature is not None
+    assert level.wind_speed is not None
+    assert level.dew_point is None
+
+    assert forecast.hourly_units is not None
+    assert forecast.hourly_units.pressure_levels is not None
+    assert forecast.hourly_units.pressure_levels[850].temperature == "°C"
+    assert forecast == snapshot
+
+
+async def test_forecast_pressure_levels_with_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test pressure level data is grouped per model as well."""
+    mock_endpoint(responses, FORECAST_URL, "forecast_pressure_levels_models.json")
+
+    forecast = await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        pressure_level_variables=[
+            PressureLevelVariable.TEMPERATURE,
+            PressureLevelVariable.WIND_SPEED,
+        ],
+        pressure_levels=[850, 500],
+        models=["icon_seamless", "gfs_seamless"],
+    )
+
+    assert forecast.models is not None
+    icon = forecast.models["icon_seamless"].hourly
+    gfs = forecast.models["gfs_seamless"].hourly
+    assert icon is not None
+    assert gfs is not None
+    assert icon.pressure_levels is not None
+    assert gfs.pressure_levels is not None
+    assert icon.pressure_levels[500].temperature is not None
+    assert icon.pressure_levels[500].temperature != gfs.pressure_levels[500].temperature
+
+
+@pytest.mark.parametrize(
+    ("variables", "levels"),
+    [
+        ([PressureLevelVariable.TEMPERATURE], None),
+        (None, [850]),
+    ],
+)
+async def test_forecast_pressure_levels_incomplete(
+    open_meteo_client: OpenMeteo,
+    variables: list[PressureLevelVariable] | None,
+    levels: list[int] | None,
+) -> None:
+    """Test giving only one of the two pressure level parameters raises."""
+    with pytest.raises(ValueError, match="Both pressure_level_variables"):
+        await open_meteo_client.forecast(
+            latitude=52.27,
+            longitude=6.87417,
+            pressure_level_variables=variables,
+            pressure_levels=levels,
+        )
 
 
 async def test_forecast_beyond_model_range(
