@@ -5,6 +5,7 @@
 import re
 from datetime import date, datetime
 from urllib.parse import unquote
+from zoneinfo import ZoneInfo
 
 import aiohttp
 import pytest
@@ -48,6 +49,7 @@ CLIMATE_URL = "https://climate-api.open-meteo.com/v1/climate"
 ENSEMBLE_URL = "https://ensemble-api.open-meteo.com/v1/ensemble"
 SEASONAL_URL = "https://seasonal-api.open-meteo.com/v1/seasonal"
 PREVIOUS_RUNS_URL = "https://previous-runs-api.open-meteo.com/v1/forecast"
+SINGLE_RUN_URL = "https://single-runs-api.open-meteo.com/v1/forecast"
 
 
 def mock_endpoint(
@@ -1133,6 +1135,57 @@ async def test_previous_runs_models(
     assert icon is not None
     assert icon.previous_days is not None
     assert icon.previous_days[1].temperature_2m is not None
+
+
+async def test_single_run(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test requesting the forecast of a specific model run."""
+    mock_endpoint(responses, SINGLE_RUN_URL, "single_run.json")
+
+    forecast = await open_meteo_client.single_run(
+        latitude=52.27,
+        longitude=6.87417,
+        # Naive on purpose: a naive run is taken as UTC
+        run=datetime(2026, 9, 1, 0, 0),  # noqa: DTZ001
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        daily=[DailyParameters.TEMPERATURE_2M_MAX],
+        models=["ecmwf_ifs"],
+        forecast_days=2,
+    )
+
+    query = requested_query(responses)
+    assert query["run"] == "2026-09-01T00:00"
+    assert query["forecast_days"] == "2"
+    # These don't apply to a single run
+    assert "past_days" not in query
+    assert "start_date" not in query
+
+    # The data starts at the start of the run
+    assert forecast.hourly is not None
+    assert forecast.hourly.time[0] == datetime(2026, 9, 1, 0, 0)  # noqa: DTZ001
+    assert forecast.daily is not None
+    assert forecast.daily.time == [date(2026, 9, 1), date(2026, 9, 2)]
+    assert forecast == snapshot
+
+
+async def test_single_run_timezone_aware(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test a timezone aware run is converted to UTC, as the API expects."""
+    mock_endpoint(responses, SINGLE_RUN_URL, "single_run.json")
+
+    await open_meteo_client.single_run(
+        latitude=52.27,
+        longitude=6.87417,
+        run=datetime(2026, 9, 1, 14, 0, tzinfo=ZoneInfo("Europe/Amsterdam")),
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+    )
+
+    assert requested_query(responses)["run"] == "2026-09-01T12:00"
 
 
 async def test_air_quality(
