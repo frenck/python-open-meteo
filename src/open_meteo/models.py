@@ -310,47 +310,47 @@ class HourlyForecast(DataClassORJSONMixin):
     """Hourly weather data."""
 
     time: list[datetime]
-    apparent_temperature: list[float] | None = None
-    cloud_cover: list[int] | None = None
-    cloud_cover_high: list[int] | None = None
-    cloud_cover_low: list[int] | None = None
-    cloud_cover_mid: list[int] | None = None
-    dew_point_2m: list[float] | None = None
-    diffuse_radiation: list[float] | None = None
-    direct_normal_irradiance: list[float] | None = None
-    direct_radiation: list[float] | None = None
-    evapotranspiration: list[float] | None = None
-    freezing_level_height: list[float] | None = None
-    is_day: list[bool] | None = None
-    precipitation: list[float] | None = None
-    precipitation_probability: list[int] | None = None
-    pressure_msl: list[float] | None = None
-    relative_humidity_2m: list[int] | None = None
-    shortwave_radiation: list[float] | None = None
-    snow_depth: list[float] | None = None
-    soil_moisture_0_to_1cm: list[float] | None = None
-    soil_moisture_1_to_3cm: list[float] | None = None
-    soil_moisture_27_to_81cm: list[float] | None = None
-    soil_moisture_3_to_9cm: list[float] | None = None
-    soil_moisture_9_to_27cm: list[float] | None = None
-    soil_temperature_0cm: list[float] | None = None
-    soil_temperature_18cm: list[float] | None = None
-    soil_temperature_54cm: list[float] | None = None
-    soil_temperature_6cm: list[float] | None = None
-    temperature_2m: list[float] | None = None
-    uv_index: list[float] | None = None
-    vapour_pressure_deficit: list[float] | None = None
-    visibility: list[float] | None = None
-    weather_code: list[int] | None = None
-    wind_direction_10m: list[int] | None = None
-    wind_direction_120m: list[int] | None = None
-    wind_direction_180m: list[int] | None = None
-    wind_direction_80m: list[int] | None = None
-    wind_gusts_10m: list[float] | None = None
-    wind_speed_10m: list[float] | None = None
-    wind_speed_120m: list[float] | None = None
-    wind_speed_180m: list[float] | None = None
-    wind_speed_80m: list[float] | None = None
+    apparent_temperature: list[float | None] | None = None
+    cloud_cover: list[int | None] | None = None
+    cloud_cover_high: list[int | None] | None = None
+    cloud_cover_low: list[int | None] | None = None
+    cloud_cover_mid: list[int | None] | None = None
+    dew_point_2m: list[float | None] | None = None
+    diffuse_radiation: list[float | None] | None = None
+    direct_normal_irradiance: list[float | None] | None = None
+    direct_radiation: list[float | None] | None = None
+    evapotranspiration: list[float | None] | None = None
+    freezing_level_height: list[float | None] | None = None
+    is_day: list[bool | None] | None = None
+    precipitation: list[float | None] | None = None
+    precipitation_probability: list[int | None] | None = None
+    pressure_msl: list[float | None] | None = None
+    relative_humidity_2m: list[int | None] | None = None
+    shortwave_radiation: list[float | None] | None = None
+    snow_depth: list[float | None] | None = None
+    soil_moisture_0_to_1cm: list[float | None] | None = None
+    soil_moisture_1_to_3cm: list[float | None] | None = None
+    soil_moisture_27_to_81cm: list[float | None] | None = None
+    soil_moisture_3_to_9cm: list[float | None] | None = None
+    soil_moisture_9_to_27cm: list[float | None] | None = None
+    soil_temperature_0cm: list[float | None] | None = None
+    soil_temperature_18cm: list[float | None] | None = None
+    soil_temperature_54cm: list[float | None] | None = None
+    soil_temperature_6cm: list[float | None] | None = None
+    temperature_2m: list[float | None] | None = None
+    uv_index: list[float | None] | None = None
+    vapour_pressure_deficit: list[float | None] | None = None
+    visibility: list[float | None] | None = None
+    weather_code: list[int | None] | None = None
+    wind_direction_10m: list[int | None] | None = None
+    wind_direction_120m: list[int | None] | None = None
+    wind_direction_180m: list[int | None] | None = None
+    wind_direction_80m: list[int | None] | None = None
+    wind_gusts_10m: list[float | None] | None = None
+    wind_speed_10m: list[float | None] | None = None
+    wind_speed_120m: list[float | None] | None = None
+    wind_speed_180m: list[float | None] | None = None
+    wind_speed_80m: list[float | None] | None = None
 
 
 @dataclass
@@ -406,28 +406,28 @@ class DailyForecast(DataClassORJSONMixin):
     """Daily weather data."""
 
     time: list[date]
-    apparent_temperature_max: list[float] | None = None
-    apparent_temperature_min: list[float] | None = None
-    cloud_cover_mean: list[int] | None = None
-    dew_point_2m_mean: list[float] | None = None
-    precipitation_hours: list[float] | None = None
-    precipitation_sum: list[float] | None = None
-    precipitation_probability_max: list[int] | None = None
-    precipitation_probability_mean: list[float] | None = None
-    precipitation_probability_min: list[float] | None = None
-    pressure_msl_mean: list[float] | None = None
-    relative_humidity_2m_mean: list[int] | None = None
-    shortwave_radiation_sum: list[float] | None = None
-    sunrise: list[datetime] | None = None
-    sunset: list[datetime] | None = None
-    temperature_2m_max: list[float] | None = None
-    temperature_2m_min: list[float] | None = None
-    uv_index_max: list[float] | None = None
-    uv_index_clear_sky_max: list[float] | None = None
-    weather_code: list[int] | None = None
-    wind_direction_10m_dominant: list[int] | None = None
-    wind_gusts_10m_max: list[float] | None = None
-    wind_speed_10m_max: list[float] | None = None
+    apparent_temperature_max: list[float | None] | None = None
+    apparent_temperature_min: list[float | None] | None = None
+    cloud_cover_mean: list[int | None] | None = None
+    dew_point_2m_mean: list[float | None] | None = None
+    precipitation_hours: list[float | None] | None = None
+    precipitation_sum: list[float | None] | None = None
+    precipitation_probability_max: list[int | None] | None = None
+    precipitation_probability_mean: list[float | None] | None = None
+    precipitation_probability_min: list[float | None] | None = None
+    pressure_msl_mean: list[float | None] | None = None
+    relative_humidity_2m_mean: list[int | None] | None = None
+    shortwave_radiation_sum: list[float | None] | None = None
+    sunrise: list[datetime | None] | None = None
+    sunset: list[datetime | None] | None = None
+    temperature_2m_max: list[float | None] | None = None
+    temperature_2m_min: list[float | None] | None = None
+    uv_index_max: list[float | None] | None = None
+    uv_index_clear_sky_max: list[float | None] | None = None
+    weather_code: list[int | None] | None = None
+    wind_direction_10m_dominant: list[int | None] | None = None
+    wind_gusts_10m_max: list[float | None] | None = None
+    wind_speed_10m_max: list[float | None] | None = None
 
 
 @dataclass

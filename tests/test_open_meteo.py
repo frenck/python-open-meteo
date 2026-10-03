@@ -182,6 +182,42 @@ async def test_forecast_defaults(
     assert forecast == snapshot
 
 
+async def test_forecast_beyond_model_range(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test values the weather models have no data for are None.
+
+    The API allows a forecast of 16 days, but the weather models run out
+    before the end of it. The fixture holds the tail of a real 16 day
+    forecast, where the API returns null for those values.
+    """
+    mock_endpoint(responses, FORECAST_URL, "forecast_16_days.json")
+
+    forecast = await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        hourly=[
+            HourlyParameters.TEMPERATURE_2M,
+            HourlyParameters.WEATHER_CODE,
+            HourlyParameters.IS_DAY,
+        ],
+        daily=[
+            DailyParameters.TEMPERATURE_2M_MAX,
+            DailyParameters.WEATHER_CODE,
+            DailyParameters.SUNRISE,
+        ],
+        forecast_days=16,
+    )
+
+    assert forecast.hourly is not None
+    assert forecast.hourly.temperature_2m == [None, None, None, None]
+    assert forecast.daily is not None
+    assert forecast.daily.temperature_2m_max == [18.3, None]
+    assert forecast == snapshot
+
+
 async def test_air_quality(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
