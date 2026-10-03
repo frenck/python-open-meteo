@@ -20,6 +20,7 @@ from .models import (
     Elevation,
     Forecast,
     Geocoding,
+    GeocodingResult,
     HourlyParameters,
     PrecipitationUnit,
     TemperatureUnit,
@@ -301,34 +302,72 @@ class OpenMeteo:
         name: str,
         count: int = 10,
         language: str = "en",
+        country_code: str | None = None,
     ) -> Geocoding:
-        """Get geocoding result.
+        """Search for locations by name or postal code.
 
         Args:
         ----
             name: String to search for. An empty string or only 1 character
                 will return an empty result set. 2 characters will only match
-                exact matching locations. 3 and more characters will perform
-                fuzzy matching. The search string can be a location name or
-                a postal code.
+                exact matching locations. 3 and more characters match the
+                start of location names, so typos will not match. The search
+                string can be a location name or a postal code. A qualifier
+                after a comma narrows the search down to a country or region,
+                like "Paris, Texas".
             count: The number of search results to return. Up to 100 results
                 can be retrieved.
             language: Return translated results, if available, otherwise return
                 English or the native location name. Lower-cased.
+            country_code: Only return results in this country, as an ISO
+                3166-1 alpha-2 code, like "NL".
 
         Returns:
         -------
             A Geocoding object.
 
         """
-        url = URL("https://geocoding-api.open-meteo.com/v1/search").with_query(
+        # Unlike every other Open-Meteo parameter, this one is camelCase; the
+        # API silently ignores country_code
+        query = _build_query(
             name=name,
             count=count,
             format="json",
             language=language,
+            countryCode=country_code,
         )
+        url = URL("https://geocoding-api.open-meteo.com/v1/search").with_query(query)
         data = await self._request(url=url)
         return Geocoding.from_json(data)
+
+    async def geocoding_by_id(
+        self,
+        *,
+        location_id: int,
+        language: str = "en",
+    ) -> GeocodingResult:
+        """Get a single location by its ID, as returned by a geocoding search.
+
+        Args:
+        ----
+            location_id: The ID of the location, the geo_id of a geocoding
+                result.
+            language: Return translated results, if available, otherwise return
+                English or the native location name. Lower-cased.
+
+        Returns:
+        -------
+            A GeocodingResult object.
+
+        Raises:
+        ------
+            OpenMeteoError: The location ID is unknown.
+
+        """
+        query = _build_query(id=location_id, format="json", language=language)
+        url = URL("https://geocoding-api.open-meteo.com/v1/get").with_query(query)
+        data = await self._request(url=url)
+        return GeocodingResult.from_json(data)
 
     async def elevation(
         self,
