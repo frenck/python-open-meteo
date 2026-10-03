@@ -1,0 +1,43 @@
+{
+  "latitude": 52.300003,
+  "longitude": 6.900009,
+  "generationtime_ms": 9.686946868896484,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 29.0,
+  "daily_units": {
+    "time": "iso8601",
+    "temperature_2m_max_MRI_AGCM3_2_S": "\u00b0C",
+    "precipitation_sum_MRI_AGCM3_2_S": "inch",
+    "temperature_2m_max_MPI_ESM1_2_XR": "\u00b0C",
+    "precipitation_sum_MPI_ESM1_2_XR": "inch"
+  },
+  "daily": {
+    "time": [
+      "2050-07-01",
+      "2050-07-02",
+      "2050-07-03"
+    ],
+    "temperature_2m_max_MRI_AGCM3_2_S": [
+      26.9,
+      27.2,
+      30.2
+    ],
+    "precipitation_sum_MRI_AGCM3_2_S": [
+      0.008,
+      0.004,
+      0.069
+    ],
+    "temperature_2m_max_MPI_ESM1_2_XR": [
+      23.9,
+      23.8,
+      23.8
+    ],
+    "precipitation_sum_MPI_ESM1_2_XR": [
+      0.804,
+      0.005,
+      0.0
+    ]
+  }
+}

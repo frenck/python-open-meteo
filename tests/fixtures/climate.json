@@ -1,0 +1,31 @@
+{
+  "latitude": 52.3125,
+  "longitude": 6.9375,
+  "generationtime_ms": 0.164031982421875,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 29.0,
+  "daily_units": {
+    "time": "iso8601",
+    "temperature_2m_max": "\u00b0C",
+    "precipitation_sum": "mm"
+  },
+  "daily": {
+    "time": [
+      "2050-07-01",
+      "2050-07-02",
+      "2050-07-03"
+    ],
+    "temperature_2m_max": [
+      27.0,
+      27.4,
+      30.4
+    ],
+    "precipitation_sum": [
+      0.2,
+      0.1,
+      1.7
+    ]
+  }
+}
