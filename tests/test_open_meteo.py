@@ -47,6 +47,7 @@ FLOOD_URL = "https://flood-api.open-meteo.com/v1/flood"
 CLIMATE_URL = "https://climate-api.open-meteo.com/v1/climate"
 ENSEMBLE_URL = "https://ensemble-api.open-meteo.com/v1/ensemble"
 SEASONAL_URL = "https://seasonal-api.open-meteo.com/v1/seasonal"
+PREVIOUS_RUNS_URL = "https://previous-runs-api.open-meteo.com/v1/forecast"
 
 
 def mock_endpoint(
@@ -1057,6 +1058,81 @@ async def test_seasonal_best_match_with_other_models(
             daily=[DailyParameters.TEMPERATURE_2M_MAX],
             models=["best_match", "ecmwf_seas5"],
         )
+
+
+async def test_previous_runs(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test earlier model runs are grouped by how many days earlier they ran."""
+    mock_endpoint(responses, PREVIOUS_RUNS_URL, "previous_runs.json")
+
+    forecast = await open_meteo_client.previous_runs(
+        latitude=52.27,
+        longitude=6.87417,
+        previous_days=[1, 2],
+        current=[HourlyParameters.TEMPERATURE_2M],
+        hourly=[HourlyParameters.TEMPERATURE_2M, HourlyParameters.PRECIPITATION],
+        past_days=1,
+        forecast_days=1,
+    )
+
+    # Every variable is requested for every previous day as well
+    query = requested_query(responses)
+    assert query["current"] == (
+        "temperature_2m,temperature_2m_previous_day1,temperature_2m_previous_day2"
+    )
+    assert query["hourly"] == (
+        "temperature_2m,precipitation,"
+        "temperature_2m_previous_day1,temperature_2m_previous_day2,"
+        "precipitation_previous_day1,precipitation_previous_day2"
+    )
+
+    assert forecast.current is not None
+    assert forecast.current.previous_days is not None
+    assert list(forecast.current.previous_days) == [1, 2]
+    assert forecast.current.previous_days[1].interval == forecast.current.interval
+
+    hourly = forecast.hourly
+    assert hourly is not None
+    assert hourly.previous_days is not None
+    assert list(hourly.previous_days) == [1, 2]
+    earlier = hourly.previous_days[2]
+    assert earlier.time == hourly.time
+    assert earlier.temperature_2m is not None
+    assert earlier.temperature_2m != hourly.temperature_2m
+    assert earlier.previous_days is None
+
+    assert forecast.current_units is not None
+    assert forecast.current_units.temperature_2m == "°C"
+    assert forecast == snapshot
+
+
+async def test_previous_runs_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test earlier model runs are grouped per model as well.
+
+    With multiple models, the API suffixes the previous day with the model,
+    like temperature_2m_previous_day1_icon_seamless.
+    """
+    mock_endpoint(responses, PREVIOUS_RUNS_URL, "previous_runs_models.json")
+
+    forecast = await open_meteo_client.previous_runs(
+        latitude=52.27,
+        longitude=6.87417,
+        previous_days=[1],
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        models=["icon_seamless", "gfs_seamless"],
+    )
+
+    assert forecast.models is not None
+    icon = forecast.models["icon_seamless"].hourly
+    assert icon is not None
+    assert icon.previous_days is not None
+    assert icon.previous_days[1].temperature_2m is not None
 
 
 async def test_air_quality(

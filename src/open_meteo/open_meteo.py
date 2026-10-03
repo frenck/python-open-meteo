@@ -73,6 +73,28 @@ def _build_query(**parameters: object) -> dict[str, str]:
     return query
 
 
+def _with_previous_days(
+    variables: list[HourlyParameters] | None,
+    previous_days: list[int],
+) -> list[str] | None:
+    """Add the variables of earlier model runs to a list of variables.
+
+    The API takes those as one variable per day, like
+    temperature_2m_previous_day1, next to the regular temperature_2m.
+    """
+    if variables is None:
+        return None
+
+    return [
+        *variables,
+        *(
+            f"{variable}_previous_day{day}"
+            for variable in variables
+            for day in previous_days
+        ),
+    ]
+
+
 # Response sections that get a model suffix when multiple models are requested;
 # the current conditions always come from a single model and never do
 MODEL_SECTIONS = (
@@ -601,6 +623,123 @@ class OpenMeteo:
             current=current,
             minutely_15=minutely_15,
             daily=daily,
+            forecast_days=forecast_days,
+            past_days=past_days,
+            forecast_hours=forecast_hours,
+            past_hours=past_hours,
+            start_date=start_date,
+            end_date=end_date,
+            start_hour=start_hour,
+            end_hour=end_hour,
+            temporal_resolution=temporal_resolution,
+            elevation=elevation,
+            cell_selection=cell_selection,
+            tilt=tilt,
+            azimuth=azimuth,
+            precipitation_unit=precipitation_unit,
+            temperature_unit=temperature_unit,
+            wind_speed_unit=wind_speed_unit,
+        )
+
+    # pylint: disable-next=too-many-arguments,too-many-locals
+    async def previous_runs(  # noqa: PLR0913
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        previous_days: list[int],
+        timezone: str = "UTC",
+        current: list[HourlyParameters] | None = None,
+        minutely_15: list[HourlyParameters] | None = None,
+        hourly: list[HourlyParameters] | None = None,
+        forecast_days: int | None = None,
+        past_days: int | None = None,
+        forecast_hours: int | None = None,
+        past_hours: int | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
+        start_hour: datetime | None = None,
+        end_hour: datetime | None = None,
+        temporal_resolution: TemporalResolution | None = None,
+        elevation: float | None = None,
+        cell_selection: CellSelection | None = None,
+        tilt: float | None = None,
+        azimuth: float | None = None,
+        models: list[str] | None = None,
+        precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
+        temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
+        wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
+    ) -> Forecast:
+        """Get what earlier runs of the weather models forecasted.
+
+        For the same hours, this returns the forecast of the latest model run
+        as the regular values, and what the runs of one or more days earlier
+        forecasted, in previous_days of the current, 15-minutely, and hourly
+        data, keyed by how many days earlier the model ran. This shows how a
+        forecast changed, or how accurate forecasts were. There is no daily
+        data and no data on pressure levels.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            previous_days: How many days earlier the model runs to include
+                ran, from 1 to 7, like [1, 2] for the runs of one and two days
+                earlier. Models that forecast fewer days ahead only have data
+                for fewer days back.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            current: A list of weather variables to get the current
+                conditions for.
+            minutely_15: A list of weather variables to get 15-minutely data
+                for.
+            hourly: A list of hourly weather variables to query for.
+            forecast_days: Number of days to forecast (0-16). Leave unset for
+                the API default of 7 days.
+            past_days: Number of past days to include as well.
+            forecast_hours: Number of hourly steps to return from now on,
+                instead of whole days.
+            past_hours: Number of past hourly steps to include, instead of
+                whole days.
+            start_date: First day of the time interval to return. Use it
+                together with end_date, instead of forecast_days.
+            end_date: Last day of the time interval to return.
+            start_hour: First hour of the time interval to return, for hourly
+                and 15-minutely data. Use it together with end_hour. This is
+                local time in the requested timezone; tzinfo is not used.
+            end_hour: Last hour of the time interval to return.
+            temporal_resolution: Aggregate hourly data into larger time steps,
+                or use the native resolution of the weather model.
+            elevation: Elevation used for statistical downscaling. Leave unset
+                to use a digital elevation model, or pass float("nan") to
+                switch downscaling off.
+            cell_selection: How to match the location to a grid cell of the
+                weather model.
+            tilt: Tilt of a solar panel in degrees, for global tilted
+                irradiance. 0 is horizontal, 90 is vertical.
+            azimuth: Orientation of a solar panel in degrees, for global
+                tilted irradiance. 0 is south, -90 is east, 90 is west.
+            models: Weather models to use, by their Open-Meteo name. Works the
+                same as for the forecast.
+            precipitation_unit: Precipitation unit.
+            temperature_unit: Temperature unit.
+            wind_speed_unit: Wind speed unit.
+
+        Returns:
+        -------
+            A Forecast object.
+
+        """
+        return await self._request_with_models(
+            "https://previous-runs-api.open-meteo.com/v1/forecast",
+            Forecast,
+            models=models,
+            latitude=latitude,
+            longitude=longitude,
+            timezone=timezone,
+            current=_with_previous_days(current, previous_days),
+            minutely_15=_with_previous_days(minutely_15, previous_days),
+            hourly=_with_previous_days(hourly, previous_days),
             forecast_days=forecast_days,
             past_days=past_days,
             forecast_hours=forecast_hours,

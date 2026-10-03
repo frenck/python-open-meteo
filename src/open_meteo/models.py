@@ -689,6 +689,14 @@ class CurrentForecast(DataClassORJSONMixin):
     wind_speed_70m: float | None = None
     wind_speed_80m: float | None = None
 
+    # Only set for previous model runs, keyed by how many days ago it ran
+    previous_days: dict[int, CurrentForecast] | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the previous model runs by day."""
+        return _split_previous_days(d)
+
 
 @dataclass
 class CurrentForecastUnits(DataClassORJSONMixin):
@@ -856,40 +864,72 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     wind_speed_70m: str | None = None
     wind_speed_80m: str | None = None
 
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Drop the units of the previous model runs."""
+        return _drop_suffixed(d)
 
-# The API returns ensemble members as one variable per member, like
-# river_discharge_member01
-ENSEMBLE_MEMBER_KEY = re.compile(r"^(?P<variable>[A-Za-z0-9_]+)_member(?P<member>\d+)$")
+
+# The API returns ensemble members and previous model runs as one variable
+# per member or run, like river_discharge_member01 or
+# temperature_2m_previous_day1
+ENSEMBLE_MEMBER_KEY = re.compile(r"^(?P<variable>[A-Za-z0-9_]+)_member(?P<key>\d+)$")
+PREVIOUS_DAY_KEY = re.compile(r"^(?P<variable>[A-Za-z0-9_]+)_previous_day(?P<key>\d+)$")
 
 
-def _split_members(data: dict[Any, Any]) -> dict[Any, Any]:
-    """Group the ensemble members of a section by member number.
+def _split_suffixed(
+    data: dict[Any, Any],
+    pattern: re.Pattern[str],
+    target: str,
+) -> dict[Any, Any]:
+    """Group the variables with a numbered suffix of a section, by number.
 
+    With the ensemble member pattern and members as target,
     river_discharge_member01 ends up as the river_discharge of members[1].
-    The regular variables hold the control run, which is member 0.
+    Each group gets the timestamps of the section as well, so it parses as a
+    section of its own.
     """
     data = dict(data)
-    members: dict[int, dict[str, Any]] = {}
+    groups: dict[int, dict[str, Any]] = {}
     for key in list(data):
-        match = ENSEMBLE_MEMBER_KEY.match(key)
+        match = pattern.match(key)
         if match is None:
             continue
 
-        members.setdefault(int(match["member"]), {})[match["variable"]] = data.pop(key)
+        groups.setdefault(int(match["key"]), {})[match["variable"]] = data.pop(key)
 
-    if members:
-        # Each member gets the timestamps, so it parses as a section of its own
-        for member in members.values():
-            member["time"] = data["time"]
-        data["members"] = members
+    if groups:
+        for group in groups.values():
+            group.update(
+                {key: data[key] for key in ("time", "interval") if key in data}
+            )
+        data[target] = groups
 
     return data
 
 
-def _drop_members(data: dict[Any, Any]) -> dict[Any, Any]:
-    """Drop the units of ensemble members; they are the same for every member."""
+def _split_members(data: dict[Any, Any]) -> dict[Any, Any]:
+    """Group the ensemble members by member number, into members.
+
+    The regular variables hold the control run, which is member 0.
+    """
+    return _split_suffixed(data, ENSEMBLE_MEMBER_KEY, "members")
+
+
+def _split_previous_days(data: dict[Any, Any]) -> dict[Any, Any]:
+    """Group the previous model runs by day, into previous_days.
+
+    The regular variables hold the latest model run, which is day 0.
+    """
+    return _split_suffixed(data, PREVIOUS_DAY_KEY, "previous_days")
+
+
+def _drop_suffixed(data: dict[Any, Any]) -> dict[Any, Any]:
+    """Drop the units of members and previous runs; they are all the same."""
     return {
-        key: value for key, value in data.items() if not ENSEMBLE_MEMBER_KEY.match(key)
+        key: value
+        for key, value in data.items()
+        if not ENSEMBLE_MEMBER_KEY.match(key) and not PREVIOUS_DAY_KEY.match(key)
     }
 
 
@@ -1153,15 +1193,18 @@ class HourlyForecast(DataClassORJSONMixin):
     # Only set for ensemble data, keyed by member number
     members: dict[int, HourlyForecast] | None = None
 
+    # Only set for previous model runs, keyed by how many days ago it ran
+    previous_days: dict[int, HourlyForecast] | None = None
+
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the ensemble members, and the pressure level variables.
+        """Group previous runs, ensemble members, and pressure level variables.
 
-        Members come first, as their variables can be on a pressure level,
-        like temperature_850hPa_member01; each member then groups its own
-        pressure levels.
+        Members come before pressure levels, as their variables can be on a
+        pressure level, like temperature_850hPa_member01; each member then
+        groups its own pressure levels.
         """
-        return _split_pressure_levels(_split_members(d))
+        return _split_pressure_levels(_split_members(_split_previous_days(d)))
 
 
 @dataclass
@@ -1334,8 +1377,8 @@ class HourlyForecastUnits(DataClassORJSONMixin):
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the pressure level variables, and drop ensemble member units."""
-        return _split_pressure_levels(_drop_members(d))
+        """Group the pressure levels, and drop member and previous run units."""
+        return _split_pressure_levels(_drop_suffixed(d))
 
 
 @dataclass
@@ -1541,8 +1584,8 @@ class DailyForecastUnits(DataClassORJSONMixin):
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Drop the units of the ensemble members."""
-        return _drop_members(d)
+        """Drop the units of ensemble members and previous runs."""
+        return _drop_suffixed(d)
 
 
 @dataclass
@@ -2856,8 +2899,8 @@ class DailyFloodUnits(DataClassORJSONMixin):
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Drop the units of the ensemble members."""
-        return _drop_members(d)
+        """Drop the units of ensemble members and previous runs."""
+        return _drop_suffixed(d)
 
 
 @dataclass
