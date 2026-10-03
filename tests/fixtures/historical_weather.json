@@ -1,0 +1,56 @@
+{
+  "latitude": 52.26713,
+  "longitude": 6.820702,
+  "generationtime_ms": 26.470065116882324,
+  "utc_offset_seconds": 7200,
+  "timezone": "Europe/Amsterdam",
+  "timezone_abbreviation": "GMT+2",
+  "elevation": 29.0,
+  "hourly_units": {
+    "time": "iso8601",
+    "temperature_2m": "\u00b0C",
+    "wind_speed_10m": "km/h",
+    "soil_moisture_index_0_to_7cm": "fraction"
+  },
+  "hourly": {
+    "time": [
+      "1953-01-31T00:00",
+      "1953-01-31T01:00",
+      "1953-01-31T02:00"
+    ],
+    "temperature_2m": [
+      5.8,
+      5.5,
+      5.1
+    ],
+    "wind_speed_10m": [
+      23.2,
+      23.7,
+      24.8
+    ],
+    "soil_moisture_index_0_to_7cm": [
+      0.935,
+      0.935,
+      0.935
+    ]
+  },
+  "daily_units": {
+    "time": "iso8601",
+    "wind_gusts_10m_max": "km/h",
+    "precipitation_sum": "mm"
+  },
+  "daily": {
+    "time": [
+      "1953-01-31",
+      "1953-02-01"
+    ],
+    "wind_gusts_10m_max": [
+      89.6,
+      84.2
+    ],
+    "precipitation_sum": [
+      11.9,
+      12.5
+    ]
+  }
+}
