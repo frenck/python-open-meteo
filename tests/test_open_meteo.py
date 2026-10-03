@@ -17,6 +17,7 @@ from open_meteo import (
     AirQualityParameters,
     CellSelection,
     DailyParameters,
+    FloodParameters,
     HourlyParameters,
     LengthUnit,
     MarineDailyParameters,
@@ -41,6 +42,7 @@ GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 GEOCODING_BY_ID_URL = "https://geocoding-api.open-meteo.com/v1/get"
 ELEVATION_URL = "https://api.open-meteo.com/v1/elevation"
 MARINE_URL = "https://marine-api.open-meteo.com/v1/marine"
+FLOOD_URL = "https://flood-api.open-meteo.com/v1/flood"
 
 
 def mock_endpoint(
@@ -726,6 +728,76 @@ async def test_marine_models(
     assert ecmwf is not None
     assert best_match.wave_height is not None
     assert best_match.wave_height != ecmwf.wave_height
+
+
+async def test_flood(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test requesting the river discharge of the Rhine, entering the Netherlands."""
+    mock_endpoint(responses, FLOOD_URL, "flood.json")
+
+    flood = await open_meteo_client.flood(
+        latitude=51.84,
+        longitude=6.11,
+        daily=list(FloodParameters),
+        forecast_days=3,
+    )
+
+    query = requested_query(responses)
+    assert query["daily"] == ",".join(FloodParameters)
+    assert query["forecast_days"] == "3"
+    # Only sent when asked for
+    assert "ensemble" not in query
+
+    assert flood.daily is not None
+    assert flood.daily.river_discharge is not None
+    assert flood.daily.members is None
+    assert flood.daily_units is not None
+    assert flood.daily_units.river_discharge == "m³/s"
+    assert flood == snapshot
+
+
+async def test_flood_ensemble_with_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test ensemble members are grouped per member, and per model.
+
+    With multiple models, the API suffixes the members with the model as
+    well, like river_discharge_member01_seamless_v4. The flood API suffixes
+    the data of best_match as flood_best_match.
+    """
+    mock_endpoint(responses, FLOOD_URL, "flood_ensemble_models.json")
+
+    flood = await open_meteo_client.flood(
+        latitude=51.84,
+        longitude=6.11,
+        daily=[FloodParameters.RIVER_DISCHARGE],
+        ensemble=True,
+        models=["best_match", "seamless_v4"],
+    )
+
+    query = requested_query(responses)
+    assert query["ensemble"] == "true"
+    assert query["models"] == "best_match,seamless_v4"
+
+    assert flood.daily is None
+    assert flood.models is not None
+    daily = flood.models["best_match"].daily
+    assert daily is not None
+    assert daily.river_discharge is not None
+    assert daily.members is not None
+    assert list(daily.members) == list(range(1, 51))
+    member = daily.members[1]
+    assert member.time == daily.time
+    assert member.river_discharge is not None
+    assert member.members is None
+
+    units = flood.models["best_match"].daily_units
+    assert units is not None
+    assert units.river_discharge == "m³/s"
 
 
 async def test_air_quality(
