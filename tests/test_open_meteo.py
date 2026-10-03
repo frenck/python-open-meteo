@@ -32,6 +32,7 @@ from .conftest import load_fixture
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
+GEOCODING_BY_ID_URL = "https://geocoding-api.open-meteo.com/v1/get"
 ELEVATION_URL = "https://api.open-meteo.com/v1/elevation"
 
 
@@ -423,6 +424,60 @@ async def test_geocoding(
         "name": "Enschede",
     }
     assert geocoding == snapshot
+
+
+async def test_geocoding_country_code(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the country filter is sent in the camelCase the API expects."""
+    mock_endpoint(responses, GEOCODING_URL, "geocoding.json")
+
+    await open_meteo_client.geocoding(name="Enschede", country_code="NL")
+
+    query = requested_query(responses)
+    assert query["countryCode"] == "NL"
+    assert "country_code" not in query
+
+
+async def test_geocoding_by_id(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test getting a single location by its ID."""
+    mock_endpoint(responses, GEOCODING_BY_ID_URL, "geocoding_by_id.json")
+
+    location = await open_meteo_client.geocoding_by_id(
+        location_id=2756071,
+        language="nl",
+    )
+
+    assert requested_query(responses) == {
+        "format": "json",
+        "id": "2756071",
+        "language": "nl",
+    }
+    assert location.geo_id == 2756071
+    assert location.name == "Enschede"
+    assert location.country == "Nederland"
+    assert location == snapshot
+
+
+async def test_geocoding_by_id_unknown(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test an unknown location ID raises with the reason the API gives."""
+    responses.get(
+        re.compile(rf"^{re.escape(GEOCODING_BY_ID_URL)}\?.*$"),
+        status=400,
+        body='{"reason":"Location ID not found.","error":true}',
+        content_type="application/json",
+    )
+
+    with pytest.raises(OpenMeteoError, match="Location ID not found"):
+        await open_meteo_client.geocoding_by_id(location_id=1)
 
 
 async def test_geocoding_no_results(
