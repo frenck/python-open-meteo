@@ -1,56 +1,74 @@
-[tool.poetry]
+[project]
 name = "open-meteo"
 version = "0.0.0"
-description = "Asynchronous client for the Open-Meteo API."
-authors = ["Franck Nijhof <opensource@frenck.dev>"]
-maintainers = ["Franck Nijhof <opensource@frenck.dev>"]
+description = "Asynchronous Python client for the Open-Meteo API."
+authors = [{ name = "Franck Nijhof", email = "opensource@frenck.dev" }]
+maintainers = [{ name = "Franck Nijhof", email = "opensource@frenck.dev" }]
 license = "MIT"
+requires-python = ">=3.11"
 readme = "README.md"
-homepage = "https://github.com/frenck/python-open-meteo"
-repository = "https://github.com/frenck/python-open-meteo"
-documentation = "https://github.com/frenck/python-open-meteo"
 keywords = [
-    "weather", "weather-api", "meteo", "openmeteo", "open-meteo", "api", "async", "client"
+  "air-quality",
+  "api",
+  "async",
+  "client",
+  "forecast",
+  "geocoding",
+  "home-assistant",
+  "meteo",
+  "open-meteo",
+  "openmeteo",
+  "weather",
+  "weather-api",
 ]
 classifiers = [
-  "Development Status :: 1 - Planning",
+  "Development Status :: 5 - Production/Stable",
+  "Framework :: AsyncIO",
   "Intended Audience :: Developers",
   "Natural Language :: English",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: 3",
   "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-packages = [
-    { include = "open_meteo", from = "src" },
+dynamic = ["dependencies"]
+packages = [{ include = "open_meteo", from = "src" }]
+dependencies = [
+  'aiohttp (>=3.8.1)',
+  'mashumaro (>=3.10)',
+  'orjson (>=3.9.8)',
+  'yarl (>=1.6.0)',
 ]
 
-[tool.poetry.dependencies]
-aiohttp = ">=3.8.1"
-mashumaro = ">=3.10"
-orjson = ">=3.9.8"
-python = "^3.11"
+[tool.poetry]
+requires-poetry = '>=2.0'
 
-[tool.poetry.urls]
+[project.urls]
+homepage = "https://github.com/frenck/python-open-meteo"
+repository = "https://github.com/frenck/python-open-meteo"
+documentation = "https://github.com/frenck/python-open-meteo"
 "Bug Tracker" = "https://github.com/frenck/python-open-meteo/issues"
 Changelog = "https://github.com/frenck/python-open-meteo/releases"
 
 [tool.poetry.group.dev.dependencies]
-aresponses = "3.0.0"
-codespell = "2.4.1"
+aioresponses = "0.7.8"
+codespell = "2.4.2"
 covdefaults = "2.3.0"
-coverage = {version = "7.10.7", extras = ["toml"]}
-mypy = "1.18.2"
-pre-commit = "4.3.0"
+coverage = { version = "7.13.5", extras = ["toml"] }
 pre-commit-hooks = "6.0.0"
-pylint = "3.3.8"
-pytest = "8.4.2"
-pytest-asyncio = "1.2.0"
-pytest-cov = "7.0.0"
-ruff = "0.13.3"
-safety = "3.6.2"
-syrupy = "5.0.0"
-yamllint = "1.37.1"
+prek = "0.3.9"
+pylint = "4.0.5"
+pytest = "9.0.3"
+pytest-asyncio = "1.3.0"
+pytest-cov = "7.1.0"
+ruff = "0.15.11"
+safety = "3.7.0"
+syrupy = "5.1.0"
+ty = "0.0.31"
+yamllint = "1.38.0"
+zizmor = "1.24.1"
 
 [tool.coverage.run]
 plugins = ["covdefaults"]
@@ -58,73 +76,28 @@ source = ["open_meteo"]
 
 [tool.coverage.report]
 show_missing = true
-fail_under = 90
+fail_under = 95
 
-[tool.mypy]
-# Specify the target platform details in config, so your developers are
-# free to run mypy on Windows, Linux, or macOS and get consistent
-# results.
-platform = "linux"
-python_version = "3.11"
-
-# show error messages from unrelated files
-follow_imports = "normal"
-
-# suppress errors about unsatisfied imports
-ignore_missing_imports = true
-
-# be strict
-check_untyped_defs = true
-disallow_any_generics = true
-disallow_incomplete_defs = true
-disallow_subclassing_any = true
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-no_implicit_reexport = true
-strict_optional = true
-warn_incomplete_stub = true
-warn_no_return = true
-warn_redundant_casts = true
-warn_return_any = true
-warn_unused_configs = true
-warn_unused_ignores = true
+[tool.ty.environment]
+python-version = "3.11"
 
 [tool.pylint.MASTER]
-ignore= [
-  "tests"
-]
+ignore = ["tests"]
 
 [tool.pylint.BASIC]
-good-names = [
-    "_",
-    "ex",
-    "fp",
-    "i",
-    "id",
-    "j",
-    "k",
-    "on",
-    "Run",
-    "T",
-]
+good-names = ["_", "ex", "fp", "i", "id", "j", "k", "on", "Run", "T"]
 
 [tool.pylint.DESIGN]
 max-attributes = 8
 
 [tool.pylint."MESSAGES CONTROL"]
-disable= [
-    "duplicate-code",
-    "format",
-    "unsubscriptable-object",
-]
+disable = ["duplicate-code", "format", "unsubscriptable-object"]
 
 [tool.pylint.SIMILARITIES]
 ignore-imports = true
 
 [tool.pylint.FORMAT]
-max-line-length=88
+max-line-length = 88
 
 [tool.pytest.ini_options]
 addopts = "--cov"
@@ -133,10 +106,10 @@ asyncio_mode = "auto"
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-  "ANN401", # Opinioated warning on disallowing dynamically typed expressions
-  "D203", # Conflicts with other rules
-  "D213", # Conflicts with other rules
-  "D417", # False positives in some occasions
+  "ANN401",  # Opinionated warning on disallowing dynamically typed expressions
+  "D203",    # Conflicts with other rules
+  "D213",    # Conflicts with other rules
+  "D417",    # False positives in some occasions
   "PLR2004", # Just annoying, not really useful
 
   # Conflicts with the Ruff formatter
@@ -160,5 +133,5 @@ runtime-evaluated-base-classes = [
 max-complexity = 25
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=2.0"]
 build-backend = "poetry.core.masonry.api"

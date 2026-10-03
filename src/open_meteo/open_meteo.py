@@ -67,7 +67,7 @@ class OpenMeteo:
         try:
             async with asyncio.timeout(self.request_timeout):
                 response = await self.session.get(url)
-        except asyncio.TimeoutError as exception:
+        except TimeoutError as exception:
             msg = "Timeout occurred while connecting to the Open-Meteo API"
             raise OpenMeteoConnectionError(msg) from exception
         except (

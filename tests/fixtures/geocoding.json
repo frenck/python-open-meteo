@@ -1,0 +1,63 @@
+{
+  "results": [
+    {
+      "id": 2756071,
+      "name": "Enschede",
+      "latitude": 52.21833,
+      "longitude": 6.89583,
+      "elevation": 45.0,
+      "feature_code": "PPL",
+      "country_code": "NL",
+      "admin1_id": 2748838,
+      "admin2_id": 2756070,
+      "timezone": "Europe/Amsterdam",
+      "population": 153655,
+      "postcodes": [
+        "7511",
+        "7512",
+        "7513",
+        "7514",
+        "7521",
+        "7522",
+        "7523",
+        "7524",
+        "7525",
+        "7531",
+        "7532",
+        "7533",
+        "7534",
+        "7535",
+        "7536",
+        "7541",
+        "7542",
+        "7543",
+        "7544",
+        "7545",
+        "7546",
+        "7547",
+        "7548"
+      ],
+      "country_id": 2750405,
+      "country": "The Netherlands",
+      "admin1": "Overijssel",
+      "admin2": "Enschede Municipality"
+    },
+    {
+      "id": 6296691,
+      "name": "Enschede Airport Twente",
+      "latitude": 52.27,
+      "longitude": 6.87417,
+      "elevation": 34.0,
+      "feature_code": "AIRP",
+      "country_code": "NL",
+      "admin1_id": 2748838,
+      "admin2_id": 2756070,
+      "timezone": "Europe/Amsterdam",
+      "country_id": 2750405,
+      "country": "The Netherlands",
+      "admin1": "Overijssel",
+      "admin2": "Enschede Municipality"
+    }
+  ],
+  "generationtime_ms": 0.15377998
+}
