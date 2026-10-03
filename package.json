@@ -2,9 +2,9 @@
   "name": "open-meteo",
   "version": "0.0.0",
   "private": true,
-  "description": "Asynchronous client for the Open-Meteo API",
+  "description": "Asynchronous Python client for the Open-Meteo API",
   "scripts": {
-    "prettier": "prettier --write **/*.{json,js,md,yml,yaml}"
+    "prettier": "prettier --write **/*.{json,js,md,yml,yaml} *.{json,js,md,yml,yaml}"
   },
   "author": "Franck Nijhof <opensource@frenck.dev>",
   "license": "MIT",
