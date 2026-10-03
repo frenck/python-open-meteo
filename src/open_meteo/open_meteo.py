@@ -871,6 +871,98 @@ class OpenMeteo:
         )
 
     # pylint: disable-next=too-many-arguments,too-many-locals
+    async def satellite_radiation(  # noqa: PLR0913
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        timezone: str = "UTC",
+        hourly: list[HourlyParameters] | None = None,
+        daily: list[DailyParameters] | None = None,
+        past_days: int | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
+        start_hour: datetime | None = None,
+        end_hour: datetime | None = None,
+        temporal_resolution: TemporalResolution | None = None,
+        cell_selection: CellSelection | None = None,
+        tilt: float | None = None,
+        azimuth: float | None = None,
+        models: list[str] | None = None,
+    ) -> Forecast:
+        """Get solar radiation measured by weather satellites, back to 1983.
+
+        Satellites measure solar radiation every 10 to 30 minutes; pass
+        TemporalResolution.NATIVE to get that resolution, instead of hourly
+        averages. Data comes in with a delay of a few hours, and there is no
+        data for North America yet. There are no current conditions, and no
+        15-minutely data.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            hourly: A list of hourly radiation variables to query for, like
+                shortwave_radiation or global_tilted_irradiance.
+            daily: A list of daily variables to query for, like
+                shortwave_radiation_sum or sunshine_duration.
+            past_days: Number of past days to include, up to today.
+            start_date: First day of the time interval to return, from
+                1983-01-01 on. Use it together with end_date.
+            end_date: Last day of the time interval to return.
+            start_hour: First hour of the time interval to return. Use it
+                together with end_hour. This is local time in the requested
+                timezone; tzinfo is not used.
+            end_hour: Last hour of the time interval to return.
+            temporal_resolution: Use the native resolution of the satellites,
+                or aggregate into larger time steps.
+            cell_selection: How to match the location to a grid cell of the
+                satellite data.
+            tilt: Tilt of a solar panel in degrees, for global tilted
+                irradiance. 0 is horizontal, 90 is vertical.
+            azimuth: Orientation of a solar panel in degrees, for global
+                tilted irradiance. 0 is south, -90 is east, 90 is west.
+            models: Satellite data sources to use, by their Open-Meteo name,
+                like "eumetsat_sarah3". Leave unset for
+                satellite_radiation_seamless, which combines them. Works the
+                same as for the forecast.
+
+        Returns:
+        -------
+            A Forecast object, as the response has the same shape.
+
+        Raises:
+        ------
+            OpenMeteoError: The location is not covered by the satellites.
+
+        """
+        return await self._request_with_models(
+            "https://satellite-api.open-meteo.com/v1/archive",
+            Forecast,
+            # The API serves its regular archive without a model, instead of
+            # the satellite data, so a satellite model is always requested
+            models=models or ["satellite_radiation_seamless"],
+            # The archive suffixes best_match data as archive_best_match
+            model_suffixes={"best_match": "archive_best_match"},
+            latitude=latitude,
+            longitude=longitude,
+            timezone=timezone,
+            hourly=hourly,
+            daily=daily,
+            past_days=past_days,
+            start_date=start_date,
+            end_date=end_date,
+            start_hour=start_hour,
+            end_hour=end_hour,
+            temporal_resolution=temporal_resolution,
+            cell_selection=cell_selection,
+            tilt=tilt,
+            azimuth=azimuth,
+        )
+
+    # pylint: disable-next=too-many-arguments,too-many-locals
     async def historical_weather(  # noqa: PLR0913
         self,
         *,
@@ -1027,6 +1119,12 @@ class OpenMeteo:
             timeformat=TimeFormat.ISO_8601,
         )
         data = await self._request(url=URL(url).with_query(query))
+
+        # For a location without any data, like outside the coverage of the
+        # satellites, the API returns NaN coordinates, which isn't valid JSON
+        if '"latitude":nan' in data:
+            msg = "No data for this location, it is outside the area the API covers"
+            raise OpenMeteoError(msg)
 
         if models is not None and len(set(models)) > 1:
             return response_type.from_dict(

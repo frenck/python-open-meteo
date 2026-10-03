@@ -203,6 +203,27 @@ async with OpenMeteo() as open_meteo:
     print(forecast.hourly.time[0], forecast.hourly.temperature_2m)
 ```
 
+### Satellite radiation
+
+The satellite radiation API has the solar radiation measured by weather
+satellites, back to 1983, every 10 to 30 minutes. There is no data for North
+America yet; for a location without data, it raises an `OpenMeteoError`.
+
+```python
+from open_meteo import HourlyParameters, OpenMeteo, TemporalResolution
+
+async with OpenMeteo() as open_meteo:
+    satellite = await open_meteo.satellite_radiation(
+        latitude=52.27,
+        longitude=6.87417,
+        past_days=1,
+        hourly=[HourlyParameters.SHORTWAVE_RADIATION],
+        temporal_resolution=TemporalResolution.NATIVE,
+    )
+
+    print(satellite.hourly.time, satellite.hourly.shortwave_radiation)
+```
+
 ### Historical forecast
 
 The historical forecast API archives the forecasts the weather models made in
