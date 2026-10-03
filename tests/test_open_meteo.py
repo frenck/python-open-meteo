@@ -43,6 +43,7 @@ ELEVATION_URL = "https://api.open-meteo.com/v1/elevation"
 MARINE_URL = "https://marine-api.open-meteo.com/v1/marine"
 FLOOD_URL = "https://flood-api.open-meteo.com/v1/flood"
 CLIMATE_URL = "https://climate-api.open-meteo.com/v1/climate"
+ENSEMBLE_URL = "https://ensemble-api.open-meteo.com/v1/ensemble"
 
 
 def mock_endpoint(
@@ -878,6 +879,86 @@ async def test_climate_best_match_with_other_models(
             daily=[DailyParameters.TEMPERATURE_2M_MAX],
             models=["best_match", "MPI_ESM1_2_XR"],
         )
+
+
+async def test_ensemble(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test ensemble members are grouped per member, with their pressure levels.
+
+    The API suffixes pressure level variables with the member as well, like
+    temperature_850hPa_member01.
+    """
+    mock_endpoint(responses, ENSEMBLE_URL, "ensemble.json")
+
+    forecast = await open_meteo_client.ensemble(
+        latitude=52.27,
+        longitude=6.87417,
+        models=["cmc_gem_geps"],
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        pressure_level_variables=[PressureLevelVariable.TEMPERATURE],
+        pressure_levels=[850],
+        daily=[DailyParameters.TEMPERATURE_2M_MAX],
+        forecast_days=1,
+    )
+
+    query = requested_query(responses)
+    assert query["models"] == "cmc_gem_geps"
+    assert query["hourly"] == "temperature_2m,temperature_850hPa"
+
+    hourly = forecast.hourly
+    assert hourly is not None
+    assert hourly.temperature_2m is not None
+    assert hourly.pressure_levels is not None
+    assert hourly.members is not None
+    assert list(hourly.members) == list(range(1, 21))
+    member = hourly.members[20]
+    assert member.time == hourly.time
+    assert member.temperature_2m is not None
+    assert member.temperature_2m != hourly.temperature_2m
+    assert member.pressure_levels is not None
+    assert member.pressure_levels[850].temperature is not None
+
+    assert forecast.daily is not None
+    assert forecast.daily.members is not None
+    assert len(forecast.daily.members) == 20
+
+    assert forecast.hourly_units is not None
+    assert forecast.hourly_units.pressure_levels is not None
+    assert forecast.hourly_units.pressure_levels[850].temperature == "°C"
+    assert forecast == snapshot
+
+
+async def test_ensemble_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test ensemble members are grouped per model as well.
+
+    icon_seamless is an older name, which the API returns as
+    icon_seamless_eps; its data ends up under the requested name.
+    """
+    mock_endpoint(responses, ENSEMBLE_URL, "ensemble_models.json")
+
+    forecast = await open_meteo_client.ensemble(
+        latitude=52.27,
+        longitude=6.87417,
+        models=["icon_seamless", "ecmwf_ifs025_ensemble"],
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+    )
+
+    assert forecast.hourly is None
+    assert forecast.models is not None
+    icon = forecast.models["icon_seamless"].hourly
+    ecmwf = forecast.models["ecmwf_ifs025_ensemble"].hourly
+    assert icon is not None
+    assert ecmwf is not None
+    assert icon.members is not None
+    assert ecmwf.members is not None
+    assert len(icon.members) == 39
+    assert len(ecmwf.members) == 50
 
 
 async def test_air_quality(

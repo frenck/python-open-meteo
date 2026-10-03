@@ -473,6 +473,146 @@ class OpenMeteo:
         )
 
     # pylint: disable-next=too-many-arguments,too-many-locals
+    async def ensemble(  # noqa: PLR0913
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        models: list[str],
+        timezone: str = "UTC",
+        current: list[HourlyParameters] | None = None,
+        minutely_15: list[HourlyParameters] | None = None,
+        hourly: list[HourlyParameters] | None = None,
+        pressure_level_variables: list[PressureLevelVariable] | None = None,
+        pressure_levels: list[int] | None = None,
+        daily: list[DailyParameters] | None = None,
+        forecast_days: int | None = None,
+        past_days: int | None = None,
+        forecast_hours: int | None = None,
+        past_hours: int | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
+        start_hour: datetime | None = None,
+        end_hour: datetime | None = None,
+        temporal_resolution: TemporalResolution | None = None,
+        elevation: float | None = None,
+        cell_selection: CellSelection | None = None,
+        tilt: float | None = None,
+        azimuth: float | None = None,
+        precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
+        temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
+        wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
+    ) -> Forecast:
+        """Get an ensemble forecast, with all members of the ensemble models.
+
+        Ensemble models run the same forecast many times, with slightly
+        different starting conditions, to show how certain a forecast is.
+        The regular values are the control run; the other members are in
+        the members of the hourly, 15-minutely, and daily data, keyed by
+        member number. Pressure levels work per member as well.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            models: Ensemble models to use, by their Open-Meteo name, like
+                "ecmwf_ifs025_ensemble" or "dwd_icon_seamless_eps". There is no
+                default; with multiple models, the data of each model is in
+                Forecast.models.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            current: A list of weather variables to get the current
+                conditions for. These are not per member.
+            minutely_15: A list of weather variables to get 15-minutely data
+                for.
+            hourly: A list of hourly weather variables to query for.
+            pressure_level_variables: A list of hourly weather variables to
+                query for on each of the pressure levels.
+            pressure_levels: The pressure levels in hPa to query the pressure
+                level variables for, like 850 or 500.
+            daily: A list of daily weather variables to query for.
+            forecast_days: Number of days to forecast (0-36). Leave unset for
+                the API default of 7 days.
+            past_days: Number of past days to include as well.
+            forecast_hours: Number of hourly steps to return from now on,
+                instead of whole days.
+            past_hours: Number of past hourly steps to include, instead of
+                whole days.
+            start_date: First day of the time interval to return. Use it
+                together with end_date, instead of forecast_days.
+            end_date: Last day of the time interval to return.
+            start_hour: First hour of the time interval to return, for hourly
+                and 15-minutely data. Use it together with end_hour. This is
+                local time in the requested timezone; tzinfo is not used.
+            end_hour: Last hour of the time interval to return.
+            temporal_resolution: Aggregate hourly data into larger time steps,
+                or use the native resolution of the ensemble model.
+            elevation: Elevation used for statistical downscaling. Leave unset
+                to use a digital elevation model, or pass float("nan") to
+                switch downscaling off.
+            cell_selection: How to match the location to a grid cell of the
+                ensemble model.
+            tilt: Tilt of a solar panel in degrees, for global tilted
+                irradiance. 0 is horizontal, 90 is vertical.
+            azimuth: Orientation of a solar panel in degrees, for global
+                tilted irradiance. 0 is south, -90 is east, 90 is west.
+            precipitation_unit: Precipitation unit.
+            temperature_unit: Temperature unit.
+            wind_speed_unit: Wind speed unit.
+
+        Returns:
+        -------
+            A Forecast object.
+
+        Raises:
+        ------
+            ValueError: Only one of pressure_level_variables and
+                pressure_levels is given; nothing would be requested.
+
+        """
+        return await self._forecast(
+            "https://ensemble-api.open-meteo.com/v1/ensemble",
+            hourly=hourly,
+            pressure_level_variables=pressure_level_variables,
+            pressure_levels=pressure_levels,
+            models=models,
+            # Older model names still work, but the API returns their data
+            # under the current name of the model
+            model_suffixes={
+                "gem_global": "gem_global_ensemble",
+                "gfs025": "ncep_gefs025",
+                "gfs05": "ncep_gefs05",
+                "gfs_seamless": "ncep_gefs_seamless",
+                "icon_d2": "icon_d2_eps",
+                "icon_eu": "icon_eu_eps",
+                "icon_global": "icon_global_eps",
+                "icon_seamless": "icon_seamless_eps",
+            },
+            latitude=latitude,
+            longitude=longitude,
+            timezone=timezone,
+            current=current,
+            minutely_15=minutely_15,
+            daily=daily,
+            forecast_days=forecast_days,
+            past_days=past_days,
+            forecast_hours=forecast_hours,
+            past_hours=past_hours,
+            start_date=start_date,
+            end_date=end_date,
+            start_hour=start_hour,
+            end_hour=end_hour,
+            temporal_resolution=temporal_resolution,
+            elevation=elevation,
+            cell_selection=cell_selection,
+            tilt=tilt,
+            azimuth=azimuth,
+            precipitation_unit=precipitation_unit,
+            temperature_unit=temperature_unit,
+            wind_speed_unit=wind_speed_unit,
+        )
+
+    # pylint: disable-next=too-many-arguments,too-many-locals
     async def historical_weather(  # noqa: PLR0913
         self,
         *,

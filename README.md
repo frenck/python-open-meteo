@@ -117,6 +117,28 @@ async with OpenMeteo() as open_meteo:
 Leave out `forecast_days` to get the API default of 7 days (up to 16), and
 use `past_days` to include data from the past as well.
 
+### Ensemble forecast
+
+Ensemble models run the same forecast many times, with slightly different
+starting conditions, to show how certain a forecast is. The regular values are
+the control run, and every other run is a member.
+
+```python
+from open_meteo import HourlyParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    forecast = await open_meteo.ensemble(
+        latitude=52.27,
+        longitude=6.87417,
+        models=["ecmwf_ifs025_ensemble"],
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+    )
+
+    print(forecast.hourly.temperature_2m)
+    for number, member in forecast.hourly.members.items():
+        print(number, member.temperature_2m)
+```
+
 ### Historical forecast
 
 The historical forecast API archives the forecasts the weather models made in
