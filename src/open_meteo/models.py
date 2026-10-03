@@ -1309,6 +1309,9 @@ class Forecast(DataClassORJSONMixin):
     minutely_15_units: Minutely15ForecastUnits | None = None
     minutely_15: Minutely15Forecast | None = None
 
+    # Only set when multiple models were requested, keyed by the model name
+    models: dict[str, Forecast] | None = None
+
 
 class AirQualityDomain(StrEnum):
     """Enum to represent the air quality model domains available."""

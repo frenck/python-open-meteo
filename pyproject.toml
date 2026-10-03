@@ -82,6 +82,7 @@ fail_under = 95
 python-version = "3.11"
 
 [tool.pylint.MASTER]
+extension-pkg-whitelist = ["orjson"]
 ignore = ["tests"]
 
 [tool.pylint.BASIC]
