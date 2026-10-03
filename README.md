@@ -117,6 +117,29 @@ async with OpenMeteo() as open_meteo:
 Leave out `forecast_days` to get the API default of 7 days (up to 16), and
 use `past_days` to include data from the past as well.
 
+### Historical forecast
+
+The historical forecast API archives the forecasts the weather models made in
+the past, back to 2016. It takes the same variables and models as the forecast,
+for a range of dates.
+
+```python
+from datetime import date
+
+from open_meteo import DailyParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    forecast = await open_meteo.historical_forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        start_date=date(2024, 1, 1),
+        end_date=date(2024, 1, 7),
+        daily=[DailyParameters.TEMPERATURE_2M_MAX],
+    )
+
+    print(forecast.daily.temperature_2m_max)
+```
+
 ### Air quality
 
 Air quality works the same way, with its own set of variables. These include
