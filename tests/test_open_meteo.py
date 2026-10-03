@@ -161,7 +161,7 @@ async def test_forecast_options(
     query = requested_query(responses)
     assert query["forecast_days"] == "1"
     assert query["past_days"] == "1"
-    assert query["precipitation_unit"] == "in"
+    assert query["precipitation_unit"] == "inch"
     assert query["temperature_unit"] == "fahrenheit"
     assert query["timeformat"] == "unixtime"
     assert query["wind_speed_unit"] == "kn"
