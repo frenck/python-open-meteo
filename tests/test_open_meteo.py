@@ -18,6 +18,9 @@ from open_meteo import (
     CellSelection,
     DailyParameters,
     HourlyParameters,
+    LengthUnit,
+    MarineDailyParameters,
+    MarineParameters,
     OpenMeteo,
     PrecipitationUnit,
     PressureLevelVariable,
@@ -37,6 +40,7 @@ AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 GEOCODING_BY_ID_URL = "https://geocoding-api.open-meteo.com/v1/get"
 ELEVATION_URL = "https://api.open-meteo.com/v1/elevation"
+MARINE_URL = "https://marine-api.open-meteo.com/v1/marine"
 
 
 def mock_endpoint(
@@ -626,6 +630,102 @@ async def test_historical_weather_best_match(
     best_match = weather.models["best_match"].daily
     assert best_match is not None
     assert best_match.temperature_2m_max == [8.0]
+
+
+async def test_marine(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test requesting every marine variable, for a location in the North Sea."""
+    mock_endpoint(responses, MARINE_URL, "marine.json")
+
+    marine = await open_meteo_client.marine(
+        latitude=53.0,
+        longitude=4.0,
+        timezone="Europe/Amsterdam",
+        current=list(MarineParameters),
+        minutely_15=list(MarineParameters),
+        hourly=list(MarineParameters),
+        daily=list(MarineDailyParameters),
+        forecast_days=3,
+        forecast_minutely_15=3,
+    )
+
+    query = requested_query(responses)
+    assert query["hourly"] == ",".join(MarineParameters)
+    assert query["daily"] == ",".join(MarineDailyParameters)
+    assert query["length_unit"] == "metric"
+    assert "past_days" not in query
+
+    assert marine.current is not None
+    assert marine.current.wave_height is not None
+    assert marine.current_units is not None
+    assert marine.current_units.wave_height == "m"
+    assert marine.minutely_15 is not None
+    assert marine.hourly is not None
+    assert marine.daily is not None
+    assert marine.daily.wave_height_max is not None
+    assert marine == snapshot
+
+
+async def test_marine_options(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the marine units and time range options end up in the query."""
+    mock_endpoint(responses, MARINE_URL, "marine.json")
+
+    await open_meteo_client.marine(
+        latitude=53.0,
+        longitude=4.0,
+        start_date=date(2026, 10, 4),
+        end_date=date(2026, 10, 5),
+        temporal_resolution=TemporalResolution.HOURLY_3,
+        cell_selection=CellSelection.SEA,
+        length_unit=LengthUnit.IMPERIAL,
+        temperature_unit=TemperatureUnit.FAHRENHEIT,
+        wind_speed_unit=WindSpeedUnit.KNOTS,
+    )
+
+    query = requested_query(responses)
+    assert query["start_date"] == "2026-10-04"
+    assert query["end_date"] == "2026-10-05"
+    assert query["temporal_resolution"] == "hourly_3"
+    assert query["cell_selection"] == "sea"
+    assert query["length_unit"] == "imperial"
+    assert query["temperature_unit"] == "fahrenheit"
+    assert query["wind_speed_unit"] == "kn"
+
+
+async def test_marine_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the data of each marine model ends up in a response of its own.
+
+    The marine API suffixes the data of best_match as marine_best_match,
+    which also ends in _best_match.
+    """
+    mock_endpoint(responses, MARINE_URL, "marine_models.json")
+
+    models = ["best_match", "ecmwf_wam025", "ncep_gfswave025"]
+    marine = await open_meteo_client.marine(
+        latitude=53.0,
+        longitude=4.0,
+        hourly=[MarineParameters.WAVE_HEIGHT],
+        models=models,
+    )
+
+    assert marine.hourly is None
+    assert marine.models is not None
+    assert list(marine.models) == models
+    best_match = marine.models["best_match"].hourly
+    ecmwf = marine.models["ecmwf_wam025"].hourly
+    assert best_match is not None
+    assert ecmwf is not None
+    assert best_match.wave_height is not None
+    assert best_match.wave_height != ecmwf.wave_height
 
 
 async def test_air_quality(

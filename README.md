@@ -163,6 +163,29 @@ async with OpenMeteo() as open_meteo:
     print(weather.daily.wind_gusts_10m_max)
 ```
 
+### Marine
+
+The marine API forecasts waves, swell, ocean currents, sea surface temperature,
+and sea level. It only has data at sea; on land, all values are `None`.
+
+```python
+from open_meteo import MarineDailyParameters, MarineParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    marine = await open_meteo.marine(
+        latitude=53.0,
+        longitude=4.0,
+        current=[
+            MarineParameters.WAVE_HEIGHT,
+            MarineParameters.SEA_SURFACE_TEMPERATURE,
+        ],
+        daily=[MarineDailyParameters.WAVE_HEIGHT_MAX],
+    )
+
+    print(marine.current.wave_height, marine.current.sea_surface_temperature)
+    print(marine.daily.wave_height_max)
+```
+
 ### Air quality
 
 Air quality works the same way, with its own set of variables. These include
