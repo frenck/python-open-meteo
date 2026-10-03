@@ -259,7 +259,6 @@ class OpenMeteo:
         models: list[str] | None = None,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
         temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
-        timeformat: TimeFormat = TimeFormat.ISO_8601,
         wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
     ) -> Forecast:
         """Get weather forecast.
@@ -323,7 +322,6 @@ class OpenMeteo:
                 on the forecast itself, like with a single model.
             precipitation_unit: Precipitation unit.
             temperature_unit: Temperature unit.
-            timeformat: Format of the returned timestamps.
             wind_speed_unit: Wind speed unit.
 
         Returns:
@@ -365,7 +363,6 @@ class OpenMeteo:
             azimuth=azimuth,
             precipitation_unit=precipitation_unit,
             temperature_unit=temperature_unit,
-            timeformat=timeformat,
             wind_speed_unit=wind_speed_unit,
         )
 
@@ -393,7 +390,6 @@ class OpenMeteo:
         models: list[str] | None = None,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
         temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
-        timeformat: TimeFormat = TimeFormat.ISO_8601,
         wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
     ) -> Forecast:
         """Get the forecasts the weather models made in the past.
@@ -439,7 +435,6 @@ class OpenMeteo:
                 same as for the forecast.
             precipitation_unit: Precipitation unit.
             temperature_unit: Temperature unit.
-            timeformat: Format of the returned timestamps.
             wind_speed_unit: Wind speed unit.
 
         Returns:
@@ -474,7 +469,6 @@ class OpenMeteo:
             azimuth=azimuth,
             precipitation_unit=precipitation_unit,
             temperature_unit=temperature_unit,
-            timeformat=timeformat,
             wind_speed_unit=wind_speed_unit,
         )
 
@@ -499,7 +493,6 @@ class OpenMeteo:
         models: list[str] | None = None,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
         temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
-        timeformat: TimeFormat = TimeFormat.ISO_8601,
         wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
     ) -> Forecast:
         """Get the historical weather, from reanalysis datasets back to 1940.
@@ -541,7 +534,6 @@ class OpenMeteo:
                 "era5" or "era5_land". Works the same as for the forecast.
             precipitation_unit: Precipitation unit.
             temperature_unit: Temperature unit.
-            timeformat: Format of the returned timestamps.
             wind_speed_unit: Wind speed unit.
 
         Returns:
@@ -572,7 +564,6 @@ class OpenMeteo:
             azimuth=azimuth,
             precipitation_unit=precipitation_unit,
             temperature_unit=temperature_unit,
-            timeformat=timeformat,
             wind_speed_unit=wind_speed_unit,
         )
 
@@ -631,7 +622,12 @@ class OpenMeteo:
         With multiple models, the data of each model is split into a response
         of its own first; see _split_models.
         """
-        query = _build_query(**parameters, models=models)
+        # The models parse timestamps in ISO 8601, so never rely on the default
+        query = _build_query(
+            **parameters,
+            models=models,
+            timeformat=TimeFormat.ISO_8601,
+        )
         data = await self._request(url=URL(url).with_query(query))
 
         if models is not None and len(set(models)) > 1:
@@ -668,7 +664,6 @@ class OpenMeteo:
         length_unit: LengthUnit = LengthUnit.METRIC,
         temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
         wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
-        timeformat: TimeFormat = TimeFormat.ISO_8601,
     ) -> Marine:
         """Get the marine forecast: waves, swell, ocean currents, and sea level.
 
@@ -717,7 +712,6 @@ class OpenMeteo:
             temperature_unit: Temperature unit, for the sea surface
                 temperature.
             wind_speed_unit: Speed unit, for the ocean current velocity.
-            timeformat: Format of the returned timestamps.
 
         Returns:
         -------
@@ -752,7 +746,6 @@ class OpenMeteo:
             length_unit=length_unit,
             temperature_unit=temperature_unit,
             wind_speed_unit=wind_speed_unit,
-            timeformat=timeformat,
         )
 
     # pylint: disable-next=too-many-arguments
@@ -770,7 +763,6 @@ class OpenMeteo:
         ensemble: bool = False,
         cell_selection: CellSelection | None = None,
         models: list[str] | None = None,
-        timeformat: TimeFormat = TimeFormat.ISO_8601,
     ) -> Flood:
         """Get the river discharge forecast, for the river nearest to a location.
 
@@ -800,7 +792,6 @@ class OpenMeteo:
             models: Flood models to use, by their Open-Meteo name, like
                 "seamless_v4". Works the same as for the forecast: with
                 multiple models, the data of each model is in Flood.models.
-            timeformat: Format of the returned timestamps.
 
         Returns:
         -------
@@ -824,7 +815,6 @@ class OpenMeteo:
             # Only sent when asked for, so the API default applies otherwise
             ensemble=ensemble or None,
             cell_selection=cell_selection,
-            timeformat=timeformat,
         )
 
     # pylint: disable-next=too-many-arguments,too-many-locals
@@ -847,7 +837,6 @@ class OpenMeteo:
         temporal_resolution: TemporalResolution | None = None,
         domains: AirQualityDomain | None = None,
         cell_selection: CellSelection | None = None,
-        timeformat: TimeFormat = TimeFormat.ISO_8601,
     ) -> AirQuality:
         """Get air quality forecast.
 
@@ -879,7 +868,6 @@ class OpenMeteo:
                 the European and global domain automatically.
             cell_selection: How to match the location to a grid cell of the
                 air quality model.
-            timeformat: Format of the returned timestamps.
 
         Returns:
         -------
@@ -903,7 +891,8 @@ class OpenMeteo:
             temporal_resolution=temporal_resolution,
             domains=domains,
             cell_selection=cell_selection,
-            timeformat=timeformat,
+            # The models parse timestamps in ISO 8601, so never rely on the default
+            timeformat=TimeFormat.ISO_8601,
         )
         url = URL("https://air-quality-api.open-meteo.com/v1/air-quality").with_query(
             query

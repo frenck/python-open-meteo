@@ -27,7 +27,6 @@ from open_meteo import (
     PressureLevelVariable,
     TemperatureUnit,
     TemporalResolution,
-    TimeFormat,
     WindSpeedUnit,
 )
 from open_meteo.exceptions import OpenMeteoConnectionError, OpenMeteoError
@@ -156,7 +155,6 @@ async def test_forecast_options(
         past_days=1,
         precipitation_unit=PrecipitationUnit.INCHES,
         temperature_unit=TemperatureUnit.FAHRENHEIT,
-        timeformat=TimeFormat.UNIXTIME,
         wind_speed_unit=WindSpeedUnit.KNOTS,
     )
 
@@ -165,7 +163,6 @@ async def test_forecast_options(
     assert query["past_days"] == "1"
     assert query["precipitation_unit"] == "inch"
     assert query["temperature_unit"] == "fahrenheit"
-    assert query["timeformat"] == "unixtime"
     assert query["wind_speed_unit"] == "kn"
 
 
