@@ -1,4 +1,4 @@
-# Python: Asynchronous client for the Open-Meteo API.
+# Python: Asynchronous client for the Open-Meteo API
 
 [![GitHub Release][releases-shield]][releases]
 [![Python Versions][python-versions-shield]][pypi]
@@ -15,12 +15,17 @@
 
 [![Support Frenck on Patreon][patreon-shield]][patreon]
 
-Asynchronous client for the Open-Meteo API.
+Asynchronous Python client for the Open-Meteo API.
 
 ## About
 
-Open-Meteo offers free weather forecast APIs for open-source developers and
-non-commercial use. No API key is required. You can start using it immediately!
+[Open-Meteo][open-meteo] offers free weather forecast APIs for open-source
+developers and non-commercial use. No API key is required.
+
+This package is an asynchronous Python client for it, covering the weather
+forecast, air quality, geocoding, and elevation APIs. It is mainly created to
+allow third-party programs to use Open-Meteo data. Home Assistant, for
+example, uses it for its Open-Meteo integration.
 
 ## Installation
 
@@ -30,38 +35,175 @@ pip install open-meteo
 
 ## Usage
 
+The client is an async context manager; every API call is a coroutine. A
+quick example that shows the current temperature in Enschede:
+
 ```python
 import asyncio
 
-from open_meteo import OpenMeteo
-from open_meteo.models import DailyParameters, HourlyParameters
+from open_meteo import HourlyParameters, OpenMeteo
 
 
-async def main():
-    """Show example on using the Open-Meteo API client."""
+async def main() -> None:
+    """Show example of using the Open-Meteo API client."""
     async with OpenMeteo() as open_meteo:
         forecast = await open_meteo.forecast(
             latitude=52.27,
             longitude=6.87417,
-            current=[
-                HourlyParameters.TEMPERATURE_2M,
-                HourlyParameters.WEATHER_CODE,
-            ],
-            daily=[
-                DailyParameters.SUNRISE,
-                DailyParameters.SUNSET,
-            ],
-            hourly=[
-                HourlyParameters.TEMPERATURE_2M,
-                HourlyParameters.RELATIVE_HUMIDITY_2M,
-            ],
+            current=[HourlyParameters.TEMPERATURE_2M],
         )
-        print(forecast)
+        print(f"It is {forecast.current.temperature_2m} °C in Enschede")
 
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
+Open-Meteo only returns the variables you ask for, so every field on the
+returned models is optional. Fields you did not request are `None`.
+
+### Weather forecast
+
+Request current conditions, hourly data, and daily data in a single call.
+Every hourly variable is also available as a current condition.
+
+```python
+from open_meteo import (
+    DailyParameters,
+    HourlyParameters,
+    OpenMeteo,
+    TemperatureUnit,
+    WindSpeedUnit,
+)
+
+async with OpenMeteo() as open_meteo:
+    forecast = await open_meteo.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        timezone="Europe/Amsterdam",
+        current=[
+            HourlyParameters.TEMPERATURE_2M,
+            HourlyParameters.WEATHER_CODE,
+            HourlyParameters.IS_DAY,
+        ],
+        hourly=[
+            HourlyParameters.TEMPERATURE_2M,
+            HourlyParameters.PRECIPITATION_PROBABILITY,
+        ],
+        daily=[
+            DailyParameters.TEMPERATURE_2M_MAX,
+            DailyParameters.SUNRISE,
+            DailyParameters.SUNSET,
+        ],
+        forecast_days=3,
+        temperature_unit=TemperatureUnit.FAHRENHEIT,
+        wind_speed_unit=WindSpeedUnit.METERS_PER_SECOND,
+    )
+
+    # Current conditions, with their units
+    current = forecast.current
+    print(current.temperature_2m, forecast.current_units.temperature_2m)
+
+    # Hourly and daily data are lists, aligned with their time list
+    for time, temperature in zip(
+        forecast.hourly.time, forecast.hourly.temperature_2m, strict=True
+    ):
+        print(time, temperature)
+
+    for day, sunrise in zip(forecast.daily.time, forecast.daily.sunrise, strict=True):
+        print(day, sunrise)
+```
+
+Leave out `forecast_days` to get the API default of 7 days (up to 16), and
+use `past_days` to include data from the past as well.
+
+### Air quality
+
+Air quality works the same way, with its own set of variables. These include
+particulate matter, gases, pollen (Europe only), and both the European and US
+air quality indices.
+
+```python
+from open_meteo import AirQualityParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    air_quality = await open_meteo.air_quality(
+        latitude=52.27,
+        longitude=6.87417,
+        current=[
+            AirQualityParameters.EUROPEAN_AQI,
+            AirQualityParameters.PM2_5,
+        ],
+        hourly=[AirQualityParameters.BIRCH_POLLEN],
+    )
+
+    print(air_quality.current.european_aqi)
+    print(air_quality.hourly.birch_pollen)
+```
+
+### Geocoding
+
+Search for a location by name or postal code. This is handy to find the
+coordinates and timezone to use with the other APIs.
+
+```python
+from open_meteo import OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    geocoding = await open_meteo.geocoding(name="Enschede", count=3)
+
+    for result in geocoding.results or []:
+        print(result.name, result.country, result.latitude, result.longitude)
+```
+
+`results` is `None` when nothing matches.
+
+### Elevation
+
+Look up the elevation of a location, in meters above sea level.
+
+```python
+from open_meteo import OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    elevation = await open_meteo.elevation(latitude=52.27, longitude=6.87417)
+
+    print(elevation.elevation[0])
+```
+
+### Connection options
+
+All constructor arguments are optional:
+
+```python
+OpenMeteo(
+    request_timeout=10,  # per-request timeout in seconds (default: 10)
+)
+```
+
+You may also pass your own `aiohttp.ClientSession` via `session=...` to
+share a connection pool. The client leaves a session you pass in open, and
+only closes the one it created itself.
+
+### Error handling
+
+```python
+from open_meteo import OpenMeteo, OpenMeteoConnectionError, OpenMeteoError
+
+try:
+    async with OpenMeteo() as open_meteo:
+        await open_meteo.forecast(latitude=999, longitude=0)
+except OpenMeteoConnectionError:
+    # Timeouts, DNS failures, or any other connection problem
+    ...
+except OpenMeteoError as err:
+    # The API rejected the request; the message tells you why, like:
+    # "Latitude must be in range of -90 to 90°. Given: 999.0."
+    print(err)
+```
+
+`OpenMeteoConnectionError` is a subclass of `OpenMeteoError`, so catching
+`OpenMeteoError` alone handles both.
 
 ## Changelog & Releases
 
@@ -127,6 +269,20 @@ The original setup of this repository is by [Franck Nijhof][frenck].
 For a full list of all authors and contributors,
 check [the contributor's page][contributors].
 
+## Disclaimer
+
+This project is an independent, community-driven effort. It is **not
+affiliated with, endorsed by, or supported by** Open-Meteo.
+
+The free Open-Meteo API is for non-commercial use only, and its data is
+licensed under [Attribution 4.0 International (CC BY 4.0)][cc-by]. If you
+use this library, those terms apply to you as well. Read the
+[Open-Meteo terms][open-meteo-terms] for the details, including the rate
+limits and the attribution requirements.
+
+This library talks to the free API only. The commercial API, which needs an
+API key, is not supported.
+
 ## License
 
 MIT License
@@ -153,6 +309,7 @@ SOFTWARE.
 
 [build-shield]: https://github.com/frenck/python-open-meteo/actions/workflows/tests.yaml/badge.svg
 [build]: https://github.com/frenck/python-open-meteo/actions/workflows/tests.yaml
+[cc-by]: https://creativecommons.org/licenses/by/4.0/
 [codecov-shield]: https://codecov.io/gh/frenck/python-open-meteo/branch/main/graph/badge.svg
 [codecov]: https://codecov.io/gh/frenck/python-open-meteo
 [contributors]: https://github.com/frenck/python-open-meteo/graphs/contributors
@@ -164,6 +321,8 @@ SOFTWARE.
 [keepchangelog]: http://keepachangelog.com/en/1.0.0/
 [license-shield]: https://img.shields.io/github/license/frenck/python-open-meteo.svg
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
+[open-meteo-terms]: https://open-meteo.com/en/terms
+[open-meteo]: https://open-meteo.com
 [patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
 [patreon]: https://www.patreon.com/frenck
 [poetry-install]: https://python-poetry.org/docs/#installation
