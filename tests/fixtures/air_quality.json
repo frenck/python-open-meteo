@@ -1,0 +1,283 @@
+{
+  "latitude": 52.300003,
+  "longitude": 6.8999996,
+  "generationtime_ms": 2.7267932891845703,
+  "utc_offset_seconds": 7200,
+  "timezone": "Europe/Amsterdam",
+  "timezone_abbreviation": "GMT+2",
+  "elevation": 29.0,
+  "current_units": {
+    "time": "iso8601",
+    "interval": "seconds",
+    "pm10": "\u03bcg/m\u00b3",
+    "pm2_5": "\u03bcg/m\u00b3",
+    "carbon_monoxide": "\u03bcg/m\u00b3",
+    "nitrogen_dioxide": "\u03bcg/m\u00b3",
+    "sulphur_dioxide": "\u03bcg/m\u00b3",
+    "ozone": "\u03bcg/m\u00b3",
+    "carbon_dioxide": "ppm",
+    "ammonia": "\u03bcg/m\u00b3",
+    "aerosol_optical_depth": "",
+    "methane": "\u03bcg/m\u00b3",
+    "dust": "\u03bcg/m\u00b3",
+    "uv_index": "",
+    "uv_index_clear_sky": "",
+    "alder_pollen": "grains/m\u00b3",
+    "birch_pollen": "grains/m\u00b3",
+    "grass_pollen": "grains/m\u00b3",
+    "mugwort_pollen": "grains/m\u00b3",
+    "olive_pollen": "grains/m\u00b3",
+    "ragweed_pollen": "grains/m\u00b3",
+    "european_aqi": "EAQI",
+    "european_aqi_pm2_5": "EAQI",
+    "european_aqi_pm10": "EAQI",
+    "european_aqi_nitrogen_dioxide": "EAQI",
+    "european_aqi_ozone": "EAQI",
+    "european_aqi_sulphur_dioxide": "EAQI",
+    "us_aqi": "USAQI",
+    "us_aqi_pm2_5": "USAQI",
+    "us_aqi_pm10": "USAQI",
+    "us_aqi_nitrogen_dioxide": "USAQI",
+    "us_aqi_ozone": "USAQI",
+    "us_aqi_sulphur_dioxide": "USAQI",
+    "us_aqi_carbon_monoxide": "USAQI"
+  },
+  "current": {
+    "time": "2026-10-03T11:00",
+    "interval": 3600,
+    "pm10": 27.6,
+    "pm2_5": 22.2,
+    "carbon_monoxide": 240.0,
+    "nitrogen_dioxide": 10.5,
+    "sulphur_dioxide": 2.1,
+    "ozone": 34.0,
+    "carbon_dioxide": 446,
+    "ammonia": 12.2,
+    "aerosol_optical_depth": 0.12,
+    "methane": 1626.0,
+    "dust": 0.0,
+    "uv_index": 1.55,
+    "uv_index_clear_sky": 1.65,
+    "alder_pollen": 0.0,
+    "birch_pollen": 0.0,
+    "grass_pollen": 0.0,
+    "mugwort_pollen": 0.0,
+    "olive_pollen": 0.0,
+    "ragweed_pollen": 0.0,
+    "european_aqi": 44,
+    "european_aqi_pm2_5": 44,
+    "european_aqi_pm10": 28,
+    "european_aqi_nitrogen_dioxide": 21,
+    "european_aqi_ozone": 11,
+    "european_aqi_sulphur_dioxide": 2,
+    "us_aqi": 65,
+    "us_aqi_pm2_5": 65,
+    "us_aqi_pm10": 21,
+    "us_aqi_nitrogen_dioxide": 5,
+    "us_aqi_ozone": 11,
+    "us_aqi_sulphur_dioxide": 1,
+    "us_aqi_carbon_monoxide": 2
+  },
+  "hourly_units": {
+    "time": "iso8601",
+    "pm10": "\u03bcg/m\u00b3",
+    "pm2_5": "\u03bcg/m\u00b3",
+    "carbon_monoxide": "\u03bcg/m\u00b3",
+    "nitrogen_dioxide": "\u03bcg/m\u00b3",
+    "sulphur_dioxide": "\u03bcg/m\u00b3",
+    "ozone": "\u03bcg/m\u00b3",
+    "carbon_dioxide": "ppm",
+    "ammonia": "\u03bcg/m\u00b3",
+    "aerosol_optical_depth": "",
+    "methane": "\u03bcg/m\u00b3",
+    "dust": "\u03bcg/m\u00b3",
+    "uv_index": "",
+    "uv_index_clear_sky": "",
+    "alder_pollen": "grains/m\u00b3",
+    "birch_pollen": "grains/m\u00b3",
+    "grass_pollen": "grains/m\u00b3",
+    "mugwort_pollen": "grains/m\u00b3",
+    "olive_pollen": "grains/m\u00b3",
+    "ragweed_pollen": "grains/m\u00b3",
+    "european_aqi": "EAQI",
+    "european_aqi_pm2_5": "EAQI",
+    "european_aqi_pm10": "EAQI",
+    "european_aqi_nitrogen_dioxide": "EAQI",
+    "european_aqi_ozone": "EAQI",
+    "european_aqi_sulphur_dioxide": "EAQI",
+    "us_aqi": "USAQI",
+    "us_aqi_pm2_5": "USAQI",
+    "us_aqi_pm10": "USAQI",
+    "us_aqi_nitrogen_dioxide": "USAQI",
+    "us_aqi_ozone": "USAQI",
+    "us_aqi_sulphur_dioxide": "USAQI",
+    "us_aqi_carbon_monoxide": "USAQI"
+  },
+  "hourly": {
+    "time": [
+      "2026-10-03T00:00",
+      "2026-10-03T01:00",
+      "2026-10-03T02:00"
+    ],
+    "pm10": [
+      25.1,
+      23.4,
+      23.9
+    ],
+    "pm2_5": [
+      20.5,
+      20.0,
+      18.9
+    ],
+    "carbon_monoxide": [
+      263.0,
+      255.0,
+      242.0
+    ],
+    "nitrogen_dioxide": [
+      20.7,
+      20.1,
+      19.2
+    ],
+    "sulphur_dioxide": [
+      1.3,
+      0.9,
+      0.9
+    ],
+    "ozone": [
+      33.0,
+      28.0,
+      27.0
+    ],
+    "carbon_dioxide": [
+      492,
+      491,
+      488
+    ],
+    "ammonia": [
+      17.3,
+      14.0,
+      16.0
+    ],
+    "aerosol_optical_depth": [
+      0.12,
+      0.12,
+      0.12
+    ],
+    "methane": [
+      1811.0,
+      1837.0,
+      1843.0
+    ],
+    "dust": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "uv_index": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "uv_index_clear_sky": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "alder_pollen": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "birch_pollen": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "grass_pollen": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mugwort_pollen": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "olive_pollen": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ragweed_pollen": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "european_aqi": [
+      43,
+      43,
+      42
+    ],
+    "european_aqi_pm2_5": [
+      43,
+      43,
+      42
+    ],
+    "european_aqi_pm10": [
+      27,
+      26,
+      26
+    ],
+    "european_aqi_nitrogen_dioxide": [
+      34,
+      33,
+      32
+    ],
+    "european_aqi_ozone": [
+      11,
+      9,
+      9
+    ],
+    "european_aqi_sulphur_dioxide": [
+      1,
+      1,
+      1
+    ],
+    "us_aqi": [
+      60,
+      61,
+      62
+    ],
+    "us_aqi_pm2_5": [
+      60,
+      61,
+      62
+    ],
+    "us_aqi_pm10": [
+      19,
+      19,
+      19
+    ],
+    "us_aqi_nitrogen_dioxide": [
+      10,
+      10,
+      9
+    ],
+    "us_aqi_ozone": [
+      23,
+      22,
+      19
+    ],
+    "us_aqi_sulphur_dioxide": [
+      1,
+      0,
+      0
+    ],
+    "us_aqi_carbon_monoxide": [
+      2,
+      2,
+      2
+    ]
+  }
+}
