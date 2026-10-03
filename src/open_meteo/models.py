@@ -3,9 +3,11 @@
 # pylint: disable=too-many-instance-attributes
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from enum import StrEnum, auto
+from typing import Any
 
 from mashumaro import field_options
 from mashumaro.mixins.orjson import DataClassORJSONMixin
@@ -799,6 +801,91 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     wind_speed_80m: str | None = None
 
 
+class PressureLevelVariable(StrEnum):
+    """Enum to represent the variables available on pressure levels.
+
+    Pressure levels are given in hPa, like 850 or 500. The lower the
+    pressure, the higher up in the atmosphere: 1000 hPa is close to sea
+    level, 500 hPa is about 5.6 km up.
+    """
+
+    # Cloud cover as an area fraction
+    CLOUD_COVER = "cloud_cover"
+
+    # Dew point temperature
+    DEW_POINT = "dew_point"
+
+    # Height above sea level of the pressure level
+    GEOPOTENTIAL_HEIGHT = "geopotential_height"
+
+    # Relative humidity
+    RELATIVE_HUMIDITY = "relative_humidity"
+
+    # Air temperature
+    TEMPERATURE = "temperature"
+
+    # Vertical wind speed; positive is upward
+    VERTICAL_VELOCITY = "vertical_velocity"
+
+    # Wind direction and speed
+    WIND_DIRECTION = "wind_direction"
+    WIND_SPEED = "wind_speed"
+
+
+# The API returns pressure level data as one variable per level, like
+# temperature_850hPa
+PRESSURE_LEVEL_KEY = re.compile(r"^(?P<variable>[a-z_]+)_(?P<level>\d+)hPa$")
+
+
+def _split_pressure_levels(data: dict[Any, Any]) -> dict[Any, Any]:
+    """Group the pressure level variables of a section by pressure level.
+
+    temperature_850hPa and wind_speed_850hPa end up as the temperature and
+    wind_speed of pressure_levels[850].
+    """
+    data = dict(data)
+    levels: dict[int, dict[str, Any]] = {}
+    for key in list(data):
+        match = PRESSURE_LEVEL_KEY.match(key)
+        if match is None or match["variable"] not in PressureLevelVariable:
+            continue
+
+        levels.setdefault(int(match["level"]), {})[match["variable"]] = data.pop(key)
+
+    if levels:
+        data["pressure_levels"] = levels
+
+    return data
+
+
+@dataclass
+class PressureLevelForecast(DataClassORJSONMixin):
+    """Hourly weather data on a single pressure level."""
+
+    cloud_cover: list[int | None] | None = None
+    dew_point: list[float | None] | None = None
+    geopotential_height: list[float | None] | None = None
+    relative_humidity: list[int | None] | None = None
+    temperature: list[float | None] | None = None
+    vertical_velocity: list[float | None] | None = None
+    wind_direction: list[int | None] | None = None
+    wind_speed: list[float | None] | None = None
+
+
+@dataclass
+class PressureLevelForecastUnits(DataClassORJSONMixin):
+    """Hourly weather data units on a single pressure level."""
+
+    cloud_cover: str | None = None
+    dew_point: str | None = None
+    geopotential_height: str | None = None
+    relative_humidity: str | None = None
+    temperature: str | None = None
+    vertical_velocity: str | None = None
+    wind_direction: str | None = None
+    wind_speed: str | None = None
+
+
 @dataclass
 class HourlyForecast(DataClassORJSONMixin):
     """Hourly weather data."""
@@ -951,6 +1038,14 @@ class HourlyForecast(DataClassORJSONMixin):
     wind_speed_50m: list[float | None] | None = None
     wind_speed_70m: list[float | None] | None = None
     wind_speed_80m: list[float | None] | None = None
+
+    # Pressure level data, keyed by the pressure level in hPa
+    pressure_levels: dict[int, PressureLevelForecast] | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the pressure level variables by pressure level."""
+        return _split_pressure_levels(d)
 
 
 @dataclass
@@ -1105,6 +1200,14 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     wind_speed_50m: str | None = None
     wind_speed_70m: str | None = None
     wind_speed_80m: str | None = None
+
+    # Pressure level units, keyed by the pressure level in hPa
+    pressure_levels: dict[int, PressureLevelForecastUnits] | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the pressure level variables by pressure level."""
+        return _split_pressure_levels(d)
 
 
 @dataclass
