@@ -21,6 +21,8 @@ from .models import (
     CellSelection,
     DailyParameters,
     Elevation,
+    Flood,
+    FloodParameters,
     Forecast,
     Geocoding,
     GeocodingResult,
@@ -44,9 +46,9 @@ def _build_query(**parameters: object) -> dict[str, str]:
     """Build a query string, the way the Open-Meteo API expects it.
 
     Parameters that are not set are left out, so the API defaults apply.
-    Lists become comma separated, and dates and times use ISO 8601. Floats
-    are formatted here, as yarl refuses NaN, which the API uses to switch
-    off elevation downscaling.
+    Lists become comma separated, booleans lowercase, and dates and times use
+    ISO 8601. Floats are formatted here, as yarl refuses NaN, which the API
+    uses to switch off elevation downscaling.
     """
     query: dict[str, str] = {}
     for key, value in parameters.items():
@@ -56,6 +58,8 @@ def _build_query(**parameters: object) -> dict[str, str]:
         # A datetime is a date as well, so it has to be checked first
         if isinstance(value, list):
             query[key] = ",".join(str(item) for item in value)
+        elif isinstance(value, bool):
+            query[key] = "true" if value else "false"
         elif isinstance(value, datetime):
             query[key] = value.strftime("%Y-%m-%dT%H:%M")
         elif isinstance(value, date):
@@ -748,6 +752,78 @@ class OpenMeteo:
             length_unit=length_unit,
             temperature_unit=temperature_unit,
             wind_speed_unit=wind_speed_unit,
+            timeformat=timeformat,
+        )
+
+    # pylint: disable-next=too-many-arguments
+    async def flood(  # noqa: PLR0913
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        daily: list[FloodParameters],
+        timezone: str = "UTC",
+        forecast_days: int | None = None,
+        past_days: int | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
+        ensemble: bool = False,
+        cell_selection: CellSelection | None = None,
+        models: list[str] | None = None,
+        timeformat: TimeFormat = TimeFormat.ISO_8601,
+    ) -> Flood:
+        """Get the river discharge forecast, for the river nearest to a location.
+
+        River discharge comes from the Global Flood Awareness System (GloFAS),
+        with data back to 1984. Due to its resolution of about 5 km, the
+        nearest river might not be the one expected; moving the coordinates
+        by about 0.1 degree can help.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            daily: A list of river discharge variables to query for.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            forecast_days: Number of days to forecast (0-366). Leave unset for
+                the API default of 92 days.
+            past_days: Number of past days to include as well.
+            start_date: First day of the time interval to return. Use it
+                together with end_date, instead of forecast_days.
+            end_date: Last day of the time interval to return.
+            ensemble: Return all ensemble members as well. They end up in
+                daily.members, keyed by member number; the regular values
+                are the control run.
+            cell_selection: How to match the location to a grid cell of the
+                flood model.
+            models: Flood models to use, by their Open-Meteo name, like
+                "seamless_v4". Works the same as for the forecast: with
+                multiple models, the data of each model is in Flood.models.
+            timeformat: Format of the returned timestamps.
+
+        Returns:
+        -------
+            A Flood object.
+
+        """
+        return await self._request_with_models(
+            "https://flood-api.open-meteo.com/v1/flood",
+            Flood,
+            models=models,
+            # The flood API suffixes best_match data as flood_best_match
+            model_suffixes={"best_match": "flood_best_match"},
+            latitude=latitude,
+            longitude=longitude,
+            daily=daily,
+            timezone=timezone,
+            forecast_days=forecast_days,
+            past_days=past_days,
+            start_date=start_date,
+            end_date=end_date,
+            # Only sent when asked for, so the API default applies otherwise
+            ensemble=ensemble or None,
+            cell_selection=cell_selection,
             timeformat=timeformat,
         )
 

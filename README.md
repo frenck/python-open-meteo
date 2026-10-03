@@ -186,6 +186,30 @@ async with OpenMeteo() as open_meteo:
     print(marine.daily.wave_height_max)
 ```
 
+### River discharge
+
+The flood API forecasts the daily river discharge of the river nearest to a
+location, from the Global Flood Awareness System (GloFAS). With `ensemble`,
+it returns all ensemble members as well.
+
+```python
+from open_meteo import FloodParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    flood = await open_meteo.flood(
+        latitude=51.84,
+        longitude=6.11,
+        daily=[
+            FloodParameters.RIVER_DISCHARGE,
+            FloodParameters.RIVER_DISCHARGE_MAX,
+        ],
+        ensemble=True,
+    )
+
+    print(flood.daily.river_discharge)
+    print(flood.daily.members[1].river_discharge)
+```
+
 ### Air quality
 
 Air quality works the same way, with its own set of variables. These include

@@ -1,0 +1,528 @@
+{
+  "latitude": 51.825005,
+  "longitude": 6.1250153,
+  "generationtime_ms": 1.3303756713867188,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 16.0,
+  "daily_units": {
+    "time": "iso8601",
+    "river_discharge_flood_best_match": "m\u00b3/s",
+    "river_discharge_member01_flood_best_match": "m\u00b3/s",
+    "river_discharge_member02_flood_best_match": "m\u00b3/s",
+    "river_discharge_member03_flood_best_match": "m\u00b3/s",
+    "river_discharge_member04_flood_best_match": "m\u00b3/s",
+    "river_discharge_member05_flood_best_match": "m\u00b3/s",
+    "river_discharge_member06_flood_best_match": "m\u00b3/s",
+    "river_discharge_member07_flood_best_match": "m\u00b3/s",
+    "river_discharge_member08_flood_best_match": "m\u00b3/s",
+    "river_discharge_member09_flood_best_match": "m\u00b3/s",
+    "river_discharge_member10_flood_best_match": "m\u00b3/s",
+    "river_discharge_member11_flood_best_match": "m\u00b3/s",
+    "river_discharge_member12_flood_best_match": "m\u00b3/s",
+    "river_discharge_member13_flood_best_match": "m\u00b3/s",
+    "river_discharge_member14_flood_best_match": "m\u00b3/s",
+    "river_discharge_member15_flood_best_match": "m\u00b3/s",
+    "river_discharge_member16_flood_best_match": "m\u00b3/s",
+    "river_discharge_member17_flood_best_match": "m\u00b3/s",
+    "river_discharge_member18_flood_best_match": "m\u00b3/s",
+    "river_discharge_member19_flood_best_match": "m\u00b3/s",
+    "river_discharge_member20_flood_best_match": "m\u00b3/s",
+    "river_discharge_member21_flood_best_match": "m\u00b3/s",
+    "river_discharge_member22_flood_best_match": "m\u00b3/s",
+    "river_discharge_member23_flood_best_match": "m\u00b3/s",
+    "river_discharge_member24_flood_best_match": "m\u00b3/s",
+    "river_discharge_member25_flood_best_match": "m\u00b3/s",
+    "river_discharge_member26_flood_best_match": "m\u00b3/s",
+    "river_discharge_member27_flood_best_match": "m\u00b3/s",
+    "river_discharge_member28_flood_best_match": "m\u00b3/s",
+    "river_discharge_member29_flood_best_match": "m\u00b3/s",
+    "river_discharge_member30_flood_best_match": "m\u00b3/s",
+    "river_discharge_member31_flood_best_match": "m\u00b3/s",
+    "river_discharge_member32_flood_best_match": "m\u00b3/s",
+    "river_discharge_member33_flood_best_match": "m\u00b3/s",
+    "river_discharge_member34_flood_best_match": "m\u00b3/s",
+    "river_discharge_member35_flood_best_match": "m\u00b3/s",
+    "river_discharge_member36_flood_best_match": "m\u00b3/s",
+    "river_discharge_member37_flood_best_match": "m\u00b3/s",
+    "river_discharge_member38_flood_best_match": "m\u00b3/s",
+    "river_discharge_member39_flood_best_match": "m\u00b3/s",
+    "river_discharge_member40_flood_best_match": "m\u00b3/s",
+    "river_discharge_member41_flood_best_match": "m\u00b3/s",
+    "river_discharge_member42_flood_best_match": "m\u00b3/s",
+    "river_discharge_member43_flood_best_match": "m\u00b3/s",
+    "river_discharge_member44_flood_best_match": "m\u00b3/s",
+    "river_discharge_member45_flood_best_match": "m\u00b3/s",
+    "river_discharge_member46_flood_best_match": "m\u00b3/s",
+    "river_discharge_member47_flood_best_match": "m\u00b3/s",
+    "river_discharge_member48_flood_best_match": "m\u00b3/s",
+    "river_discharge_member49_flood_best_match": "m\u00b3/s",
+    "river_discharge_member50_flood_best_match": "m\u00b3/s",
+    "river_discharge_seamless_v4": "m\u00b3/s",
+    "river_discharge_member01_seamless_v4": "m\u00b3/s",
+    "river_discharge_member02_seamless_v4": "m\u00b3/s",
+    "river_discharge_member03_seamless_v4": "m\u00b3/s",
+    "river_discharge_member04_seamless_v4": "m\u00b3/s",
+    "river_discharge_member05_seamless_v4": "m\u00b3/s",
+    "river_discharge_member06_seamless_v4": "m\u00b3/s",
+    "river_discharge_member07_seamless_v4": "m\u00b3/s",
+    "river_discharge_member08_seamless_v4": "m\u00b3/s",
+    "river_discharge_member09_seamless_v4": "m\u00b3/s",
+    "river_discharge_member10_seamless_v4": "m\u00b3/s",
+    "river_discharge_member11_seamless_v4": "m\u00b3/s",
+    "river_discharge_member12_seamless_v4": "m\u00b3/s",
+    "river_discharge_member13_seamless_v4": "m\u00b3/s",
+    "river_discharge_member14_seamless_v4": "m\u00b3/s",
+    "river_discharge_member15_seamless_v4": "m\u00b3/s",
+    "river_discharge_member16_seamless_v4": "m\u00b3/s",
+    "river_discharge_member17_seamless_v4": "m\u00b3/s",
+    "river_discharge_member18_seamless_v4": "m\u00b3/s",
+    "river_discharge_member19_seamless_v4": "m\u00b3/s",
+    "river_discharge_member20_seamless_v4": "m\u00b3/s",
+    "river_discharge_member21_seamless_v4": "m\u00b3/s",
+    "river_discharge_member22_seamless_v4": "m\u00b3/s",
+    "river_discharge_member23_seamless_v4": "m\u00b3/s",
+    "river_discharge_member24_seamless_v4": "m\u00b3/s",
+    "river_discharge_member25_seamless_v4": "m\u00b3/s",
+    "river_discharge_member26_seamless_v4": "m\u00b3/s",
+    "river_discharge_member27_seamless_v4": "m\u00b3/s",
+    "river_discharge_member28_seamless_v4": "m\u00b3/s",
+    "river_discharge_member29_seamless_v4": "m\u00b3/s",
+    "river_discharge_member30_seamless_v4": "m\u00b3/s",
+    "river_discharge_member31_seamless_v4": "m\u00b3/s",
+    "river_discharge_member32_seamless_v4": "m\u00b3/s",
+    "river_discharge_member33_seamless_v4": "m\u00b3/s",
+    "river_discharge_member34_seamless_v4": "m\u00b3/s",
+    "river_discharge_member35_seamless_v4": "m\u00b3/s",
+    "river_discharge_member36_seamless_v4": "m\u00b3/s",
+    "river_discharge_member37_seamless_v4": "m\u00b3/s",
+    "river_discharge_member38_seamless_v4": "m\u00b3/s",
+    "river_discharge_member39_seamless_v4": "m\u00b3/s",
+    "river_discharge_member40_seamless_v4": "m\u00b3/s",
+    "river_discharge_member41_seamless_v4": "m\u00b3/s",
+    "river_discharge_member42_seamless_v4": "m\u00b3/s",
+    "river_discharge_member43_seamless_v4": "m\u00b3/s",
+    "river_discharge_member44_seamless_v4": "m\u00b3/s",
+    "river_discharge_member45_seamless_v4": "m\u00b3/s",
+    "river_discharge_member46_seamless_v4": "m\u00b3/s",
+    "river_discharge_member47_seamless_v4": "m\u00b3/s",
+    "river_discharge_member48_seamless_v4": "m\u00b3/s",
+    "river_discharge_member49_seamless_v4": "m\u00b3/s",
+    "river_discharge_member50_seamless_v4": "m\u00b3/s"
+  },
+  "daily": {
+    "time": [
+      "2026-10-03",
+      "2026-10-04"
+    ],
+    "river_discharge_flood_best_match": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member01_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member02_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member03_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member04_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member05_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member06_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member07_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member08_flood_best_match": [
+      593.29,
+      665.81
+    ],
+    "river_discharge_member09_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member10_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member11_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member12_flood_best_match": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member13_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member14_flood_best_match": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member15_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member16_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member17_flood_best_match": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member18_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member19_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member20_flood_best_match": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member21_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member22_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member23_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member24_flood_best_match": [
+      593.29,
+      670.43
+    ],
+    "river_discharge_member25_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member26_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member27_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member28_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member29_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member30_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member31_flood_best_match": [
+      593.29,
+      665.81
+    ],
+    "river_discharge_member32_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member33_flood_best_match": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member34_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member35_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member36_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member37_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member38_flood_best_match": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member39_flood_best_match": [
+      593.29,
+      670.43
+    ],
+    "river_discharge_member40_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member41_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member42_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member43_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member44_flood_best_match": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member45_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member46_flood_best_match": [
+      593.29,
+      671.98
+    ],
+    "river_discharge_member47_flood_best_match": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member48_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member49_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member50_flood_best_match": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_seamless_v4": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member01_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member02_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member03_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member04_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member05_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member06_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member07_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member08_seamless_v4": [
+      593.29,
+      665.81
+    ],
+    "river_discharge_member09_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member10_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member11_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member12_seamless_v4": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member13_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member14_seamless_v4": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member15_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member16_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member17_seamless_v4": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member18_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member19_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member20_seamless_v4": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member21_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member22_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member23_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member24_seamless_v4": [
+      593.29,
+      670.43
+    ],
+    "river_discharge_member25_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member26_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member27_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member28_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member29_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member30_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member31_seamless_v4": [
+      593.29,
+      665.81
+    ],
+    "river_discharge_member32_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member33_seamless_v4": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member34_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member35_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member36_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member37_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member38_seamless_v4": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member39_seamless_v4": [
+      593.29,
+      670.43
+    ],
+    "river_discharge_member40_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member41_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member42_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member43_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member44_seamless_v4": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member45_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member46_seamless_v4": [
+      593.29,
+      671.98
+    ],
+    "river_discharge_member47_seamless_v4": [
+      593.29,
+      668.88
+    ],
+    "river_discharge_member48_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member49_seamless_v4": [
+      593.29,
+      667.34
+    ],
+    "river_discharge_member50_seamless_v4": [
+      593.29,
+      667.34
+    ]
+  }
+}
