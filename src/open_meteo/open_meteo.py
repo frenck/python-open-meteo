@@ -312,27 +312,17 @@ class OpenMeteo:
                 pressure_levels is given; nothing would be requested.
 
         """
-        if (pressure_level_variables is None) != (pressure_levels is None):
-            msg = "Both pressure_level_variables and pressure_levels are needed"
-            raise ValueError(msg)
-
-        # The API takes pressure level data as one variable per level, like
-        # temperature_850hPa, so every variable is combined with every level
-        hourly_variables: list[str] = list(hourly or [])
-        if pressure_level_variables and pressure_levels:
-            hourly_variables += [
-                f"{variable}_{level}hPa"
-                for variable in pressure_level_variables
-                for level in pressure_levels
-            ]
-
-        query = _build_query(
+        return await self._forecast(
+            "https://api.open-meteo.com/v1/forecast",
+            hourly=hourly,
+            pressure_level_variables=pressure_level_variables,
+            pressure_levels=pressure_levels,
+            models=models,
             latitude=latitude,
             longitude=longitude,
             timezone=timezone,
             current=current,
             minutely_15=minutely_15,
-            hourly=hourly_variables or None,
             daily=daily,
             forecast_days=forecast_days,
             past_days=past_days,
@@ -349,14 +339,158 @@ class OpenMeteo:
             cell_selection=cell_selection,
             tilt=tilt,
             azimuth=azimuth,
-            models=models,
             precipitation_unit=precipitation_unit,
             temperature_unit=temperature_unit,
             timeformat=timeformat,
             wind_speed_unit=wind_speed_unit,
         )
-        url = URL("https://api.open-meteo.com/v1/forecast").with_query(query)
-        data = await self._request(url=url)
+
+    # pylint: disable-next=too-many-arguments,too-many-locals
+    async def historical_forecast(  # noqa: PLR0913
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        start_date: date,
+        end_date: date,
+        timezone: str = "UTC",
+        minutely_15: list[HourlyParameters] | None = None,
+        hourly: list[HourlyParameters] | None = None,
+        pressure_level_variables: list[PressureLevelVariable] | None = None,
+        pressure_levels: list[int] | None = None,
+        daily: list[DailyParameters] | None = None,
+        start_hour: datetime | None = None,
+        end_hour: datetime | None = None,
+        temporal_resolution: TemporalResolution | None = None,
+        elevation: float | None = None,
+        cell_selection: CellSelection | None = None,
+        tilt: float | None = None,
+        azimuth: float | None = None,
+        models: list[str] | None = None,
+        precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
+        temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
+        timeformat: TimeFormat = TimeFormat.ISO_8601,
+        wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
+    ) -> Forecast:
+        """Get the forecasts the weather models made in the past.
+
+        The historical forecast API archives the weather forecasts as they were
+        made, with the same variables and models as the forecast. Data goes
+        back to 2016, but how far exactly depends on the weather model.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            start_date: First day of the time interval to return.
+            end_date: Last day of the time interval to return.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            minutely_15: A list of weather variables to get 15-minutely data
+                for. Every hourly variable is available.
+            hourly: A list of hourly weather variables to query for.
+            pressure_level_variables: A list of hourly weather variables to
+                query for on each of the pressure levels. They end up in
+                hourly.pressure_levels, keyed by the pressure level.
+            pressure_levels: The pressure levels in hPa to query the pressure
+                level variables for, like 850 or 500. Which levels have data
+                depends on the weather model.
+            daily: A list of daily weather variables to query for.
+            start_hour: First hour to return, to narrow down the time interval
+                for hourly and 15-minutely data. This is local time in the
+                requested timezone; tzinfo is not used.
+            end_hour: Last hour to return.
+            temporal_resolution: Aggregate hourly data into larger time steps,
+                or use the native resolution of the weather model.
+            elevation: Elevation used for statistical downscaling. Leave unset
+                to use a digital elevation model, or pass float("nan") to
+                switch downscaling off.
+            cell_selection: How to match the location to a grid cell of the
+                weather model.
+            tilt: Tilt of a solar panel in degrees, for global tilted
+                irradiance. 0 is horizontal, 90 is vertical.
+            azimuth: Orientation of a solar panel in degrees, for global
+                tilted irradiance. 0 is south, -90 is east, 90 is west.
+            models: Weather models to use, by their Open-Meteo name. Works the
+                same as for the forecast.
+            precipitation_unit: Precipitation unit.
+            temperature_unit: Temperature unit.
+            timeformat: Format of the returned timestamps.
+            wind_speed_unit: Wind speed unit.
+
+        Returns:
+        -------
+            A Forecast object.
+
+        Raises:
+        ------
+            ValueError: Only one of pressure_level_variables and
+                pressure_levels is given; nothing would be requested.
+
+        """
+        return await self._forecast(
+            "https://historical-forecast-api.open-meteo.com/v1/forecast",
+            hourly=hourly,
+            pressure_level_variables=pressure_level_variables,
+            pressure_levels=pressure_levels,
+            models=models,
+            latitude=latitude,
+            longitude=longitude,
+            start_date=start_date,
+            end_date=end_date,
+            timezone=timezone,
+            minutely_15=minutely_15,
+            daily=daily,
+            start_hour=start_hour,
+            end_hour=end_hour,
+            temporal_resolution=temporal_resolution,
+            elevation=elevation,
+            cell_selection=cell_selection,
+            tilt=tilt,
+            azimuth=azimuth,
+            precipitation_unit=precipitation_unit,
+            temperature_unit=temperature_unit,
+            timeformat=timeformat,
+            wind_speed_unit=wind_speed_unit,
+        )
+
+    # pylint: disable-next=too-many-arguments
+    async def _forecast(
+        self,
+        url: str,
+        *,
+        hourly: list[HourlyParameters] | None,
+        pressure_level_variables: list[PressureLevelVariable] | None,
+        pressure_levels: list[int] | None,
+        models: list[str] | None,
+        **parameters: object,
+    ) -> Forecast:
+        """Request and parse a forecast, shared by the forecast-like APIs.
+
+        These APIs all have the same parameters and responses, on another
+        host. This handles what needs more than passing a parameter on: the
+        pressure levels and the models.
+        """
+        if (pressure_level_variables is None) != (pressure_levels is None):
+            msg = "Both pressure_level_variables and pressure_levels are needed"
+            raise ValueError(msg)
+
+        # The API takes pressure level data as one variable per level, like
+        # temperature_850hPa, so every variable is combined with every level
+        hourly_variables: list[str] = list(hourly or [])
+        if pressure_level_variables and pressure_levels:
+            hourly_variables += [
+                f"{variable}_{level}hPa"
+                for variable in pressure_level_variables
+                for level in pressure_levels
+            ]
+
+        query = _build_query(
+            **parameters,
+            hourly=hourly_variables or None,
+            models=models,
+        )
+        data = await self._request(url=URL(url).with_query(query))
 
         if models is not None and len(set(models)) > 1:
             return Forecast.from_dict(_split_models(orjson.loads(data), models))

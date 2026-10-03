@@ -31,6 +31,7 @@ from open_meteo.exceptions import OpenMeteoConnectionError, OpenMeteoError
 from .conftest import load_fixture
 
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
+HISTORICAL_FORECAST_URL = "https://historical-forecast-api.open-meteo.com/v1/forecast"
 AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 GEOCODING_BY_ID_URL = "https://geocoding-api.open-meteo.com/v1/get"
@@ -493,6 +494,72 @@ async def test_forecast_beyond_model_range(
     assert forecast.daily is not None
     assert forecast.daily.temperature_2m_max == [18.3, None]
     assert forecast == snapshot
+
+
+async def test_historical_forecast(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test requesting forecasts the weather models made in the past."""
+    mock_endpoint(responses, HISTORICAL_FORECAST_URL, "historical_forecast.json")
+
+    forecast = await open_meteo_client.historical_forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        timezone="Europe/Amsterdam",
+        start_date=date(2024, 1, 1),
+        end_date=date(2024, 1, 2),
+        hourly=[HourlyParameters.TEMPERATURE_2M, HourlyParameters.WEATHER_CODE],
+        daily=[DailyParameters.TEMPERATURE_2M_MAX, DailyParameters.PRECIPITATION_SUM],
+    )
+
+    # Only what was asked for; the forecast defaults like past_days don't apply
+    assert requested_query(responses) == {
+        "daily": "temperature_2m_max,precipitation_sum",
+        "end_date": "2024-01-02",
+        "hourly": "temperature_2m,weather_code",
+        "latitude": "52.27",
+        "longitude": "6.87417",
+        "precipitation_unit": "mm",
+        "start_date": "2024-01-01",
+        "temperature_unit": "celsius",
+        "timeformat": "iso8601",
+        "timezone": "Europe/Amsterdam",
+        "wind_speed_unit": "kmh",
+    }
+    assert forecast.daily is not None
+    assert forecast.daily.time == [date(2024, 1, 1), date(2024, 1, 2)]
+    assert forecast == snapshot
+
+
+async def test_historical_forecast_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test models and pressure levels work the same as for the forecast."""
+    mock_endpoint(
+        responses,
+        HISTORICAL_FORECAST_URL,
+        "forecast_pressure_levels_models.json",
+    )
+
+    forecast = await open_meteo_client.historical_forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        start_date=date(2024, 1, 1),
+        end_date=date(2024, 1, 1),
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        pressure_level_variables=[PressureLevelVariable.TEMPERATURE],
+        pressure_levels=[850],
+        models=["icon_seamless", "gfs_seamless"],
+    )
+
+    assert "temperature_850hPa" in requested_query(responses)["hourly"]
+    assert forecast.models is not None
+    gfs = forecast.models["gfs_seamless"].hourly
+    assert gfs is not None
+    assert gfs.pressure_levels is not None
 
 
 async def test_air_quality(
