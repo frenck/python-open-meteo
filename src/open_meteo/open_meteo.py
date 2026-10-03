@@ -6,10 +6,11 @@ import asyncio
 import socket
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Any, Self
+from typing import Any, Self, TypeVar
 
 import orjson
 from aiohttp.client import ClientError, ClientResponseError, ClientSession
+from mashumaro.mixins.orjson import DataClassORJSONMixin
 from yarl import URL
 
 from .exceptions import OpenMeteoConnectionError, OpenMeteoError
@@ -24,6 +25,10 @@ from .models import (
     Geocoding,
     GeocodingResult,
     HourlyParameters,
+    LengthUnit,
+    Marine,
+    MarineDailyParameters,
+    MarineParameters,
     PrecipitationUnit,
     PressureLevelVariable,
     TemperatureUnit,
@@ -31,6 +36,8 @@ from .models import (
     TimeFormat,
     WindSpeedUnit,
 )
+
+ResponseT = TypeVar("ResponseT", bound=DataClassORJSONMixin)
 
 
 def _build_query(**parameters: object) -> dict[str, str]:
@@ -597,19 +604,152 @@ class OpenMeteo:
                 for level in pressure_levels
             ]
 
-        query = _build_query(
-            **parameters,
-            hourly=hourly_variables or None,
+        return await self._request_with_models(
+            url,
+            Forecast,
             models=models,
+            model_suffixes=model_suffixes,
+            hourly=hourly_variables or None,
+            **parameters,
         )
+
+    async def _request_with_models(
+        self,
+        url: str,
+        response_type: type[ResponseT],
+        *,
+        models: list[str] | None,
+        model_suffixes: dict[str, str] | None = None,
+        **parameters: object,
+    ) -> ResponseT:
+        """Request data from an API with weather models, and parse it.
+
+        With multiple models, the data of each model is split into a response
+        of its own first; see _split_models.
+        """
+        query = _build_query(**parameters, models=models)
         data = await self._request(url=URL(url).with_query(query))
 
         if models is not None and len(set(models)) > 1:
-            return Forecast.from_dict(
+            return response_type.from_dict(
                 _split_models(orjson.loads(data), models, model_suffixes)
             )
 
-        return Forecast.from_json(data)
+        return response_type.from_json(data)
+
+    # pylint: disable-next=too-many-arguments,too-many-locals
+    async def marine(  # noqa: PLR0913
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        timezone: str = "UTC",
+        current: list[MarineParameters] | None = None,
+        minutely_15: list[MarineParameters] | None = None,
+        hourly: list[MarineParameters] | None = None,
+        daily: list[MarineDailyParameters] | None = None,
+        forecast_days: int | None = None,
+        past_days: int | None = None,
+        forecast_hours: int | None = None,
+        past_hours: int | None = None,
+        forecast_minutely_15: int | None = None,
+        past_minutely_15: int | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
+        start_hour: datetime | None = None,
+        end_hour: datetime | None = None,
+        temporal_resolution: TemporalResolution | None = None,
+        cell_selection: CellSelection | None = None,
+        models: list[str] | None = None,
+        length_unit: LengthUnit = LengthUnit.METRIC,
+        temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
+        wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
+        timeformat: TimeFormat = TimeFormat.ISO_8601,
+    ) -> Marine:
+        """Get the marine forecast: waves, swell, ocean currents, and sea level.
+
+        Marine data is only available at sea; on land, all values are None.
+        Which variables have data depends on the location and the marine
+        model. Data goes back to 1940.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            current: A list of marine variables to get the current conditions
+                for.
+            minutely_15: A list of marine variables to get 15-minutely data
+                for.
+            hourly: A list of hourly marine variables to query for.
+            daily: A list of daily marine variables to query for.
+            forecast_days: Number of days to forecast (0-16). Leave unset for
+                the API default of 7 days.
+            past_days: Number of past days to include as well.
+            forecast_hours: Number of hourly steps to return from now on,
+                instead of whole days.
+            past_hours: Number of past hourly steps to include, instead of
+                whole days.
+            forecast_minutely_15: Number of 15-minutely steps to return from
+                now on, instead of whole days.
+            past_minutely_15: Number of past 15-minutely steps to include,
+                instead of whole days.
+            start_date: First day of the time interval to return. Use it
+                together with end_date, instead of forecast_days.
+            end_date: Last day of the time interval to return.
+            start_hour: First hour of the time interval to return, for hourly
+                and 15-minutely data. Use it together with end_hour. This is
+                local time in the requested timezone; tzinfo is not used.
+            end_hour: Last hour of the time interval to return.
+            temporal_resolution: Aggregate hourly data into larger time steps,
+                or use the native resolution of the marine model.
+            cell_selection: How to match the location to a grid cell of the
+                marine model.
+            models: Marine models to use, by their Open-Meteo name, like
+                "ecmwf_wam025". Works the same as for the forecast: with
+                multiple models, the data of each model is in Marine.models.
+            length_unit: Unit for wave heights and sea level: meters or feet.
+            temperature_unit: Temperature unit, for the sea surface
+                temperature.
+            wind_speed_unit: Speed unit, for the ocean current velocity.
+            timeformat: Format of the returned timestamps.
+
+        Returns:
+        -------
+            A Marine object.
+
+        """
+        return await self._request_with_models(
+            "https://marine-api.open-meteo.com/v1/marine",
+            Marine,
+            models=models,
+            # The marine API suffixes best_match data as marine_best_match
+            model_suffixes={"best_match": "marine_best_match"},
+            latitude=latitude,
+            longitude=longitude,
+            timezone=timezone,
+            current=current,
+            minutely_15=minutely_15,
+            hourly=hourly,
+            daily=daily,
+            forecast_days=forecast_days,
+            past_days=past_days,
+            forecast_hours=forecast_hours,
+            past_hours=past_hours,
+            forecast_minutely_15=forecast_minutely_15,
+            past_minutely_15=past_minutely_15,
+            start_date=start_date,
+            end_date=end_date,
+            start_hour=start_hour,
+            end_hour=end_hour,
+            temporal_resolution=temporal_resolution,
+            cell_selection=cell_selection,
+            length_unit=length_unit,
+            temperature_unit=temperature_unit,
+            wind_speed_unit=wind_speed_unit,
+            timeformat=timeformat,
+        )
 
     # pylint: disable-next=too-many-arguments,too-many-locals
     async def air_quality(  # noqa: PLR0913

@@ -1,0 +1,435 @@
+{
+  "latitude": 53.041664,
+  "longitude": 3.9583435,
+  "generationtime_ms": 1.186966896057129,
+  "utc_offset_seconds": 7200,
+  "timezone": "Europe/Amsterdam",
+  "timezone_abbreviation": "GMT+2",
+  "elevation": 0.0,
+  "current_units": {
+    "time": "iso8601",
+    "interval": "seconds",
+    "wave_height": "m",
+    "wave_direction": "\u00b0",
+    "wave_period": "s",
+    "wave_peak_period": "undefined",
+    "wind_wave_height": "m",
+    "wind_wave_direction": "\u00b0",
+    "wind_wave_period": "s",
+    "wind_wave_peak_period": "s",
+    "swell_wave_height": "m",
+    "swell_wave_direction": "\u00b0",
+    "swell_wave_period": "s",
+    "swell_wave_peak_period": "s",
+    "secondary_swell_wave_height": "m",
+    "secondary_swell_wave_direction": "\u00b0",
+    "secondary_swell_wave_period": "s",
+    "tertiary_swell_wave_height": "undefined",
+    "tertiary_swell_wave_direction": "undefined",
+    "tertiary_swell_wave_period": "undefined",
+    "sea_level_height_msl": "m",
+    "invert_barometer_height": "m",
+    "sea_surface_temperature": "\u00b0C",
+    "ocean_current_velocity": "km/h",
+    "ocean_current_direction": "\u00b0"
+  },
+  "current": {
+    "time": "2026-10-03T13:45",
+    "interval": 900,
+    "wave_height": 0.76,
+    "wave_direction": 240,
+    "wave_period": 3.85,
+    "wave_peak_period": null,
+    "wind_wave_height": 0.58,
+    "wind_wave_direction": 248,
+    "wind_wave_period": 3.05,
+    "wind_wave_peak_period": 4.3,
+    "swell_wave_height": 0.34,
+    "swell_wave_direction": 256,
+    "swell_wave_period": 4.25,
+    "swell_wave_peak_period": 4.95,
+    "secondary_swell_wave_height": 0.28,
+    "secondary_swell_wave_direction": 215,
+    "secondary_swell_wave_period": 3.4,
+    "tertiary_swell_wave_height": null,
+    "tertiary_swell_wave_direction": null,
+    "tertiary_swell_wave_period": null,
+    "sea_level_height_msl": -0.05,
+    "invert_barometer_height": -0.18,
+    "sea_surface_temperature": 18.4,
+    "ocean_current_velocity": 1.0,
+    "ocean_current_direction": 158
+  },
+  "minutely_15_units": {
+    "time": "iso8601",
+    "wave_height": "m",
+    "wave_direction": "\u00b0",
+    "wave_period": "s",
+    "wave_peak_period": "undefined",
+    "wind_wave_height": "m",
+    "wind_wave_direction": "\u00b0",
+    "wind_wave_period": "s",
+    "wind_wave_peak_period": "s",
+    "swell_wave_height": "m",
+    "swell_wave_direction": "\u00b0",
+    "swell_wave_period": "s",
+    "swell_wave_peak_period": "s",
+    "secondary_swell_wave_height": "m",
+    "secondary_swell_wave_direction": "\u00b0",
+    "secondary_swell_wave_period": "s",
+    "tertiary_swell_wave_height": "undefined",
+    "tertiary_swell_wave_direction": "undefined",
+    "tertiary_swell_wave_period": "undefined",
+    "sea_level_height_msl": "m",
+    "invert_barometer_height": "m",
+    "sea_surface_temperature": "\u00b0C",
+    "ocean_current_velocity": "km/h",
+    "ocean_current_direction": "\u00b0"
+  },
+  "minutely_15": {
+    "time": [
+      "2026-10-03T13:45",
+      "2026-10-03T14:00",
+      "2026-10-03T14:15"
+    ],
+    "wave_height": [
+      0.76,
+      0.76,
+      0.76
+    ],
+    "wave_direction": [
+      240,
+      241,
+      241
+    ],
+    "wave_period": [
+      3.85,
+      3.85,
+      3.85
+    ],
+    "wave_peak_period": [
+      null,
+      null,
+      null
+    ],
+    "wind_wave_height": [
+      0.58,
+      0.56,
+      0.52
+    ],
+    "wind_wave_direction": [
+      248,
+      249,
+      251
+    ],
+    "wind_wave_period": [
+      3.05,
+      3.0,
+      2.95
+    ],
+    "wind_wave_peak_period": [
+      4.3,
+      4.3,
+      4.3
+    ],
+    "swell_wave_height": [
+      0.34,
+      0.34,
+      0.36
+    ],
+    "swell_wave_direction": [
+      256,
+      255,
+      254
+    ],
+    "swell_wave_period": [
+      4.25,
+      4.2,
+      4.15
+    ],
+    "swell_wave_peak_period": [
+      4.95,
+      4.75,
+      4.7
+    ],
+    "secondary_swell_wave_height": [
+      0.28,
+      0.3,
+      0.28
+    ],
+    "secondary_swell_wave_direction": [
+      215,
+      213,
+      224
+    ],
+    "secondary_swell_wave_period": [
+      3.4,
+      3.65,
+      4.0
+    ],
+    "tertiary_swell_wave_height": [
+      null,
+      null,
+      null
+    ],
+    "tertiary_swell_wave_direction": [
+      null,
+      null,
+      null
+    ],
+    "tertiary_swell_wave_period": [
+      null,
+      null,
+      null
+    ],
+    "sea_level_height_msl": [
+      -0.05,
+      -0.08,
+      -0.12
+    ],
+    "invert_barometer_height": [
+      -0.18,
+      -0.18,
+      -0.18
+    ],
+    "sea_surface_temperature": [
+      18.4,
+      18.4,
+      18.4
+    ],
+    "ocean_current_velocity": [
+      1.0,
+      1.1,
+      1.1
+    ],
+    "ocean_current_direction": [
+      158,
+      171,
+      180
+    ]
+  },
+  "hourly_units": {
+    "time": "iso8601",
+    "wave_height": "m",
+    "wave_direction": "\u00b0",
+    "wave_period": "s",
+    "wave_peak_period": "undefined",
+    "wind_wave_height": "m",
+    "wind_wave_direction": "\u00b0",
+    "wind_wave_period": "s",
+    "wind_wave_peak_period": "s",
+    "swell_wave_height": "m",
+    "swell_wave_direction": "\u00b0",
+    "swell_wave_period": "s",
+    "swell_wave_peak_period": "s",
+    "secondary_swell_wave_height": "m",
+    "secondary_swell_wave_direction": "\u00b0",
+    "secondary_swell_wave_period": "s",
+    "tertiary_swell_wave_height": "undefined",
+    "tertiary_swell_wave_direction": "undefined",
+    "tertiary_swell_wave_period": "undefined",
+    "sea_level_height_msl": "m",
+    "invert_barometer_height": "m",
+    "sea_surface_temperature": "\u00b0C",
+    "ocean_current_velocity": "km/h",
+    "ocean_current_direction": "\u00b0"
+  },
+  "hourly": {
+    "time": [
+      "2026-10-03T00:00",
+      "2026-10-03T01:00",
+      "2026-10-03T02:00"
+    ],
+    "wave_height": [
+      0.76,
+      0.78,
+      0.82
+    ],
+    "wave_direction": [
+      222,
+      223,
+      223
+    ],
+    "wave_period": [
+      3.8,
+      3.85,
+      3.9
+    ],
+    "wave_peak_period": [
+      null,
+      null,
+      null
+    ],
+    "wind_wave_height": [
+      0.62,
+      0.66,
+      0.72
+    ],
+    "wind_wave_direction": [
+      208,
+      211,
+      215
+    ],
+    "wind_wave_period": [
+      2.95,
+      3.1,
+      3.2
+    ],
+    "wind_wave_peak_period": [
+      3.55,
+      3.9,
+      3.9
+    ],
+    "swell_wave_height": [
+      0.44,
+      0.4,
+      0.38
+    ],
+    "swell_wave_direction": [
+      248,
+      251,
+      253
+    ],
+    "swell_wave_period": [
+      3.8,
+      3.9,
+      4.05
+    ],
+    "swell_wave_peak_period": [
+      4.3,
+      4.75,
+      5.2
+    ],
+    "secondary_swell_wave_height": [
+      0.12,
+      0.1,
+      0.1
+    ],
+    "secondary_swell_wave_direction": [
+      25,
+      25,
+      25
+    ],
+    "secondary_swell_wave_period": [
+      4.75,
+      4.75,
+      4.55
+    ],
+    "tertiary_swell_wave_height": [
+      null,
+      null,
+      null
+    ],
+    "tertiary_swell_wave_direction": [
+      null,
+      null,
+      null
+    ],
+    "tertiary_swell_wave_period": [
+      null,
+      null,
+      null
+    ],
+    "sea_level_height_msl": [
+      -0.16,
+      -0.12,
+      -0.32
+    ],
+    "invert_barometer_height": [
+      -0.19,
+      -0.19,
+      -0.19
+    ],
+    "sea_surface_temperature": [
+      18.4,
+      18.4,
+      18.4
+    ],
+    "ocean_current_velocity": [
+      0.7,
+      0.8,
+      1.1
+    ],
+    "ocean_current_direction": [
+      76,
+      153,
+      198
+    ]
+  },
+  "daily_units": {
+    "time": "iso8601",
+    "wave_height_max": "m",
+    "wave_direction_dominant": "\u00b0",
+    "wave_period_max": "s",
+    "wind_wave_height_max": "m",
+    "wind_wave_direction_dominant": "\u00b0",
+    "wind_wave_period_max": "s",
+    "wind_wave_peak_period_max": "s",
+    "swell_wave_height_max": "m",
+    "swell_wave_direction_dominant": "\u00b0",
+    "swell_wave_period_max": "s",
+    "swell_wave_peak_period_max": "s"
+  },
+  "daily": {
+    "time": [
+      "2026-10-03",
+      "2026-10-04",
+      "2026-10-05"
+    ],
+    "wave_height_max": [
+      0.88,
+      0.44,
+      0.9
+    ],
+    "wave_direction_dominant": [
+      233,
+      303,
+      265
+    ],
+    "wave_period_max": [
+      4.05,
+      4.9,
+      4.2
+    ],
+    "wind_wave_height_max": [
+      0.74,
+      0.04,
+      0.76
+    ],
+    "wind_wave_direction_dominant": [
+      226,
+      341,
+      246
+    ],
+    "wind_wave_period_max": [
+      3.3,
+      1.5,
+      3.25
+    ],
+    "wind_wave_peak_period_max": [
+      4.3,
+      2.45,
+      3.9
+    ],
+    "swell_wave_height_max": [
+      0.62,
+      0.36,
+      0.64
+    ],
+    "swell_wave_direction_dominant": [
+      249,
+      312,
+      307
+    ],
+    "swell_wave_period_max": [
+      4.45,
+      4.35,
+      4.05
+    ],
+    "swell_wave_peak_period_max": [
+      5.75,
+      5.75,
+      4.75
+    ]
+  }
+}

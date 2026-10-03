@@ -1,0 +1,33 @@
+{
+  "latitude": 53.041664,
+  "longitude": 3.9583435,
+  "generationtime_ms": 0.0890493392944336,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 0.0,
+  "hourly_units": {
+    "time": "iso8601",
+    "wave_height_marine_best_match": "m",
+    "wave_height_ecmwf_wam025": "m",
+    "wave_height_ncep_gfswave025": "m"
+  },
+  "hourly": {
+    "time": [
+      "2026-10-03T11:00",
+      "2026-10-03T12:00"
+    ],
+    "wave_height_marine_best_match": [
+      0.78,
+      0.76
+    ],
+    "wave_height_ecmwf_wam025": [
+      0.88,
+      0.86
+    ],
+    "wave_height_ncep_gfswave025": [
+      0.68,
+      0.7
+    ]
+  }
+}
