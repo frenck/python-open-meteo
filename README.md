@@ -140,6 +140,29 @@ async with OpenMeteo() as open_meteo:
     print(forecast.daily.temperature_2m_max)
 ```
 
+### Historical weather
+
+The historical weather API has the weather of the past, back to 1940, from
+reanalysis datasets like ERA5. Those combine weather observations and weather
+models into the best estimate of what the weather was.
+
+```python
+from datetime import date
+
+from open_meteo import DailyParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    weather = await open_meteo.historical_weather(
+        latitude=52.27,
+        longitude=6.87417,
+        start_date=date(1953, 1, 31),
+        end_date=date(1953, 2, 1),
+        daily=[DailyParameters.WIND_GUSTS_10M_MAX],
+    )
+
+    print(weather.daily.wind_gusts_10m_max)
+```
+
 ### Air quality
 
 Air quality works the same way, with its own set of variables. These include

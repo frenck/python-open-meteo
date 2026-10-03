@@ -132,6 +132,9 @@ class HourlyParameters(StrEnum):
     SNOWFALL_PROBABILITY = "snowfall_probability"
     THUNDERSTORM_PROBABILITY = "thunderstorm_probability"
 
+    # Growing degree days with a base of 0°C and a limit of 50°C
+    GROWING_DEGREE_DAYS_BASE_0_LIMIT_50 = "growing_degree_days_base_0_limit_50"
+
     # Total solar radiation on a tilted panel, as average of the preceding hour;
     # use the tilt and azimuth parameters to describe the panel
     GLOBAL_TILTED_IRRADIANCE = "global_tilted_irradiance"
@@ -142,6 +145,9 @@ class HourlyParameters(StrEnum):
     # K index and lifted index, indicators of thunderstorm potential
     K_INDEX = "k_index"
     LIFTED_INDEX = "lifted_index"
+
+    # Probability of leaf wetness
+    LEAF_WETNESS_PROBABILITY = "leaf_wetness_probability"
 
     # Lightning density and lightning potential index
     LIGHTNING_DENSITY = "lightning_density"
@@ -209,6 +215,7 @@ class HourlyParameters(StrEnum):
     SOIL_MOISTURE_0_TO_1CM = "soil_moisture_0_to_1cm"
     SOIL_MOISTURE_0_TO_7CM = "soil_moisture_0_to_7cm"
     SOIL_MOISTURE_0_TO_10CM = "soil_moisture_0_to_10cm"
+    SOIL_MOISTURE_0_TO_100CM = "soil_moisture_0_to_100cm"
     SOIL_MOISTURE_1_TO_3CM = "soil_moisture_1_to_3cm"
     SOIL_MOISTURE_3_TO_9CM = "soil_moisture_3_to_9cm"
     SOIL_MOISTURE_7_TO_28CM = "soil_moisture_7_to_28cm"
@@ -226,6 +233,13 @@ class HourlyParameters(StrEnum):
     SOIL_MOISTURE_243_TO_729CM = "soil_moisture_243_to_729cm"
     SOIL_MOISTURE_729_TO_2187CM = "soil_moisture_729_to_2187cm"
 
+    # Soil moisture index, averaged over layers, from 0 (wilting point) to 1
+    # (field capacity) and beyond when the soil is saturated
+    SOIL_MOISTURE_INDEX_0_TO_7CM = "soil_moisture_index_0_to_7cm"
+    SOIL_MOISTURE_INDEX_0_TO_100CM = "soil_moisture_index_0_to_100cm"
+    SOIL_MOISTURE_INDEX_7_TO_28CM = "soil_moisture_index_7_to_28cm"
+    SOIL_MOISTURE_INDEX_28_TO_100CM = "soil_moisture_index_28_to_100cm"
+
     # Temperature in the soil, at fixed depths or averaged over layers. 0 cm is
     # the surface temperature on land or water surface temperature on water.
     # Which depths are available depends on the weather model.
@@ -238,6 +252,7 @@ class HourlyParameters(StrEnum):
     SOIL_TEMPERATURE_1458CM = "soil_temperature_1458cm"
     SOIL_TEMPERATURE_0_TO_7CM = "soil_temperature_0_to_7cm"
     SOIL_TEMPERATURE_0_TO_10CM = "soil_temperature_0_to_10cm"
+    SOIL_TEMPERATURE_0_TO_100CM = "soil_temperature_0_to_100cm"
     SOIL_TEMPERATURE_7_TO_28CM = "soil_temperature_7_to_28cm"
     SOIL_TEMPERATURE_10_TO_35CM = "soil_temperature_10_to_35cm"
     SOIL_TEMPERATURE_10_TO_40CM = "soil_temperature_10_to_40cm"
@@ -521,9 +536,11 @@ class CurrentForecast(DataClassORJSONMixin):
     freezing_rain_probability: int | None = None
     global_tilted_irradiance: float | None = None
     global_tilted_irradiance_instant: float | None = None
+    growing_degree_days_base_0_limit_50: float | None = None
     ice_pellets_probability: int | None = None
     is_day: bool | None = None
     k_index: float | None = None
+    leaf_wetness_probability: int | None = None
     lifted_index: float | None = None
     lightning_density: float | None = None
     lightning_potential: float | None = None
@@ -552,6 +569,7 @@ class CurrentForecast(DataClassORJSONMixin):
     snowfall_height: float | None = None
     snowfall_probability: int | None = None
     snowfall_water_equivalent: float | None = None
+    soil_moisture_0_to_100cm: float | None = None
     soil_moisture_0_to_10cm: float | None = None
     soil_moisture_0_to_1cm: float | None = None
     soil_moisture_0_to_7cm: float | None = None
@@ -571,6 +589,11 @@ class CurrentForecast(DataClassORJSONMixin):
     soil_moisture_7_to_28cm: float | None = None
     soil_moisture_81_to_243cm: float | None = None
     soil_moisture_9_to_27cm: float | None = None
+    soil_moisture_index_0_to_100cm: float | None = None
+    soil_moisture_index_0_to_7cm: float | None = None
+    soil_moisture_index_28_to_100cm: float | None = None
+    soil_moisture_index_7_to_28cm: float | None = None
+    soil_temperature_0_to_100cm: float | None = None
     soil_temperature_0_to_10cm: float | None = None
     soil_temperature_0_to_7cm: float | None = None
     soil_temperature_0cm: float | None = None
@@ -676,9 +699,11 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     freezing_rain_probability: str | None = None
     global_tilted_irradiance: str | None = None
     global_tilted_irradiance_instant: str | None = None
+    growing_degree_days_base_0_limit_50: str | None = None
     ice_pellets_probability: str | None = None
     is_day: str | None = None
     k_index: str | None = None
+    leaf_wetness_probability: str | None = None
     lifted_index: str | None = None
     lightning_density: str | None = None
     lightning_potential: str | None = None
@@ -707,6 +732,7 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     snowfall_height: str | None = None
     snowfall_probability: str | None = None
     snowfall_water_equivalent: str | None = None
+    soil_moisture_0_to_100cm: str | None = None
     soil_moisture_0_to_10cm: str | None = None
     soil_moisture_0_to_1cm: str | None = None
     soil_moisture_0_to_7cm: str | None = None
@@ -726,6 +752,11 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     soil_moisture_7_to_28cm: str | None = None
     soil_moisture_81_to_243cm: str | None = None
     soil_moisture_9_to_27cm: str | None = None
+    soil_moisture_index_0_to_100cm: str | None = None
+    soil_moisture_index_0_to_7cm: str | None = None
+    soil_moisture_index_28_to_100cm: str | None = None
+    soil_moisture_index_7_to_28cm: str | None = None
+    soil_temperature_0_to_100cm: str | None = None
     soil_temperature_0_to_10cm: str | None = None
     soil_temperature_0_to_7cm: str | None = None
     soil_temperature_0cm: str | None = None
@@ -919,9 +950,11 @@ class HourlyForecast(DataClassORJSONMixin):
     freezing_rain_probability: list[int | None] | None = None
     global_tilted_irradiance: list[float | None] | None = None
     global_tilted_irradiance_instant: list[float | None] | None = None
+    growing_degree_days_base_0_limit_50: list[float | None] | None = None
     ice_pellets_probability: list[int | None] | None = None
     is_day: list[bool | None] | None = None
     k_index: list[float | None] | None = None
+    leaf_wetness_probability: list[int | None] | None = None
     lifted_index: list[float | None] | None = None
     lightning_density: list[float | None] | None = None
     lightning_potential: list[float | None] | None = None
@@ -950,6 +983,7 @@ class HourlyForecast(DataClassORJSONMixin):
     snowfall_height: list[float | None] | None = None
     snowfall_probability: list[int | None] | None = None
     snowfall_water_equivalent: list[float | None] | None = None
+    soil_moisture_0_to_100cm: list[float | None] | None = None
     soil_moisture_0_to_10cm: list[float | None] | None = None
     soil_moisture_0_to_1cm: list[float | None] | None = None
     soil_moisture_0_to_7cm: list[float | None] | None = None
@@ -969,6 +1003,11 @@ class HourlyForecast(DataClassORJSONMixin):
     soil_moisture_7_to_28cm: list[float | None] | None = None
     soil_moisture_81_to_243cm: list[float | None] | None = None
     soil_moisture_9_to_27cm: list[float | None] | None = None
+    soil_moisture_index_0_to_100cm: list[float | None] | None = None
+    soil_moisture_index_0_to_7cm: list[float | None] | None = None
+    soil_moisture_index_28_to_100cm: list[float | None] | None = None
+    soil_moisture_index_7_to_28cm: list[float | None] | None = None
+    soil_temperature_0_to_100cm: list[float | None] | None = None
     soil_temperature_0_to_10cm: list[float | None] | None = None
     soil_temperature_0_to_7cm: list[float | None] | None = None
     soil_temperature_0cm: list[float | None] | None = None
@@ -1081,9 +1120,11 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     freezing_rain_probability: str | None = None
     global_tilted_irradiance: str | None = None
     global_tilted_irradiance_instant: str | None = None
+    growing_degree_days_base_0_limit_50: str | None = None
     ice_pellets_probability: str | None = None
     is_day: str | None = None
     k_index: str | None = None
+    leaf_wetness_probability: str | None = None
     lifted_index: str | None = None
     lightning_density: str | None = None
     lightning_potential: str | None = None
@@ -1112,6 +1153,7 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     snowfall_height: str | None = None
     snowfall_probability: str | None = None
     snowfall_water_equivalent: str | None = None
+    soil_moisture_0_to_100cm: str | None = None
     soil_moisture_0_to_10cm: str | None = None
     soil_moisture_0_to_1cm: str | None = None
     soil_moisture_0_to_7cm: str | None = None
@@ -1131,6 +1173,11 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     soil_moisture_7_to_28cm: str | None = None
     soil_moisture_81_to_243cm: str | None = None
     soil_moisture_9_to_27cm: str | None = None
+    soil_moisture_index_0_to_100cm: str | None = None
+    soil_moisture_index_0_to_7cm: str | None = None
+    soil_moisture_index_28_to_100cm: str | None = None
+    soil_moisture_index_7_to_28cm: str | None = None
+    soil_temperature_0_to_100cm: str | None = None
     soil_temperature_0_to_10cm: str | None = None
     soil_temperature_0_to_7cm: str | None = None
     soil_temperature_0cm: str | None = None

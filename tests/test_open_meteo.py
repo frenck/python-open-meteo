@@ -32,6 +32,7 @@ from .conftest import load_fixture
 
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 HISTORICAL_FORECAST_URL = "https://historical-forecast-api.open-meteo.com/v1/forecast"
+HISTORICAL_WEATHER_URL = "https://archive-api.open-meteo.com/v1/archive"
 AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 GEOCODING_BY_ID_URL = "https://geocoding-api.open-meteo.com/v1/get"
@@ -560,6 +561,71 @@ async def test_historical_forecast_models(
     gfs = forecast.models["gfs_seamless"].hourly
     assert gfs is not None
     assert gfs.pressure_levels is not None
+
+
+async def test_historical_weather(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test requesting the historical weather.
+
+    The fixture is a real response for the North Sea flood of 1953.
+    """
+    mock_endpoint(responses, HISTORICAL_WEATHER_URL, "historical_weather.json")
+
+    weather = await open_meteo_client.historical_weather(
+        latitude=52.27,
+        longitude=6.87417,
+        timezone="Europe/Amsterdam",
+        start_date=date(1953, 1, 31),
+        end_date=date(1953, 2, 1),
+        hourly=[
+            HourlyParameters.TEMPERATURE_2M,
+            HourlyParameters.WIND_SPEED_10M,
+            HourlyParameters.SOIL_MOISTURE_INDEX_0_TO_7CM,
+        ],
+        daily=[DailyParameters.WIND_GUSTS_10M_MAX, DailyParameters.PRECIPITATION_SUM],
+    )
+
+    query = requested_query(responses)
+    assert query["start_date"] == "1953-01-31"
+    assert query["end_date"] == "1953-02-01"
+    assert "past_days" not in query
+    assert weather.daily is not None
+    assert weather.daily.wind_gusts_10m_max is not None
+    assert weather.hourly is not None
+    assert weather.hourly.soil_moisture_index_0_to_7cm is not None
+    assert weather == snapshot
+
+
+async def test_historical_weather_best_match(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test best_match data ends up under the name it was requested by.
+
+    The archive suffixes the data of best_match as archive_best_match, which
+    also ends in _best_match.
+    """
+    mock_endpoint(responses, HISTORICAL_WEATHER_URL, "historical_weather_models.json")
+
+    weather = await open_meteo_client.historical_weather(
+        latitude=52.27,
+        longitude=6.87417,
+        start_date=date(2024, 1, 1),
+        end_date=date(2024, 1, 1),
+        daily=[DailyParameters.TEMPERATURE_2M_MAX],
+        models=["best_match", "era5", "era5_land"],
+    )
+
+    assert requested_query(responses)["models"] == "best_match,era5,era5_land"
+    assert weather.daily is None
+    assert weather.models is not None
+    assert list(weather.models) == ["best_match", "era5", "era5_land"]
+    best_match = weather.models["best_match"].daily
+    assert best_match is not None
+    assert best_match.temperature_2m_max == [8.0]
 
 
 async def test_air_quality(

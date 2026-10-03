@@ -71,7 +71,11 @@ MODEL_SECTIONS = (
 )
 
 
-def _split_models(data: dict[str, Any], models: list[str]) -> dict[str, Any]:
+def _split_models(
+    data: dict[str, Any],
+    models: list[str],
+    suffixes: dict[str, str] | None = None,
+) -> dict[str, Any]:
     """Split a multiple model response into a response per model.
 
     With multiple models, the API suffixes every variable with the model name,
@@ -83,11 +87,17 @@ def _split_models(data: dict[str, Any], models: list[str]) -> dict[str, Any]:
     When only one of the requested models has data for the location, the API
     leaves out the suffixes, and there is no telling which model the data is
     from. The response is returned as is then, like a single model response.
+
+    Some APIs use another suffix than the requested name for a model; suffixes
+    maps those requested names to the suffix the API uses.
     """
-    # The longest name has to win: temperature_2m_meteoswiss_icon_seamless
+    # Match on the suffix the API uses, but keep the data under the name the
+    # model was requested by
+    suffix_to_model = {(suffixes or {}).get(model, model): model for model in models}
+
+    # The longest suffix has to win: temperature_2m_meteoswiss_icon_seamless
     # also ends in _icon_seamless
-    by_length = sorted(set(models), key=str.__len__, reverse=True)
-    sections = {key: value for key, value in data.items() if key in MODEL_SECTIONS}
+    by_length = sorted(suffix_to_model, key=str.__len__, reverse=True)
     shared = {key: value for key, value in data.items() if key not in MODEL_SECTIONS}
 
     # Keep the models in the order they were requested
@@ -96,24 +106,27 @@ def _split_models(data: dict[str, Any], models: list[str]) -> dict[str, Any]:
     }
 
     split = False
-    for section, values in sections.items():
+    for section in MODEL_SECTIONS:
+        if section not in data:
+            continue
+
         leftover: dict[str, Any] = {}
-        for key, value in values.items():
-            model = next((m for m in by_length if key.endswith(f"_{m}")), None)
+        for key, value in data[section].items():
+            suffix = next((m for m in by_length if key.endswith(f"_{m}")), None)
 
             # Time is shared between the models; anything else without a
             # model suffix stays where it is
-            if model is None:
+            if suffix is None:
                 leftover[key] = value
                 continue
 
-            variable = key.removesuffix(f"_{model}")
-            per_model[model].setdefault(section, {})[variable] = value
+            model_section = per_model[suffix_to_model[suffix]].setdefault(section, {})
+            model_section[key.removesuffix(f"_{suffix}")] = value
             split = True
 
-        for model in by_length:
-            if section in per_model[model] and "time" in leftover:
-                per_model[model][section]["time"] = leftover["time"]
+        for model in per_model.values():
+            if section in model and "time" in leftover:
+                model[section]["time"] = leftover["time"]
 
         # Only keep the section on the top level, if more than time is left
         if set(leftover) - {"time"}:
@@ -123,9 +136,9 @@ def _split_models(data: dict[str, Any], models: list[str]) -> dict[str, Any]:
         return data
 
     # The current conditions are not per model, so they stay on the top level
-    for model in by_length:
-        per_model[model].pop("current", None)
-        per_model[model].pop("current_units", None)
+    for model in per_model.values():
+        model.pop("current", None)
+        model.pop("current_units", None)
 
     return {**shared, "models": per_model}
 
@@ -454,8 +467,106 @@ class OpenMeteo:
             wind_speed_unit=wind_speed_unit,
         )
 
+    # pylint: disable-next=too-many-arguments,too-many-locals
+    async def historical_weather(  # noqa: PLR0913
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        start_date: date,
+        end_date: date,
+        timezone: str = "UTC",
+        hourly: list[HourlyParameters] | None = None,
+        daily: list[DailyParameters] | None = None,
+        start_hour: datetime | None = None,
+        end_hour: datetime | None = None,
+        temporal_resolution: TemporalResolution | None = None,
+        elevation: float | None = None,
+        cell_selection: CellSelection | None = None,
+        tilt: float | None = None,
+        azimuth: float | None = None,
+        models: list[str] | None = None,
+        precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
+        temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
+        timeformat: TimeFormat = TimeFormat.ISO_8601,
+        wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
+    ) -> Forecast:
+        """Get the historical weather, from reanalysis datasets back to 1940.
+
+        The historical weather API combines weather observations and weather
+        models into reanalysis datasets, like ERA5. These are the best
+        estimate of the weather in the past. ERA5 becomes available with a
+        delay of about five days; by default, the most recent days are filled
+        in with ECMWF IFS data. There is no 15-minutely data, no current
+        conditions, and no data on pressure levels.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            start_date: First day of the time interval to return, from
+                1940-01-01 on.
+            end_date: Last day of the time interval to return.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            hourly: A list of hourly weather variables to query for.
+            daily: A list of daily weather variables to query for.
+            start_hour: First hour to return, to narrow down the time interval
+                for hourly data. This is local time in the requested
+                timezone; tzinfo is not used.
+            end_hour: Last hour to return.
+            temporal_resolution: Aggregate hourly data into larger time steps,
+                or use the native resolution of the dataset.
+            elevation: Elevation used for statistical downscaling. Leave unset
+                to use a digital elevation model, or pass float("nan") to
+                switch downscaling off.
+            cell_selection: How to match the location to a grid cell of the
+                dataset.
+            tilt: Tilt of a solar panel in degrees, for global tilted
+                irradiance. 0 is horizontal, 90 is vertical.
+            azimuth: Orientation of a solar panel in degrees, for global
+                tilted irradiance. 0 is south, -90 is east, 90 is west.
+            models: Reanalysis datasets to use, by their Open-Meteo name, like
+                "era5" or "era5_land". Works the same as for the forecast.
+            precipitation_unit: Precipitation unit.
+            temperature_unit: Temperature unit.
+            timeformat: Format of the returned timestamps.
+            wind_speed_unit: Wind speed unit.
+
+        Returns:
+        -------
+            A Forecast object, as the response has the same shape.
+
+        """
+        return await self._forecast(
+            "https://archive-api.open-meteo.com/v1/archive",
+            hourly=hourly,
+            pressure_level_variables=None,
+            pressure_levels=None,
+            models=models,
+            # The archive suffixes best_match data as archive_best_match
+            model_suffixes={"best_match": "archive_best_match"},
+            latitude=latitude,
+            longitude=longitude,
+            start_date=start_date,
+            end_date=end_date,
+            timezone=timezone,
+            daily=daily,
+            start_hour=start_hour,
+            end_hour=end_hour,
+            temporal_resolution=temporal_resolution,
+            elevation=elevation,
+            cell_selection=cell_selection,
+            tilt=tilt,
+            azimuth=azimuth,
+            precipitation_unit=precipitation_unit,
+            temperature_unit=temperature_unit,
+            timeformat=timeformat,
+            wind_speed_unit=wind_speed_unit,
+        )
+
     # pylint: disable-next=too-many-arguments
-    async def _forecast(
+    async def _forecast(  # noqa: PLR0913
         self,
         url: str,
         *,
@@ -463,6 +574,7 @@ class OpenMeteo:
         pressure_level_variables: list[PressureLevelVariable] | None,
         pressure_levels: list[int] | None,
         models: list[str] | None,
+        model_suffixes: dict[str, str] | None = None,
         **parameters: object,
     ) -> Forecast:
         """Request and parse a forecast, shared by the forecast-like APIs.
@@ -493,7 +605,9 @@ class OpenMeteo:
         data = await self._request(url=URL(url).with_query(query))
 
         if models is not None and len(set(models)) > 1:
-            return Forecast.from_dict(_split_models(orjson.loads(data), models))
+            return Forecast.from_dict(
+                _split_models(orjson.loads(data), models, model_suffixes)
+            )
 
         return Forecast.from_json(data)
 
