@@ -1,7 +1,7 @@
 {
   "latitude": 52.300003,
   "longitude": 6.8999996,
-  "generationtime_ms": 2.658247947692871,
+  "generationtime_ms": 7.7457427978515625,
   "utc_offset_seconds": 7200,
   "timezone": "Europe/Amsterdam",
   "timezone_abbreviation": "GMT+2",
@@ -22,6 +22,18 @@
     "dust": "\u03bcg/m\u00b3",
     "uv_index": "",
     "uv_index_clear_sky": "",
+    "is_day": "",
+    "formaldehyde": "\u03bcg/m\u00b3",
+    "glyoxal": "\u03bcg/m\u00b3",
+    "nitrogen_monoxide": "\u03bcg/m\u00b3",
+    "peroxyacyl_nitrates": "\u03bcg/m\u00b3",
+    "sea_salt_aerosol": "\u03bcg/m\u00b3",
+    "non_methane_volatile_organic_compounds": "\u03bcg/m\u00b3",
+    "pm10_wildfires": "\u03bcg/m\u00b3",
+    "pm2_5_total_organic_matter": "\u03bcg/m\u00b3",
+    "residential_elementary_carbon": "\u03bcg/m\u00b3",
+    "secondary_inorganic_aerosol": "\u03bcg/m\u00b3",
+    "total_elementary_carbon": "\u03bcg/m\u00b3",
     "alder_pollen": "grains/m\u00b3",
     "birch_pollen": "grains/m\u00b3",
     "grass_pollen": "grains/m\u00b3",
@@ -43,21 +55,33 @@
     "us_aqi_carbon_monoxide": "USAQI"
   },
   "current": {
-    "time": "2026-10-03T11:00",
+    "time": "2026-10-03T12:00",
     "interval": 3600,
-    "pm10": 27.6,
-    "pm2_5": 22.2,
-    "carbon_monoxide": 240.0,
-    "nitrogen_dioxide": 10.5,
-    "sulphur_dioxide": 2.1,
-    "ozone": 34.0,
-    "carbon_dioxide": 446,
-    "ammonia": 12.2,
+    "pm10": 28.2,
+    "pm2_5": 22.1,
+    "carbon_monoxide": 229.0,
+    "nitrogen_dioxide": 11.2,
+    "sulphur_dioxide": 2.5,
+    "ozone": 42.0,
+    "carbon_dioxide": 444,
+    "ammonia": 11.1,
     "aerosol_optical_depth": 0.14,
-    "methane": 1626.0,
+    "methane": 1595.0,
     "dust": 0.0,
-    "uv_index": 1.45,
-    "uv_index_clear_sky": 1.65,
+    "uv_index": 2.1,
+    "uv_index_clear_sky": 2.3,
+    "is_day": 1,
+    "formaldehyde": 2.0,
+    "glyoxal": 0.2,
+    "nitrogen_monoxide": 2.9,
+    "peroxyacyl_nitrates": 1.5,
+    "sea_salt_aerosol": 2.2,
+    "non_methane_volatile_organic_compounds": 51.0,
+    "pm10_wildfires": 0.0,
+    "pm2_5_total_organic_matter": 2.3,
+    "residential_elementary_carbon": 0.1,
+    "secondary_inorganic_aerosol": 13.3,
+    "total_elementary_carbon": 0.4,
     "alder_pollen": 0.0,
     "birch_pollen": 0.0,
     "grass_pollen": 0.0,
@@ -66,15 +90,15 @@
     "ragweed_pollen": 0.0,
     "european_aqi": 44,
     "european_aqi_pm2_5": 44,
-    "european_aqi_pm10": 28,
-    "european_aqi_nitrogen_dioxide": 21,
-    "european_aqi_ozone": 11,
-    "european_aqi_sulphur_dioxide": 2,
+    "european_aqi_pm10": 29,
+    "european_aqi_nitrogen_dioxide": 22,
+    "european_aqi_ozone": 14,
+    "european_aqi_sulphur_dioxide": 3,
     "us_aqi": 65,
     "us_aqi_pm2_5": 65,
     "us_aqi_pm10": 21,
-    "us_aqi_nitrogen_dioxide": 5,
-    "us_aqi_ozone": 11,
+    "us_aqi_nitrogen_dioxide": 6,
+    "us_aqi_ozone": 12,
     "us_aqi_sulphur_dioxide": 1,
     "us_aqi_carbon_monoxide": 2
   },
@@ -93,6 +117,18 @@
     "dust": "\u03bcg/m\u00b3",
     "uv_index": "",
     "uv_index_clear_sky": "",
+    "is_day": "",
+    "formaldehyde": "\u03bcg/m\u00b3",
+    "glyoxal": "\u03bcg/m\u00b3",
+    "nitrogen_monoxide": "\u03bcg/m\u00b3",
+    "peroxyacyl_nitrates": "\u03bcg/m\u00b3",
+    "sea_salt_aerosol": "\u03bcg/m\u00b3",
+    "non_methane_volatile_organic_compounds": "\u03bcg/m\u00b3",
+    "pm10_wildfires": "\u03bcg/m\u00b3",
+    "pm2_5_total_organic_matter": "\u03bcg/m\u00b3",
+    "residential_elementary_carbon": "\u03bcg/m\u00b3",
+    "secondary_inorganic_aerosol": "\u03bcg/m\u00b3",
+    "total_elementary_carbon": "\u03bcg/m\u00b3",
     "alder_pollen": "grains/m\u00b3",
     "birch_pollen": "grains/m\u00b3",
     "grass_pollen": "grains/m\u00b3",
@@ -183,6 +219,66 @@
       0.0,
       0.0,
       0.0
+    ],
+    "is_day": [
+      0,
+      0,
+      0
+    ],
+    "formaldehyde": [
+      1.5,
+      1.4,
+      1.3
+    ],
+    "glyoxal": [
+      0.1,
+      0.0,
+      0.0
+    ],
+    "nitrogen_monoxide": [
+      0.1,
+      0.1,
+      0.1
+    ],
+    "peroxyacyl_nitrates": [
+      1.3,
+      1.4,
+      1.4
+    ],
+    "sea_salt_aerosol": [
+      3.1,
+      2.9,
+      2.7
+    ],
+    "non_methane_volatile_organic_compounds": [
+      63.0,
+      56.0,
+      50.0
+    ],
+    "pm10_wildfires": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pm2_5_total_organic_matter": [
+      3.5,
+      3.6,
+      3.2
+    ],
+    "residential_elementary_carbon": [
+      0.2,
+      0.2,
+      0.2
+    ],
+    "secondary_inorganic_aerosol": [
+      9.7,
+      10.1,
+      10.8
+    ],
+    "total_elementary_carbon": [
+      0.5,
+      0.5,
+      0.4
     ],
     "alder_pollen": [
       0.0,

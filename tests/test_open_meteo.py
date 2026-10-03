@@ -13,6 +13,7 @@ from syrupy.assertion import SnapshotAssertion
 from yarl import URL
 
 from open_meteo import (
+    AirQualityDomain,
     AirQualityParameters,
     CellSelection,
     DailyParameters,
@@ -366,6 +367,40 @@ async def test_air_quality_forecast_days(
     )
 
     assert requested_query(responses)["forecast_days"] == "3"
+
+
+async def test_air_quality_options(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the air quality time range and model options end up in the query."""
+    mock_endpoint(responses, AIR_QUALITY_URL, "air_quality.json")
+
+    await open_meteo_client.air_quality(
+        latitude=52.27,
+        longitude=6.87417,
+        start_date=date(2026, 10, 4),
+        end_date=date(2026, 10, 5),
+        # Naive on purpose: the API reads these as local time in the timezone
+        start_hour=datetime(2026, 10, 4, 6, 0),  # noqa: DTZ001
+        end_hour=datetime(2026, 10, 4, 18, 0),  # noqa: DTZ001
+        forecast_hours=6,
+        past_hours=2,
+        temporal_resolution=TemporalResolution.HOURLY_3,
+        domains=AirQualityDomain.CAMS_EUROPE,
+        cell_selection=CellSelection.NEAREST,
+    )
+
+    query = requested_query(responses)
+    assert query["start_date"] == "2026-10-04"
+    assert query["end_date"] == "2026-10-05"
+    assert query["start_hour"] == "2026-10-04T06:00"
+    assert query["end_hour"] == "2026-10-04T18:00"
+    assert query["forecast_hours"] == "6"
+    assert query["past_hours"] == "2"
+    assert query["temporal_resolution"] == "hourly_3"
+    assert query["domains"] == "cams_europe"
+    assert query["cell_selection"] == "nearest"
 
 
 async def test_geocoding(
