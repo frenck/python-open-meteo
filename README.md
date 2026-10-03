@@ -139,6 +139,27 @@ async with OpenMeteo() as open_meteo:
         print(number, member.temperature_2m)
 ```
 
+### Seasonal forecast
+
+The seasonal API forecasts up to seven months ahead. Besides 6-hourly and daily
+data with all ensemble members, it has weekly and monthly statistics, like how
+much warmer or colder than normal it will likely be.
+
+```python
+from open_meteo import OpenMeteo, SeasonalMonthlyParameters, SeasonalWeeklyParameters
+
+async with OpenMeteo() as open_meteo:
+    seasonal = await open_meteo.seasonal(
+        latitude=52.27,
+        longitude=6.87417,
+        weekly=[SeasonalWeeklyParameters.TEMPERATURE_2M_ANOMALY],
+        monthly=[SeasonalMonthlyParameters.PRECIPITATION_ANOMALY],
+    )
+
+    print(seasonal.weekly.time, seasonal.weekly.temperature_2m_anomaly)
+    print(seasonal.monthly.time, seasonal.monthly.precipitation_anomaly)
+```
+
 ### Historical forecast
 
 The historical forecast API archives the forecasts the weather models made in
