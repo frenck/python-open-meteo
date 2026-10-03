@@ -1,0 +1,562 @@
+{
+  "latitude": 52.131145,
+  "longitude": 7.1223025,
+  "generationtime_ms": 1.1484622955322266,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 29.0,
+  "daily_units": {
+    "time": "iso8601",
+    "temperature_2m_max_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member01_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member02_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member03_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member04_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member05_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member06_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member07_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member08_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member09_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member10_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member11_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member12_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member13_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member14_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member15_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member16_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member17_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member18_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member19_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member20_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member21_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member22_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member23_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member24_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member25_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member26_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member27_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member28_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member29_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member30_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member31_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member32_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member33_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member34_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member35_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member36_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member37_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member38_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member39_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member40_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member41_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member42_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member43_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member44_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member45_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member46_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member47_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member48_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member49_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_member50_ecmwf_seas5": "\u00b0C",
+    "temperature_2m_max_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member01_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member02_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member03_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member04_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member05_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member06_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member07_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member08_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member09_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member10_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member11_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member12_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member13_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member14_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member15_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member16_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member17_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member18_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member19_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member20_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member21_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member22_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member23_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member24_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member25_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member26_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member27_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member28_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member29_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member30_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member31_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member32_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member33_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member34_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member35_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member36_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member37_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member38_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member39_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member40_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member41_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member42_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member43_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member44_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member45_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member46_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member47_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member48_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member49_ecmwf_ec46": "\u00b0C",
+    "temperature_2m_max_member50_ecmwf_ec46": "\u00b0C"
+  },
+  "daily": {
+    "time": [
+      "2026-10-03",
+      "2026-10-04"
+    ],
+    "temperature_2m_max_ecmwf_seas5": [
+      18.9,
+      16.8
+    ],
+    "temperature_2m_max_member01_ecmwf_seas5": [
+      21.3,
+      22.3
+    ],
+    "temperature_2m_max_member02_ecmwf_seas5": [
+      17.0,
+      16.1
+    ],
+    "temperature_2m_max_member03_ecmwf_seas5": [
+      19.4,
+      18.4
+    ],
+    "temperature_2m_max_member04_ecmwf_seas5": [
+      14.7,
+      15.1
+    ],
+    "temperature_2m_max_member05_ecmwf_seas5": [
+      17.7,
+      17.3
+    ],
+    "temperature_2m_max_member06_ecmwf_seas5": [
+      22.2,
+      22.3
+    ],
+    "temperature_2m_max_member07_ecmwf_seas5": [
+      17.8,
+      15.7
+    ],
+    "temperature_2m_max_member08_ecmwf_seas5": [
+      14.3,
+      15.8
+    ],
+    "temperature_2m_max_member09_ecmwf_seas5": [
+      16.0,
+      16.7
+    ],
+    "temperature_2m_max_member10_ecmwf_seas5": [
+      18.5,
+      17.6
+    ],
+    "temperature_2m_max_member11_ecmwf_seas5": [
+      13.4,
+      14.9
+    ],
+    "temperature_2m_max_member12_ecmwf_seas5": [
+      14.5,
+      14.1
+    ],
+    "temperature_2m_max_member13_ecmwf_seas5": [
+      14.7,
+      16.0
+    ],
+    "temperature_2m_max_member14_ecmwf_seas5": [
+      21.3,
+      20.6
+    ],
+    "temperature_2m_max_member15_ecmwf_seas5": [
+      18.1,
+      18.2
+    ],
+    "temperature_2m_max_member16_ecmwf_seas5": [
+      24.5,
+      17.1
+    ],
+    "temperature_2m_max_member17_ecmwf_seas5": [
+      17.5,
+      20.6
+    ],
+    "temperature_2m_max_member18_ecmwf_seas5": [
+      16.0,
+      17.8
+    ],
+    "temperature_2m_max_member19_ecmwf_seas5": [
+      18.1,
+      16.6
+    ],
+    "temperature_2m_max_member20_ecmwf_seas5": [
+      20.7,
+      20.9
+    ],
+    "temperature_2m_max_member21_ecmwf_seas5": [
+      23.4,
+      26.7
+    ],
+    "temperature_2m_max_member22_ecmwf_seas5": [
+      22.4,
+      23.5
+    ],
+    "temperature_2m_max_member23_ecmwf_seas5": [
+      13.8,
+      14.5
+    ],
+    "temperature_2m_max_member24_ecmwf_seas5": [
+      13.3,
+      15.2
+    ],
+    "temperature_2m_max_member25_ecmwf_seas5": [
+      14.1,
+      14.1
+    ],
+    "temperature_2m_max_member26_ecmwf_seas5": [
+      22.9,
+      21.5
+    ],
+    "temperature_2m_max_member27_ecmwf_seas5": [
+      22.7,
+      20.2
+    ],
+    "temperature_2m_max_member28_ecmwf_seas5": [
+      18.0,
+      15.7
+    ],
+    "temperature_2m_max_member29_ecmwf_seas5": [
+      22.6,
+      19.3
+    ],
+    "temperature_2m_max_member30_ecmwf_seas5": [
+      14.8,
+      15.0
+    ],
+    "temperature_2m_max_member31_ecmwf_seas5": [
+      16.2,
+      16.4
+    ],
+    "temperature_2m_max_member32_ecmwf_seas5": [
+      13.4,
+      12.7
+    ],
+    "temperature_2m_max_member33_ecmwf_seas5": [
+      16.9,
+      17.8
+    ],
+    "temperature_2m_max_member34_ecmwf_seas5": [
+      23.9,
+      16.8
+    ],
+    "temperature_2m_max_member35_ecmwf_seas5": [
+      22.0,
+      20.8
+    ],
+    "temperature_2m_max_member36_ecmwf_seas5": [
+      21.3,
+      20.6
+    ],
+    "temperature_2m_max_member37_ecmwf_seas5": [
+      16.1,
+      14.5
+    ],
+    "temperature_2m_max_member38_ecmwf_seas5": [
+      13.4,
+      18.9
+    ],
+    "temperature_2m_max_member39_ecmwf_seas5": [
+      19.0,
+      20.3
+    ],
+    "temperature_2m_max_member40_ecmwf_seas5": [
+      16.0,
+      14.8
+    ],
+    "temperature_2m_max_member41_ecmwf_seas5": [
+      14.7,
+      15.1
+    ],
+    "temperature_2m_max_member42_ecmwf_seas5": [
+      19.9,
+      21.5
+    ],
+    "temperature_2m_max_member43_ecmwf_seas5": [
+      16.8,
+      14.4
+    ],
+    "temperature_2m_max_member44_ecmwf_seas5": [
+      20.1,
+      17.3
+    ],
+    "temperature_2m_max_member45_ecmwf_seas5": [
+      14.1,
+      16.1
+    ],
+    "temperature_2m_max_member46_ecmwf_seas5": [
+      16.8,
+      15.0
+    ],
+    "temperature_2m_max_member47_ecmwf_seas5": [
+      13.9,
+      14.3
+    ],
+    "temperature_2m_max_member48_ecmwf_seas5": [
+      14.9,
+      15.6
+    ],
+    "temperature_2m_max_member49_ecmwf_seas5": [
+      16.6,
+      12.6
+    ],
+    "temperature_2m_max_member50_ecmwf_seas5": [
+      17.3,
+      14.4
+    ],
+    "temperature_2m_max_ecmwf_ec46": [
+      20.0,
+      19.7
+    ],
+    "temperature_2m_max_member01_ecmwf_ec46": [
+      19.5,
+      19.4
+    ],
+    "temperature_2m_max_member02_ecmwf_ec46": [
+      19.9,
+      18.7
+    ],
+    "temperature_2m_max_member03_ecmwf_ec46": [
+      20.2,
+      19.3
+    ],
+    "temperature_2m_max_member04_ecmwf_ec46": [
+      20.2,
+      19.9
+    ],
+    "temperature_2m_max_member05_ecmwf_ec46": [
+      19.8,
+      19.4
+    ],
+    "temperature_2m_max_member06_ecmwf_ec46": [
+      19.9,
+      18.9
+    ],
+    "temperature_2m_max_member07_ecmwf_ec46": [
+      19.9,
+      18.7
+    ],
+    "temperature_2m_max_member08_ecmwf_ec46": [
+      20.1,
+      19.2
+    ],
+    "temperature_2m_max_member09_ecmwf_ec46": [
+      20.6,
+      20.2
+    ],
+    "temperature_2m_max_member10_ecmwf_ec46": [
+      20.4,
+      18.5
+    ],
+    "temperature_2m_max_member11_ecmwf_ec46": [
+      20.5,
+      20.1
+    ],
+    "temperature_2m_max_member12_ecmwf_ec46": [
+      20.3,
+      17.9
+    ],
+    "temperature_2m_max_member13_ecmwf_ec46": [
+      20.5,
+      18.8
+    ],
+    "temperature_2m_max_member14_ecmwf_ec46": [
+      20.6,
+      19.7
+    ],
+    "temperature_2m_max_member15_ecmwf_ec46": [
+      19.6,
+      19.1
+    ],
+    "temperature_2m_max_member16_ecmwf_ec46": [
+      19.9,
+      18.1
+    ],
+    "temperature_2m_max_member17_ecmwf_ec46": [
+      19.7,
+      17.5
+    ],
+    "temperature_2m_max_member18_ecmwf_ec46": [
+      20.1,
+      19.9
+    ],
+    "temperature_2m_max_member19_ecmwf_ec46": [
+      20.3,
+      20.2
+    ],
+    "temperature_2m_max_member20_ecmwf_ec46": [
+      20.3,
+      19.7
+    ],
+    "temperature_2m_max_member21_ecmwf_ec46": [
+      20.0,
+      18.5
+    ],
+    "temperature_2m_max_member22_ecmwf_ec46": [
+      20.1,
+      18.0
+    ],
+    "temperature_2m_max_member23_ecmwf_ec46": [
+      20.3,
+      19.8
+    ],
+    "temperature_2m_max_member24_ecmwf_ec46": [
+      19.9,
+      18.5
+    ],
+    "temperature_2m_max_member25_ecmwf_ec46": [
+      20.5,
+      20.3
+    ],
+    "temperature_2m_max_member26_ecmwf_ec46": [
+      19.7,
+      19.1
+    ],
+    "temperature_2m_max_member27_ecmwf_ec46": [
+      20.8,
+      18.5
+    ],
+    "temperature_2m_max_member28_ecmwf_ec46": [
+      19.8,
+      19.8
+    ],
+    "temperature_2m_max_member29_ecmwf_ec46": [
+      20.5,
+      19.4
+    ],
+    "temperature_2m_max_member30_ecmwf_ec46": [
+      19.5,
+      19.1
+    ],
+    "temperature_2m_max_member31_ecmwf_ec46": [
+      20.8,
+      20.3
+    ],
+    "temperature_2m_max_member32_ecmwf_ec46": [
+      20.9,
+      19.4
+    ],
+    "temperature_2m_max_member33_ecmwf_ec46": [
+      19.8,
+      19.2
+    ],
+    "temperature_2m_max_member34_ecmwf_ec46": [
+      20.1,
+      18.9
+    ],
+    "temperature_2m_max_member35_ecmwf_ec46": [
+      19.4,
+      19.3
+    ],
+    "temperature_2m_max_member36_ecmwf_ec46": [
+      20.2,
+      19.4
+    ],
+    "temperature_2m_max_member37_ecmwf_ec46": [
+      19.8,
+      19.4
+    ],
+    "temperature_2m_max_member38_ecmwf_ec46": [
+      20.7,
+      19.0
+    ],
+    "temperature_2m_max_member39_ecmwf_ec46": [
+      20.2,
+      17.4
+    ],
+    "temperature_2m_max_member40_ecmwf_ec46": [
+      20.2,
+      19.6
+    ],
+    "temperature_2m_max_member41_ecmwf_ec46": [
+      19.8,
+      18.4
+    ],
+    "temperature_2m_max_member42_ecmwf_ec46": [
+      19.6,
+      19.4
+    ],
+    "temperature_2m_max_member43_ecmwf_ec46": [
+      20.1,
+      19.4
+    ],
+    "temperature_2m_max_member44_ecmwf_ec46": [
+      19.9,
+      18.6
+    ],
+    "temperature_2m_max_member45_ecmwf_ec46": [
+      20.2,
+      20.2
+    ],
+    "temperature_2m_max_member46_ecmwf_ec46": [
+      19.7,
+      19.2
+    ],
+    "temperature_2m_max_member47_ecmwf_ec46": [
+      20.5,
+      19.2
+    ],
+    "temperature_2m_max_member48_ecmwf_ec46": [
+      19.9,
+      17.3
+    ],
+    "temperature_2m_max_member49_ecmwf_ec46": [
+      19.8,
+      20.2
+    ],
+    "temperature_2m_max_member50_ecmwf_ec46": [
+      20.3,
+      18.1
+    ]
+  },
+  "weekly_units": {
+    "time": "iso8601",
+    "temperature_2m_anomaly_ecmwf_ec46": "K"
+  },
+  "weekly": {
+    "time": [
+      "2026-09-28",
+      "2026-10-05",
+      "2026-10-12",
+      "2026-10-19",
+      "2026-10-26",
+      "2026-11-02"
+    ],
+    "temperature_2m_anomaly_ecmwf_ec46": [
+      4.4,
+      0.4,
+      0.3,
+      0.5,
+      0.2,
+      0.9
+    ]
+  },
+  "monthly_units": {
+    "time": "iso8601",
+    "temperature_2m_mean_ecmwf_seas5": "\u00b0C"
+  },
+  "monthly": {
+    "time": [
+      "2026-10-01"
+    ],
+    "temperature_2m_mean_ecmwf_seas5": [
+      11.0
+    ]
+  }
+}

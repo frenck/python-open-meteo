@@ -25,6 +25,8 @@ from open_meteo import (
     OpenMeteo,
     PrecipitationUnit,
     PressureLevelVariable,
+    SeasonalMonthlyParameters,
+    SeasonalWeeklyParameters,
     TemperatureUnit,
     TemporalResolution,
     WindSpeedUnit,
@@ -44,6 +46,7 @@ MARINE_URL = "https://marine-api.open-meteo.com/v1/marine"
 FLOOD_URL = "https://flood-api.open-meteo.com/v1/flood"
 CLIMATE_URL = "https://climate-api.open-meteo.com/v1/climate"
 ENSEMBLE_URL = "https://ensemble-api.open-meteo.com/v1/ensemble"
+SEASONAL_URL = "https://seasonal-api.open-meteo.com/v1/seasonal"
 
 
 def mock_endpoint(
@@ -959,6 +962,101 @@ async def test_ensemble_models(
     assert ecmwf.members is not None
     assert len(icon.members) == 39
     assert len(ecmwf.members) == 50
+
+
+async def test_seasonal(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test requesting a seasonal forecast, with every kind of section."""
+    mock_endpoint(responses, SEASONAL_URL, "seasonal.json")
+
+    seasonal = await open_meteo_client.seasonal(
+        latitude=52.27,
+        longitude=6.87417,
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        daily=[DailyParameters.TEMPERATURE_2M_MAX],
+        weekly=[
+            SeasonalWeeklyParameters.TEMPERATURE_2M_MEAN,
+            SeasonalWeeklyParameters.TEMPERATURE_2M_ANOMALY,
+            SeasonalWeeklyParameters.TEMPERATURE_2M_ANOMALY_GT1,
+            SeasonalWeeklyParameters.TEMPERATURE_2M_EFI,
+        ],
+        monthly=[
+            SeasonalMonthlyParameters.TEMPERATURE_2M_MEAN,
+            SeasonalMonthlyParameters.PRECIPITATION_ANOMALY,
+        ],
+        models=["ecmwf_seasonal_seamless"],
+        forecast_days=31,
+    )
+
+    query = requested_query(responses)
+    assert query["weekly"] == (
+        "temperature_2m_mean,temperature_2m_anomaly,"
+        "temperature_2m_anomaly_gt1,temperature_2m_efi"
+    )
+    assert query["monthly"] == "temperature_2m_mean,precipitation_anomaly"
+
+    # The 6-hourly and daily data have the ensemble members
+    assert seasonal.hourly is not None
+    assert seasonal.hourly.members is not None
+    assert len(seasonal.hourly.members) == 50
+    assert seasonal.daily is not None
+    assert seasonal.daily.members is not None
+
+    # The weekly and monthly data are statistics over the members
+    assert seasonal.weekly is not None
+    assert seasonal.weekly.temperature_2m_anomaly_gt1 is not None
+    assert seasonal.weekly_units is not None
+    assert seasonal.weekly_units.temperature_2m_anomaly_gt1 == "%"
+    assert seasonal.monthly is not None
+    assert seasonal.monthly.time == [date(2026, 10, 1)]
+    assert seasonal.monthly.precipitation_anomaly is not None
+    assert seasonal == snapshot
+
+
+async def test_seasonal_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test each model has the weekly or monthly data it provides.
+
+    Weekly data comes from EC46, monthly data from SEAS5.
+    """
+    mock_endpoint(responses, SEASONAL_URL, "seasonal_models.json")
+
+    seasonal = await open_meteo_client.seasonal(
+        latitude=52.27,
+        longitude=6.87417,
+        daily=[DailyParameters.TEMPERATURE_2M_MAX],
+        weekly=[SeasonalWeeklyParameters.TEMPERATURE_2M_ANOMALY],
+        monthly=[SeasonalMonthlyParameters.TEMPERATURE_2M_MEAN],
+        models=["ecmwf_seas5", "ecmwf_ec46"],
+    )
+
+    assert seasonal.models is not None
+    seas5 = seasonal.models["ecmwf_seas5"]
+    ec46 = seasonal.models["ecmwf_ec46"]
+    assert seas5.weekly is None
+    assert seas5.monthly is not None
+    assert ec46.weekly is not None
+    assert ec46.monthly is None
+    assert seas5.daily is not None
+    assert seas5.daily.members is not None
+
+
+async def test_seasonal_best_match_with_other_models(
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test best_match can't be combined with other seasonal models."""
+    with pytest.raises(ValueError, match="best_match can't be combined"):
+        await open_meteo_client.seasonal(
+            latitude=52.27,
+            longitude=6.87417,
+            daily=[DailyParameters.TEMPERATURE_2M_MAX],
+            models=["best_match", "ecmwf_seas5"],
+        )
 
 
 async def test_air_quality(

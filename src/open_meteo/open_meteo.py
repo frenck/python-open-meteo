@@ -33,6 +33,9 @@ from .models import (
     MarineParameters,
     PrecipitationUnit,
     PressureLevelVariable,
+    Seasonal,
+    SeasonalMonthlyParameters,
+    SeasonalWeeklyParameters,
     TemperatureUnit,
     TemporalResolution,
     TimeFormat,
@@ -79,6 +82,10 @@ MODEL_SECTIONS = (
     "hourly_units",
     "daily",
     "daily_units",
+    "weekly",
+    "weekly_units",
+    "monthly",
+    "monthly_units",
 )
 
 
@@ -964,6 +971,102 @@ class OpenMeteo:
             timezone=timezone,
             # Only sent when asked for, so the API default applies otherwise
             disable_bias_correction=disable_bias_correction or None,
+            cell_selection=cell_selection,
+            precipitation_unit=precipitation_unit,
+            temperature_unit=temperature_unit,
+            wind_speed_unit=wind_speed_unit,
+        )
+
+    # pylint: disable-next=too-many-arguments,too-many-locals
+    async def seasonal(  # noqa: PLR0913
+        self,
+        *,
+        latitude: float,
+        longitude: float,
+        timezone: str = "UTC",
+        hourly: list[HourlyParameters] | None = None,
+        daily: list[DailyParameters] | None = None,
+        weekly: list[SeasonalWeeklyParameters] | None = None,
+        monthly: list[SeasonalMonthlyParameters] | None = None,
+        forecast_days: int | None = None,
+        past_days: int | None = None,
+        start_date: date | None = None,
+        end_date: date | None = None,
+        cell_selection: CellSelection | None = None,
+        models: list[str] | None = None,
+        precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
+        temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
+        wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
+    ) -> Seasonal:
+        """Get the seasonal forecast, up to seven months ahead.
+
+        Seasonal forecasts come from ensemble models of ECMWF. The hourly data
+        has a resolution of 6 hours; it and the daily data have all ensemble
+        members, in their members, keyed by member number. The weekly and
+        monthly data are statistics over the members, like the anomaly
+        compared to the model climate.
+
+        Weekly data comes from EC46, which forecasts 46 days ahead, and
+        monthly data from SEAS5, which forecasts seven months ahead. The
+        default seamless model combines both; selecting one of them leaves out
+        the data the other one has.
+
+        Args:
+        ----
+            latitude: Latitude of the location.
+            longitude: Longitude of the location.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            hourly: A list of weather variables to get 6-hourly data for.
+            daily: A list of daily weather variables to query for.
+            weekly: A list of weekly statistics to query for.
+            monthly: A list of monthly statistics to query for.
+            forecast_days: Number of days to forecast (0-217). Leave unset for
+                the API default of 183 days.
+            past_days: Number of past days to include as well.
+            start_date: First day of the time interval to return. Use it
+                together with end_date, instead of forecast_days.
+            end_date: Last day of the time interval to return.
+            cell_selection: How to match the location to a grid cell of the
+                seasonal model.
+            models: Seasonal models to use, by their Open-Meteo name, like
+                "ecmwf_seas5" or "ecmwf_ec46". Works the same as for the
+                forecast, except that best_match can't be combined with other
+                models.
+            precipitation_unit: Precipitation unit.
+            temperature_unit: Temperature unit.
+            wind_speed_unit: Wind speed unit.
+
+        Returns:
+        -------
+            A Seasonal object.
+
+        Raises:
+        ------
+            ValueError: best_match is combined with other models.
+
+        """
+        # The seasonal API returns best_match data under the name of the model
+        # it picked, so there is no telling it apart
+        if models is not None and "best_match" in models and len(set(models)) > 1:
+            msg = "best_match can't be combined with other seasonal models"
+            raise ValueError(msg)
+
+        return await self._request_with_models(
+            "https://seasonal-api.open-meteo.com/v1/seasonal",
+            Seasonal,
+            models=models,
+            latitude=latitude,
+            longitude=longitude,
+            timezone=timezone,
+            hourly=hourly,
+            daily=daily,
+            weekly=weekly,
+            monthly=monthly,
+            forecast_days=forecast_days,
+            past_days=past_days,
+            start_date=start_date,
+            end_date=end_date,
             cell_selection=cell_selection,
             precipitation_unit=precipitation_unit,
             temperature_unit=temperature_unit,
