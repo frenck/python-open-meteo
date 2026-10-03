@@ -275,6 +275,31 @@ async def test_geocoding_no_results(
     assert geocoding.results is None
 
 
+async def test_geocoding_missing_fields(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test results without a country or elevation still parse.
+
+    The fixture holds three real results, taken from searches for
+    Antarctica, McMurdo, and Atlantic.
+    """
+    mock_endpoint(responses, GEOCODING_URL, "geocoding_missing_fields.json")
+
+    geocoding = await open_meteo_client.geocoding(name="Antarctica")
+
+    assert geocoding.results is not None
+    antarctica, island, cape = geocoding.results
+    assert antarctica.country is None
+    assert antarctica.country_code is None
+    assert antarctica.country_id is None
+    assert island.country is None
+    assert island.country_code is not None
+    assert cape.elevation is None
+    assert geocoding == snapshot
+
+
 async def test_elevation(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,

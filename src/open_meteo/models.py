@@ -729,15 +729,18 @@ class GeocodingResult(DataClassORJSONMixin):
     """Geocoding result item."""
 
     geo_id: int = field(metadata=field_options(alias="id"))
-    country_code: str
-    country_id: int
-    country: str
-    elevation: float
     feature_code: str
     latitude: float
     longitude: float
     name: str
     timezone: str
+
+    # Not every location has these, Antarctica or some islands for example
+    country_code: str | None = None
+    country_id: int | None = None
+    country: str | None = None
+    elevation: float | None = None
+
     admin1_id: int | None = None
     admin1: str | None = None
     admin2_id: int | None = None

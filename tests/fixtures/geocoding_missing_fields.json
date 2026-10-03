@@ -1,0 +1,40 @@
+{
+  "results": [
+    {
+      "id": 6255152,
+      "name": "Antarctica",
+      "latitude": -78.15856,
+      "longitude": 16.40626,
+      "elevation": 3199.0,
+      "feature_code": "CONT",
+      "timezone": "Antarctica/Syowa",
+      "population": 1100
+    },
+    {
+      "id": 1546314,
+      "name": "\u00cele MacMurdo",
+      "latitude": -48.89824,
+      "longitude": 69.41539,
+      "elevation": 123.0,
+      "feature_code": "ISL",
+      "country_code": "TF",
+      "timezone": "Indian/Kerguelen"
+    },
+    {
+      "id": 4956966,
+      "name": "Atlantic Point",
+      "latitude": 44.09647,
+      "longitude": -69.10087,
+      "feature_code": "CAPE",
+      "country_code": "US",
+      "admin1_id": 4971068,
+      "admin2_id": 4968996,
+      "timezone": "America/New_York",
+      "country_id": 6252001,
+      "country": "United States",
+      "admin1": "Maine",
+      "admin2": "Knox"
+    }
+  ],
+  "generationtime_ms": 0.7573366
+}
