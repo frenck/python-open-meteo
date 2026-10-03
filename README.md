@@ -117,6 +117,26 @@ async with OpenMeteo() as open_meteo:
 Leave out `forecast_days` to get the API default of 7 days (up to 16), and
 use `past_days` to include data from the past as well.
 
+Weather higher up in the atmosphere is available on pressure levels, like 850
+or 500 hPa. Those end up per level, for the hourly data by default, or for the
+current conditions and 15-minutely data with `pressure_level_sections`.
+
+```python
+from open_meteo import ForecastSection, OpenMeteo, PressureLevelVariable
+
+async with OpenMeteo() as open_meteo:
+    forecast = await open_meteo.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        pressure_level_variables=[PressureLevelVariable.TEMPERATURE],
+        pressure_levels=[850, 500],
+        pressure_level_sections=[ForecastSection.CURRENT, ForecastSection.HOURLY],
+    )
+
+    print(forecast.current.pressure_levels[850].temperature)
+    print(forecast.hourly.pressure_levels[500].temperature)
+```
+
 ### Ensemble forecast
 
 Ensemble models run the same forecast many times, with slightly different

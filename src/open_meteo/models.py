@@ -56,6 +56,14 @@ class CellSelection(StrEnum):
     NEAREST = "nearest"
 
 
+class ForecastSection(StrEnum):
+    """Enum to represent the forecast sections pressure levels can be for."""
+
+    CURRENT = "current"
+    MINUTELY_15 = "minutely_15"
+    HOURLY = "hourly"
+
+
 class TemporalResolution(StrEnum):
     """Enum to represent the time resolutions data can be aggregated into."""
 
@@ -700,10 +708,13 @@ class CurrentForecast(DataClassORJSONMixin):
     # Only set for ensemble mean models: the spread over the members
     spread: CurrentForecast | None = None
 
+    # Pressure level data, keyed by the pressure level in hPa
+    pressure_levels: dict[int, PressureLevelCurrent] | None = None
+
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the previous model runs by day, and the spread."""
-        return _split_spread(_split_previous_days(d))
+        """Group previous runs, the spread, and pressure level variables."""
+        return _split_pressure_levels(_split_spread(_split_previous_days(d)))
 
 
 @dataclass
@@ -873,10 +884,13 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     wind_speed_70m: str | None = None
     wind_speed_80m: str | None = None
 
+    # Pressure level units, keyed by the pressure level in hPa
+    pressure_levels: dict[int, PressureLevelForecastUnits] | None = None
+
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Drop the units of the previous model runs and the spread."""
-        return _drop_suffixed(d)
+        """Group the pressure levels, and drop previous run and spread units."""
+        return _split_pressure_levels(_drop_suffixed(d))
 
 
 # The API returns ensemble members and previous model runs as one variable
@@ -1042,6 +1056,20 @@ class PressureLevelForecast(DataClassORJSONMixin):
     vertical_velocity: list[float | None] | None = None
     wind_direction: list[int | None] | None = None
     wind_speed: list[float | None] | None = None
+
+
+@dataclass
+class PressureLevelCurrent(DataClassORJSONMixin):
+    """Current weather conditions on a single pressure level."""
+
+    cloud_cover: int | None = None
+    dew_point: float | None = None
+    geopotential_height: float | None = None
+    relative_humidity: int | None = None
+    temperature: float | None = None
+    vertical_velocity: float | None = None
+    wind_direction: int | None = None
+    wind_speed: float | None = None
 
 
 @dataclass
