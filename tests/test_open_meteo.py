@@ -968,6 +968,65 @@ async def test_ensemble_models(
     assert len(ecmwf.members) == 50
 
 
+async def test_ensemble_spread(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test the spread of an ensemble mean model, with its pressure levels."""
+    mock_endpoint(responses, ENSEMBLE_URL, "ensemble_spread.json")
+
+    forecast = await open_meteo_client.ensemble(
+        latitude=52.27,
+        longitude=6.87417,
+        models=["ecmwf_ifs025_ensemble_mean"],
+        current=[HourlyParameters.TEMPERATURE_2M],
+        hourly=[HourlyParameters.TEMPERATURE_2M, HourlyParameters.WEATHER_CODE],
+        pressure_level_variables=[PressureLevelVariable.TEMPERATURE],
+        pressure_levels=[850],
+        spread=True,
+    )
+
+    # The API has no spread for the weather code
+    query = requested_query(responses)
+    assert query["hourly"] == (
+        "temperature_2m,weather_code,temperature_850hPa,"
+        "temperature_2m_spread,temperature_850hPa_spread"
+    )
+    assert query["current"] == "temperature_2m,temperature_2m_spread"
+
+    hourly = forecast.hourly
+    assert hourly is not None
+    assert hourly.spread is not None
+    assert hourly.spread.time == hourly.time
+    assert hourly.spread.temperature_2m is not None
+    assert hourly.spread.weather_code is None
+    assert hourly.spread.pressure_levels is not None
+    assert hourly.spread.pressure_levels[850].temperature is not None
+
+    assert forecast.current is not None
+    assert forecast.current.spread is not None
+    assert forecast.current.spread.temperature_2m is not None
+    assert forecast == snapshot
+
+
+async def test_ensemble_without_spread(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the spread is only requested when asked for."""
+    mock_endpoint(responses, ENSEMBLE_URL, "ensemble.json")
+
+    await open_meteo_client.ensemble(
+        latitude=52.27,
+        longitude=6.87417,
+        models=["cmc_gem_geps"],
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+    )
+
+    assert "_spread" not in requested_query(responses)["hourly"]
+
+
 async def test_seasonal(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
