@@ -28,6 +28,7 @@ from .conftest import load_fixture
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
+ELEVATION_URL = "https://api.open-meteo.com/v1/elevation"
 
 
 def mock_endpoint(
@@ -254,6 +255,24 @@ async def test_geocoding_no_results(
     geocoding = await open_meteo_client.geocoding(name="Xyzzyplughnowhere")
 
     assert geocoding.results is None
+
+
+async def test_elevation(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test looking up the elevation of a location."""
+    mock_endpoint(responses, ELEVATION_URL, "elevation.json")
+
+    elevation = await open_meteo_client.elevation(latitude=52.27, longitude=6.87417)
+
+    assert requested_query(responses) == {
+        "latitude": "52.27",
+        "longitude": "6.87417",
+    }
+    assert elevation.elevation == [29.0]
+    assert elevation == snapshot
 
 
 async def test_timeout(
