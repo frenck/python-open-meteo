@@ -139,6 +139,10 @@ async with OpenMeteo() as open_meteo:
         print(number, member.temperature_2m)
 ```
 
+The ensemble mean models, like `ecmwf_ifs025_ensemble_mean`, return the mean
+over all members. With `spread=True`, they return the spread as well, the
+standard deviation, in `forecast.hourly.spread`.
+
 ### Seasonal forecast
 
 The seasonal API forecasts up to seven months ahead. Besides 6-hourly and daily

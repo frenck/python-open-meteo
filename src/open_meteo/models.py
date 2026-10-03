@@ -697,10 +697,13 @@ class CurrentForecast(DataClassORJSONMixin):
     # Only set for previous model runs, keyed by how many days ago it ran
     previous_days: dict[int, CurrentForecast] | None = None
 
+    # Only set for ensemble mean models: the spread over the members
+    spread: CurrentForecast | None = None
+
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the previous model runs by day."""
-        return _split_previous_days(d)
+        """Group the previous model runs by day, and the spread."""
+        return _split_spread(_split_previous_days(d))
 
 
 @dataclass
@@ -872,7 +875,7 @@ class CurrentForecastUnits(DataClassORJSONMixin):
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Drop the units of the previous model runs."""
+        """Drop the units of the previous model runs and the spread."""
         return _drop_suffixed(d)
 
 
@@ -881,6 +884,10 @@ class CurrentForecastUnits(DataClassORJSONMixin):
 # temperature_2m_previous_day1
 ENSEMBLE_MEMBER_KEY = re.compile(r"^(?P<variable>[A-Za-z0-9_]+)_member(?P<key>\d+)$")
 PREVIOUS_DAY_KEY = re.compile(r"^(?P<variable>[A-Za-z0-9_]+)_previous_day(?P<key>\d+)$")
+
+# Ensemble mean models return the spread over the members, the standard
+# deviation, as one variable per variable, like temperature_2m_spread
+SPREAD_KEY = re.compile(r"^(?P<variable>[A-Za-z0-9_]+)_spread$")
 
 
 def _split_suffixed(
@@ -930,12 +937,35 @@ def _split_previous_days(data: dict[Any, Any]) -> dict[Any, Any]:
     return _split_suffixed(data, PREVIOUS_DAY_KEY, "previous_days")
 
 
+def _split_spread(data: dict[Any, Any]) -> dict[Any, Any]:
+    """Move the spread of the variables of a section into spread.
+
+    temperature_2m_spread ends up as the temperature_2m of spread, which
+    gets the timestamps of the section as well, so it parses as a section of
+    its own.
+    """
+    data = dict(data)
+    spread = {
+        match["variable"]: data.pop(key)
+        for key in list(data)
+        if (match := SPREAD_KEY.match(key))
+    }
+
+    if spread:
+        spread.update({key: data[key] for key in ("time", "interval") if key in data})
+        data["spread"] = spread
+
+    return data
+
+
 def _drop_suffixed(data: dict[Any, Any]) -> dict[Any, Any]:
-    """Drop the units of members and previous runs; they are all the same."""
+    """Drop the units of members, previous runs, and spread; they are the same."""
     return {
         key: value
         for key, value in data.items()
-        if not ENSEMBLE_MEMBER_KEY.match(key) and not PREVIOUS_DAY_KEY.match(key)
+        if not ENSEMBLE_MEMBER_KEY.match(key)
+        and not PREVIOUS_DAY_KEY.match(key)
+        and not SPREAD_KEY.match(key)
     }
 
 
@@ -1203,15 +1233,20 @@ class HourlyForecast(DataClassORJSONMixin):
     # Only set for previous model runs, keyed by how many days ago it ran
     previous_days: dict[int, HourlyForecast] | None = None
 
+    # Only set for ensemble mean models: the spread over the members
+    spread: HourlyForecast | None = None
+
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group previous runs, ensemble members, and pressure level variables.
+        """Group previous runs, members, spread, and pressure level variables.
 
-        Members come before pressure levels, as their variables can be on a
-        pressure level, like temperature_850hPa_member01; each member then
-        groups its own pressure levels.
+        The order follows the API: a member can have a spread, like
+        temperature_2m_spread_member01, and both can be on a pressure level,
+        like temperature_850hPa_spread. Each group then splits its own.
         """
-        return _split_pressure_levels(_split_members(_split_previous_days(d)))
+        return _split_pressure_levels(
+            _split_spread(_split_members(_split_previous_days(d)))
+        )
 
 
 @dataclass

@@ -95,6 +95,25 @@ def _with_previous_days(
     ]
 
 
+# The API has no spread for these, as they can't be averaged
+NO_SPREAD = {HourlyParameters.IS_DAY.value, HourlyParameters.WEATHER_CODE.value}
+
+
+def _with_spread(variables: list[str] | None) -> list[str] | None:
+    """Add the spread of each variable to a list of variables.
+
+    The API takes those as one variable per variable, like
+    temperature_2m_spread, next to the regular temperature_2m.
+    """
+    if variables is None:
+        return None
+
+    return [
+        *variables,
+        *(f"{variable}_spread" for variable in variables if variable not in NO_SPREAD),
+    ]
+
+
 # Response sections that get a model suffix when multiple models are requested;
 # the current conditions always come from a single model and never do
 MODEL_SECTIONS = (
@@ -528,6 +547,7 @@ class OpenMeteo:
         cell_selection: CellSelection | None = None,
         tilt: float | None = None,
         azimuth: float | None = None,
+        spread: bool = False,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
         temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
         wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
@@ -585,6 +605,11 @@ class OpenMeteo:
                 irradiance. 0 is horizontal, 90 is vertical.
             azimuth: Orientation of a solar panel in degrees, for global
                 tilted irradiance. 0 is south, -90 is east, 90 is west.
+            spread: Return the spread over the members as well, the standard
+                deviation, for the current, 15-minutely, and hourly data. It
+                ends up in their spread. This is meant for the ensemble mean
+                models, like "dwd_icon_eps_ensemble_mean_seamless". There is
+                no spread for is_day and weather_code.
             precipitation_unit: Precipitation unit.
             temperature_unit: Temperature unit.
             wind_speed_unit: Wind speed unit.
@@ -607,6 +632,7 @@ class OpenMeteo:
             models=models,
             # Older model names still work, but the API returns their data
             # under the current name of the model
+            spread=spread,
             model_suffixes={
                 "gem_global": "gem_global_ensemble",
                 "gfs025": "ncep_gefs025",
@@ -1067,7 +1093,8 @@ class OpenMeteo:
         pressure_levels: list[int] | None,
         models: list[str] | None,
         model_suffixes: dict[str, str] | None = None,
-        **parameters: object,
+        spread: bool = False,
+        **parameters: Any,
     ) -> Forecast:
         """Request and parse a forecast, shared by the forecast-like APIs.
 
@@ -1088,6 +1115,12 @@ class OpenMeteo:
                 for variable in pressure_level_variables
                 for level in pressure_levels
             ]
+
+        # The spread of every variable, including those on pressure levels
+        if spread:
+            hourly_variables = _with_spread(hourly_variables) or []
+            for section in ("current", "minutely_15"):
+                parameters[section] = _with_spread(parameters.get(section))
 
         return await self._request_with_models(
             url,
