@@ -333,26 +333,27 @@ class OpenMeteo:
     async def elevation(
         self,
         *,
-        latitude: float,
-        longitude: float,
+        latitude: float | list[float],
+        longitude: float | list[float],
     ) -> Elevation:
-        """Get elevation above sea level for a coordinate.
+        """Get the elevation above sea level for one or more coordinates.
 
         Args:
         ----
-            latitude: Latitude of the location.
-            longitude: Longitude of the location.
+            latitude: Latitude of the location, or a list of latitudes for
+                as many as 100 locations at once.
+            longitude: Longitude of the location, or a list of longitudes,
+                in the same order and of the same length as the latitudes.
 
         Returns:
         -------
             An Elevation object containing the elevation in meters. This is
-            always a list, holding a single value for a single coordinate.
+            always a list, with one value per coordinate, in the order the
+            coordinates were given.
 
         """
-        url = URL("https://api.open-meteo.com/v1/elevation").with_query(
-            latitude=latitude,
-            longitude=longitude,
-        )
+        query = _build_query(latitude=latitude, longitude=longitude)
+        url = URL("https://api.open-meteo.com/v1/elevation").with_query(query)
         data = await self._request(url=url)
         return Elevation.from_json(data)
 

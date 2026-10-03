@@ -445,6 +445,30 @@ async def test_elevation(
     assert elevation == snapshot
 
 
+async def test_elevation_multiple_coordinates(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test looking up the elevation of multiple locations at once."""
+    responses.get(
+        re.compile(rf"^{re.escape(ELEVATION_URL)}\?.*$"),
+        status=200,
+        body='{"elevation":[29.0,46.0]}',
+        content_type="application/json",
+    )
+
+    elevation = await open_meteo_client.elevation(
+        latitude=[52.27, 48.85],
+        longitude=[6.87417, 2.35],
+    )
+
+    assert requested_query(responses) == {
+        "latitude": "52.27,48.85",
+        "longitude": "6.87417,2.35",
+    }
+    assert elevation.elevation == [29.0, 46.0]
+
+
 async def test_timeout(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
