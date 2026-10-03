@@ -77,8 +77,14 @@ class HourlyParameters(StrEnum):
     # Altitude above sea level of the 0°C level
     FREEZING_LEVEL_HEIGHT = "freezinglevel_height"
 
+    # Boolean value indicating if it is day (1) or night (0) at the location.
+    IS_DAY = "is_day"
+
     # Total precipitation (rain, showers, snow) sum of the preceding hour
     PRECIPITATION = "precipitation"
+
+    # Probability of precipitation (rain, showers, snow) for the next hour
+    PRECIPITATION_PROBABILITY = "precipitation_probability"
 
     # Atmospheric air pressure reduced to sea level (hPa)
     PRESSURE_MSL = "pressure_msl"
@@ -110,10 +116,16 @@ class HourlyParameters(StrEnum):
     # Air temperature at 2 meters above ground
     TEMPERATURE_2M = "temperature_2m"
 
+    # UV index
+    UV_INDEX = "uv_index"
+
     # Vapor Pressure Deificit (VPD) in kilo pascal (kPa). For high VPD (>1.6),
     # water transpiration of plants increases. For low VPD (<0.4),
     # transpiration decreases.
     VAPOR_PRESSURE_DEFICIT = "vapor_pressure_deficit"
+
+    # Visibility
+    VISIBILITY = "visibility"
 
     # Weather condition as a WMO numeric weather code.
     WEATHER_CODE = "weathercode"
@@ -142,11 +154,28 @@ class DailyParameters(StrEnum):
     APPARENT_TEMPERATURE_MAX = "apparent_temperature_max"
     APPARENT_TEMPERATURE_MIN = "apparent_temperature_min"
 
+    # Total cloud cover as an area fraction
+    CLOUD_COVER_MEAN = "cloud_cover_mean"
+
+    # Dew point temperature at 2 meters above ground
+    DEW_POINT_2M_MEAN = "dew_point_2m_mean"
+
     # The number of hours with rain,
     PRECIPITATION_HOURS = "precipitation_hours"
 
     # Sum of daily precipitation.
     PRECIPITATION_SUM = "precipitation_sum"
+
+    # Maximum probability of precipitation for the day
+    PRECIPITATION_PROBABILITY_MAX = "precipitation_probability_max"
+    PRECIPITATION_PROBABILITY_MEAN = "precipitation_probability_mean"
+    PRECIPITATION_PROBABILITY_MIN = "precipitation_probability_min"
+
+    # Atmospheric air pressure reduced to sea level (hPa)
+    PRESSURE_MSL_MEAN = "pressure_msl_mean"
+
+    # Relative humidity at 2 meters above ground
+    RELATIVE_HUMIDITY_2M_MEAN = "relative_humidity_2m_mean"
 
     # The sum of solar radiation on a given day in Mega Joules.
     SHORTWAVE_RADIATION_SUM = "shortwave_radiation_sum"
@@ -158,6 +187,10 @@ class DailyParameters(StrEnum):
     # Maximum and minimum daily air temperature at 2 meters above ground.
     TEMPERATURE_2M_MAX = "temperature_2m_max"
     TEMPERATURE_2M_MIN = "temperature_2m_min"
+
+    # UV index
+    UV_INDEX_MAX = "uv_index_max"
+    UV_INDEX_CLEAR_SKY_MAX = "uv_index_clear_sky_max"
 
     # The most severe weather condition on a given day.
     WEATHER_CODE = "weathercode"
@@ -198,7 +231,9 @@ class HourlyForecast(DataClassORJSONMixin):
     freezing_level_height: list[int] | None = field(
         default=None, metadata=field_options(alias="freezinglevel_height")
     )
+    is_day: list[bool] | None = field(default=None)
     precipitation: list[float] | None = field(default=None)
+    precipitation_probability: list[int] | None = field(default=None)
     pressure_msl: list[float] | None = field(default=None)
     relative_humidity_2m: list[int] | None = field(
         default=None, metadata=field_options(alias="relativehumidity_2m")
@@ -215,7 +250,9 @@ class HourlyForecast(DataClassORJSONMixin):
     soil_temperature_54cm: list[float] | None = field(default=None)
     soil_temperature_6cm: list[float] | None = field(default=None)
     temperature_2m: list[float] | None = field(default=None)
+    uv_index: list[float] | None = field(default=None)
     vapor_pressure_deficit: list[float] | None = field(default=None)
+    visibility: list[float] | None = field(default=None)
     weather_code: list[int] | None = field(
         default=None, metadata=field_options(alias="weathercode")
     )
@@ -255,13 +292,22 @@ class DailyForecast(DataClassORJSONMixin):
     time: list[date]
     apparent_temperature_max: list[float] | None = field(default=None)
     apparent_temperature_min: list[float] | None = field(default=None)
+    cloud_cover_mean: list[int] | None = field(default=None)
+    dew_point_2m_mean: list[float] | None = field(default=None)
     precipitation_hours: list[int] | None = field(default=None)
     precipitation_sum: list[float] | None = field(default=None)
+    precipitation_probability_max: list[int] | None = field(default=None)
+    precipitation_probability_mean: list[float] | None = field(default=None)
+    precipitation_probability_min: list[float] | None = field(default=None)
+    pressure_msl_mean: list[float] | None = field(default=None)
+    relative_humidity_2m_mean: list[int] | None = field(default=None)
     shortwave_radiation_sum: list[float] | None = field(default=None)
     sunrise: list[datetime] | None = field(default=None)
     sunset: list[datetime] | None = field(default=None)
     temperature_2m_max: list[float] | None = field(default=None)
     temperature_2m_min: list[float] | None = field(default=None)
+    uv_index_max: list[float] | None = field(default=None)
+    uv_index_clear_sky_max: list[float] | None = field(default=None)
     weathercode: list[int] | None = field(default=None)
     wind_direction_10m_dominant: list[int] | None = field(
         default=None, metadata=field_options(alias="winddirection_10m_dominant")
@@ -301,7 +347,9 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     freezing_level_height: str | None = field(
         default=None, metadata=field_options(alias="freezinglevel_height")
     )
+    is_day: str | None = field(default=None)
     precipitation: str | None = field(default=None)
+    precipitation_probability: str | None = field(default=None)
     pressure_msl: str | None = field(default=None)
     relative_humidity_2m: str | None = field(
         default=None, metadata=field_options(alias="relativehumidity_2m")
@@ -320,6 +368,8 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     temperature_2m: str | None = field(default=None)
     time: TimeFormat | None = field(default=None)
     vapor_pressure_deficit: str | None = field(default=None)
+    visibility: str | None = field(default=None)
+    uv_index: str | None = field(default=None)
     weather_code: str | None = field(
         default=None, metadata=field_options(alias="weathercode")
     )
@@ -369,14 +419,23 @@ class DailyForecastUnits(DataClassORJSONMixin):
 
     apparent_temperature_max: str | None = field(default=None)
     apparent_temperature_min: str | None = field(default=None)
+    cloud_cover_mean: str | None = field(default=None)
+    dew_point_2m_mean: str | None = field(default=None)
     precipitation_hours: str | None = field(default=None)
     precipitation_sum: str | None = field(default=None)
+    precipitation_probability_max: str | None = field(default=None)
+    precipitation_probability_mean: str | None = field(default=None)
+    precipitation_probability_min: str | None = field(default=None)
+    pressure_msl_mean: str | None = field(default=None)
+    relative_humidity_2m_mean: str | None = field(default=None)
     shortwave_radiation_sum: str | None = field(default=None)
     sunrise: TimeFormat | None = field(default=None)
     sunset: TimeFormat | None = field(default=None)
     temperature_2m_max: str | None = field(default=None)
     temperature_2m_min: str | None = field(default=None)
     time: TimeFormat | None = field(default=None)
+    uv_index_max: str | None = field(default=None)
+    uv_index_clear_sky_max: str | None = field(default=None)
     weather_code: str | None = field(
         default=None, metadata=field_options(alias="weathercode")
     )
