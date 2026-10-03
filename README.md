@@ -181,6 +181,28 @@ async with OpenMeteo() as open_meteo:
     print(forecast.hourly.previous_days[1].temperature_2m)
 ```
 
+### Single model runs
+
+The single runs API returns the forecast of one specific run of a weather
+model, starting at the time it ran. The run is in UTC.
+
+```python
+from datetime import UTC, datetime
+
+from open_meteo import HourlyParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    forecast = await open_meteo.single_run(
+        latitude=52.27,
+        longitude=6.87417,
+        run=datetime(2026, 9, 1, 0, 0, tzinfo=UTC),
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        models=["ecmwf_ifs"],
+    )
+
+    print(forecast.hourly.time[0], forecast.hourly.temperature_2m)
+```
+
 ### Historical forecast
 
 The historical forecast API archives the forecasts the weather models made in
