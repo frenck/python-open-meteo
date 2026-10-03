@@ -1,7 +1,7 @@
 {
   "latitude": 52.300003,
   "longitude": 6.8999996,
-  "generationtime_ms": 2.7267932891845703,
+  "generationtime_ms": 2.658247947692871,
   "utc_offset_seconds": 7200,
   "timezone": "Europe/Amsterdam",
   "timezone_abbreviation": "GMT+2",
@@ -53,10 +53,10 @@
     "ozone": 34.0,
     "carbon_dioxide": 446,
     "ammonia": 12.2,
-    "aerosol_optical_depth": 0.12,
+    "aerosol_optical_depth": 0.14,
     "methane": 1626.0,
     "dust": 0.0,
-    "uv_index": 1.55,
+    "uv_index": 1.45,
     "uv_index_clear_sky": 1.65,
     "alder_pollen": 0.0,
     "birch_pollen": 0.0,
@@ -162,7 +162,7 @@
     "aerosol_optical_depth": [
       0.12,
       0.12,
-      0.12
+      0.13
     ],
     "methane": [
       1811.0,

@@ -108,20 +108,20 @@ async def test_forecast(
     open_meteo_client: OpenMeteo,
     snapshot: SnapshotAssertion,
 ) -> None:
-    """Test requesting a forecast with every daily and hourly variable."""
+    """Test requesting a forecast with every variable available."""
     mock_endpoint(responses, FORECAST_URL, "forecast.json")
 
     forecast = await open_meteo_client.forecast(
         latitude=52.27,
         longitude=6.87417,
         timezone="Europe/Amsterdam",
-        current_weather=True,
+        current=list(HourlyParameters),
         daily=list(DailyParameters),
         hourly=list(HourlyParameters),
     )
 
     query = requested_query(responses)
-    assert query["current_weather"] == "true"
+    assert query["current"] == ",".join(HourlyParameters)
     assert query["daily"] == ",".join(DailyParameters)
     assert query["hourly"] == ",".join(HourlyParameters)
     assert query["timezone"] == "Europe/Amsterdam"
@@ -138,6 +138,7 @@ async def test_forecast_options(
     await open_meteo_client.forecast(
         latitude=52.27,
         longitude=6.87417,
+        forecast_days=1,
         past_days=1,
         precipitation_unit=PrecipitationUnit.INCHES,
         temperature_unit=TemperatureUnit.FAHRENHEIT,
@@ -146,11 +147,12 @@ async def test_forecast_options(
     )
 
     query = requested_query(responses)
+    assert query["forecast_days"] == "1"
     assert query["past_days"] == "1"
     assert query["precipitation_unit"] == "in"
     assert query["temperature_unit"] == "fahrenheit"
     assert query["timeformat"] == "unixtime"
-    assert query["windspeed_unit"] == "kn"
+    assert query["wind_speed_unit"] == "kn"
 
 
 async def test_forecast_defaults(
@@ -163,9 +165,8 @@ async def test_forecast_defaults(
 
     forecast = await open_meteo_client.forecast(latitude=52.27, longitude=6.87417)
 
-    # Unset daily and hourly lists are left out of the query entirely
+    # Anything left unset is left out of the query, so the API defaults apply
     assert requested_query(responses) == {
-        "current_weather": "false",
         "latitude": "52.27",
         "longitude": "6.87417",
         "past_days": "0",
@@ -173,9 +174,9 @@ async def test_forecast_defaults(
         "temperature_unit": "celsius",
         "timeformat": "iso8601",
         "timezone": "UTC",
-        "windspeed_unit": "kmh",
+        "wind_speed_unit": "kmh",
     }
-    assert forecast.current_weather is None
+    assert forecast.current is None
     assert forecast.daily is None
     assert forecast.hourly is None
     assert forecast == snapshot
@@ -213,14 +214,31 @@ async def test_air_quality_defaults(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
 ) -> None:
-    """Test unset current and hourly lists are left out of the query."""
+    """Test anything left unset is left out of the query."""
     mock_endpoint(responses, AIR_QUALITY_URL, "air_quality.json")
 
     await open_meteo_client.air_quality(latitude=52.27, longitude=6.87417)
 
     query = requested_query(responses)
     assert "current" not in query
+    assert "forecast_days" not in query
     assert "hourly" not in query
+
+
+async def test_air_quality_forecast_days(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the number of forecast days ends up in the query."""
+    mock_endpoint(responses, AIR_QUALITY_URL, "air_quality.json")
+
+    await open_meteo_client.air_quality(
+        latitude=52.27,
+        longitude=6.87417,
+        forecast_days=3,
+    )
+
+    assert requested_query(responses)["forecast_days"] == "3"
 
 
 async def test_geocoding(

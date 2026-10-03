@@ -107,9 +107,10 @@ class OpenMeteo:
         latitude: float,
         longitude: float,
         timezone: str = "UTC",
-        current_weather: bool = False,
+        current: list[HourlyParameters] | None = None,
         daily: list[DailyParameters] | None = None,
         hourly: list[HourlyParameters] | None = None,
+        forecast_days: int | None = None,
         past_days: int = 0,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
         temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
@@ -122,27 +123,30 @@ class OpenMeteo:
         ----
             latitude: Latitude of the location.
             longitude: Longitude of the location.
-            current_weather: Include current weather conditions.
-            daily: A list of weather variables to query for.
-            hourly: A list of weather variables to query for.
-            past_days: If set, yesterdays or the day before yesterdays are also
-                returned (0-2).
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            current: A list of weather variables to get the current
+                conditions for. Every hourly variable is available.
+            daily: A list of daily weather variables to query for.
+            hourly: A list of hourly weather variables to query for.
+            forecast_days: Number of days to forecast (0-16). Leave unset for
+                the API default of 7 days.
+            past_days: Number of past days to include as well.
             precipitation_unit: Precipitation unit.
             temperature_unit: Temperature unit.
-            timeformat: Timeformat.
-            timezone: All timestamps are returned as local-time and data is
-                returned starting at 0:00 local-time.
+            timeformat: Format of the returned timestamps.
             wind_speed_unit: Wind speed unit.
 
         Returns:
         -------
-            A forecast object.
+            A Forecast object.
 
         """
         url = URL("https://api.open-meteo.com/v1/forecast").with_query(
-            current_weather="true" if current_weather else "false",
+            current=",".join(current) if current is not None else [],
             daily=",".join(daily) if daily is not None else [],
             hourly=",".join(hourly) if hourly is not None else [],
+            forecast_days=forecast_days if forecast_days is not None else [],
             latitude=latitude,
             longitude=longitude,
             past_days=past_days,
@@ -150,7 +154,7 @@ class OpenMeteo:
             temperature_unit=temperature_unit,
             timeformat=timeformat,
             timezone=timezone,
-            windspeed_unit=wind_speed_unit,
+            wind_speed_unit=wind_speed_unit,
         )
         data = await self._request(url=url)
         return Forecast.from_json(data)
@@ -164,32 +168,35 @@ class OpenMeteo:
         timezone: str = "UTC",
         current: list[AirQualityParameters] | None = None,
         hourly: list[AirQualityParameters] | None = None,
+        forecast_days: int | None = None,
         past_days: int = 0,
         timeformat: TimeFormat = TimeFormat.ISO_8601,
     ) -> AirQuality:
-        """Get air-quality forecast.
+        """Get air quality forecast.
 
         Args:
         ----
             latitude: Latitude of the location.
             longitude: Longitude of the location.
-            current_air_quality: Include current weather conditions.
-            daily: A list of air quality variables to query for.
-            hourly: A list of air quality variables to query for.
-            past_days: If set, yesterdays or the day before yesterdays are also
-                returned (0-2).
-            timeformat: Timeformat.
-            timezone: All timestamps are returned as local-time and data is
-                returned starting at 0:00 local-time.
+            timezone: All timestamps are returned as local time and data is
+                returned starting at 0:00 local time.
+            current: A list of air quality variables to get the current
+                conditions for.
+            hourly: A list of hourly air quality variables to query for.
+            forecast_days: Number of days to forecast (0-7). Leave unset for
+                the API default of 5 days.
+            past_days: Number of past days to include as well.
+            timeformat: Format of the returned timestamps.
 
         Returns:
         -------
-            A air quality object.
+            An AirQuality object.
 
         """
         url = URL("https://air-quality-api.open-meteo.com/v1/air-quality").with_query(
             current=",".join(current) if current is not None else [],
             hourly=",".join(hourly) if hourly is not None else [],
+            forecast_days=forecast_days if forecast_days is not None else [],
             latitude=latitude,
             longitude=longitude,
             past_days=past_days,
@@ -211,18 +218,18 @@ class OpenMeteo:
         Args:
         ----
             name: String to search for. An empty string or only 1 character
-                will return an empty resultset. 2 characters will only match
-                exact matching locations. 3 and more locations will perform
+                will return an empty result set. 2 characters will only match
+                exact matching locations. 3 and more characters will perform
                 fuzzy matching. The search string can be a location name or
                 a postal code.
-            count: The number of search results to return. Up up 100 results
+            count: The number of search results to return. Up to 100 results
                 can be retrieved.
             language: Return translated results, if available, otherwise return
-                english or the native location name. Lower-cased.
+                English or the native location name. Lower-cased.
 
         Returns:
         -------
-            An Geocoding object.
+            A Geocoding object.
 
         """
         url = URL("https://geocoding-api.open-meteo.com/v1/search").with_query(
