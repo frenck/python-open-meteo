@@ -160,6 +160,27 @@ async with OpenMeteo() as open_meteo:
     print(seasonal.monthly.time, seasonal.monthly.precipitation_anomaly)
 ```
 
+### Previous model runs
+
+The previous runs API shows what earlier runs of the weather models forecasted
+for the same hours, up to seven days earlier. That shows how a forecast
+changed, or how accurate forecasts were.
+
+```python
+from open_meteo import HourlyParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    forecast = await open_meteo.previous_runs(
+        latitude=52.27,
+        longitude=6.87417,
+        previous_days=[1, 2],
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+    )
+
+    print(forecast.hourly.temperature_2m)
+    print(forecast.hourly.previous_days[1].temperature_2m)
+```
+
 ### Historical forecast
 
 The historical forecast API archives the forecasts the weather models made in

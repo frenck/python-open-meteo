@@ -1,0 +1,38 @@
+{
+  "latitude": 52.28,
+  "longitude": 6.8799996,
+  "generationtime_ms": 3.6215782165527344,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 29.0,
+  "hourly_units": {
+    "time": "iso8601",
+    "temperature_2m_icon_seamless": "\u00b0C",
+    "temperature_2m_previous_day1_icon_seamless": "\u00b0C",
+    "temperature_2m_gfs_seamless": "\u00b0C",
+    "temperature_2m_previous_day1_gfs_seamless": "\u00b0C"
+  },
+  "hourly": {
+    "time": [
+      "2026-10-03T18:00",
+      "2026-10-03T19:00"
+    ],
+    "temperature_2m_icon_seamless": [
+      14.4,
+      13.5
+    ],
+    "temperature_2m_previous_day1_icon_seamless": [
+      13.6,
+      13.0
+    ],
+    "temperature_2m_gfs_seamless": [
+      14.9,
+      14.2
+    ],
+    "temperature_2m_previous_day1_gfs_seamless": [
+      14.7,
+      14.0
+    ]
+  }
+}
