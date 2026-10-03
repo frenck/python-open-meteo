@@ -1,0 +1,41 @@
+{
+  "latitude": 52.276,
+  "longitude": 6.8729997,
+  "generationtime_ms": 0.07200241088867188,
+  "utc_offset_seconds": 7200,
+  "timezone": "Europe/Amsterdam",
+  "timezone_abbreviation": "GMT+2",
+  "elevation": 29.0,
+  "minutely_15_units": {
+    "time": "iso8601",
+    "temperature_2m": "\u00b0C",
+    "precipitation": "mm",
+    "is_day": ""
+  },
+  "minutely_15": {
+    "time": [
+      "2026-10-03T12:30",
+      "2026-10-03T12:45",
+      "2026-10-03T13:00",
+      "2026-10-03T13:15"
+    ],
+    "temperature_2m": [
+      17.7,
+      18.1,
+      18.5,
+      18.9
+    ],
+    "precipitation": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_day": [
+      1,
+      1,
+      1,
+      1
+    ]
+  }
+}

@@ -3,6 +3,7 @@
 # pylint: disable=protected-access
 
 import re
+from datetime import date, datetime
 from urllib.parse import unquote
 
 import aiohttp
@@ -13,11 +14,13 @@ from yarl import URL
 
 from open_meteo import (
     AirQualityParameters,
+    CellSelection,
     DailyParameters,
     HourlyParameters,
     OpenMeteo,
     PrecipitationUnit,
     TemperatureUnit,
+    TemporalResolution,
     TimeFormat,
     WindSpeedUnit,
 )
@@ -180,6 +183,94 @@ async def test_forecast_defaults(
     assert forecast.daily is None
     assert forecast.hourly is None
     assert forecast == snapshot
+
+
+async def test_forecast_minutely_15(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test requesting 15-minutely data."""
+    mock_endpoint(responses, FORECAST_URL, "forecast_minutely_15.json")
+
+    forecast = await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        minutely_15=[
+            HourlyParameters.TEMPERATURE_2M,
+            HourlyParameters.PRECIPITATION,
+            HourlyParameters.IS_DAY,
+        ],
+        forecast_minutely_15=4,
+        past_minutely_15=0,
+    )
+
+    query = requested_query(responses)
+    assert query["minutely_15"] == "temperature_2m,precipitation,is_day"
+    assert query["forecast_minutely_15"] == "4"
+    assert query["past_minutely_15"] == "0"
+
+    assert forecast.minutely_15 is not None
+    assert len(forecast.minutely_15.time) == 4
+    assert forecast.minutely_15.temperature_2m is not None
+    assert forecast.minutely_15_units is not None
+    assert forecast.minutely_15_units.temperature_2m == "°C"
+    assert forecast == snapshot
+
+
+async def test_forecast_time_range(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test dates and hours are sent in the ISO 8601 format the API expects."""
+    mock_endpoint(responses, FORECAST_URL, "forecast_minimal.json")
+
+    await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        start_date=date(2026, 10, 4),
+        end_date=date(2026, 10, 5),
+        # Naive on purpose: the API reads these as local time in the timezone
+        start_hour=datetime(2026, 10, 4, 6, 0, 30),  # noqa: DTZ001
+        end_hour=datetime(2026, 10, 4, 18, 0),  # noqa: DTZ001
+        forecast_hours=6,
+        past_hours=2,
+        temporal_resolution=TemporalResolution.HOURLY_3,
+    )
+
+    query = requested_query(responses)
+    assert query["start_date"] == "2026-10-04"
+    assert query["end_date"] == "2026-10-05"
+    # The API takes hours without seconds
+    assert query["start_hour"] == "2026-10-04T06:00"
+    assert query["end_hour"] == "2026-10-04T18:00"
+    assert query["forecast_hours"] == "6"
+    assert query["past_hours"] == "2"
+    assert query["temporal_resolution"] == "hourly_3"
+
+
+async def test_forecast_location_options(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the options that tune how the location is modeled."""
+    mock_endpoint(responses, FORECAST_URL, "forecast_minimal.json")
+
+    await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        elevation=float("nan"),
+        cell_selection=CellSelection.SEA,
+        tilt=35,
+        azimuth=-10.5,
+    )
+
+    query = requested_query(responses)
+    # NaN switches off elevation downscaling, and yarl can't encode it itself
+    assert query["elevation"] == "nan"
+    assert query["cell_selection"] == "sea"
+    assert query["tilt"] == "35"
+    assert query["azimuth"] == "-10.5"
 
 
 async def test_forecast_beyond_model_range(

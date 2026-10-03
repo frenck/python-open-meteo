@@ -41,6 +41,29 @@ class TimeFormat(StrEnum):
     UNIXTIME = "unixtime"
 
 
+class CellSelection(StrEnum):
+    """Enum to represent how a location is matched to a weather model grid cell."""
+
+    # Prefer grid cells on land with a similar elevation (the API default)
+    LAND = "land"
+
+    # Prefer grid cells on sea
+    SEA = "sea"
+
+    # Use the nearest grid cell, regardless of land or sea
+    NEAREST = "nearest"
+
+
+class TemporalResolution(StrEnum):
+    """Enum to represent the time resolutions data can be aggregated into."""
+
+    # The native time resolution of the weather model
+    NATIVE = "native"
+    HOURLY = "hourly"
+    HOURLY_3 = "hourly_3"
+    HOURLY_6 = "hourly_6"
+
+
 class HourlyParameters(StrEnum):
     """Enum to represent the hourly parameters available.
 
@@ -1085,6 +1108,20 @@ class HourlyForecastUnits(DataClassORJSONMixin):
 
 
 @dataclass
+class Minutely15Forecast(HourlyForecast):
+    """15-minutely weather data.
+
+    Every hourly variable is available. Only some weather models have native
+    15-minutely data, for others the data is interpolated from hourly values.
+    """
+
+
+@dataclass
+class Minutely15ForecastUnits(HourlyForecastUnits):
+    """15-minutely weather data units."""
+
+
+@dataclass
 class DailyForecast(DataClassORJSONMixin):
     """Daily weather data."""
 
@@ -1269,6 +1306,8 @@ class Forecast(DataClassORJSONMixin):
     daily: DailyForecast | None = None
     hourly_units: HourlyForecastUnits | None = None
     hourly: HourlyForecast | None = None
+    minutely_15_units: Minutely15ForecastUnits | None = None
+    minutely_15: Minutely15Forecast | None = None
 
 
 class AirQualityParameters(StrEnum):
