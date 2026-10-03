@@ -50,6 +50,7 @@ ENSEMBLE_URL = "https://ensemble-api.open-meteo.com/v1/ensemble"
 SEASONAL_URL = "https://seasonal-api.open-meteo.com/v1/seasonal"
 PREVIOUS_RUNS_URL = "https://previous-runs-api.open-meteo.com/v1/forecast"
 SINGLE_RUN_URL = "https://single-runs-api.open-meteo.com/v1/forecast"
+SATELLITE_URL = "https://satellite-api.open-meteo.com/v1/archive"
 
 
 def mock_endpoint(
@@ -1186,6 +1187,90 @@ async def test_single_run_timezone_aware(
     )
 
     assert requested_query(responses)["run"] == "2026-09-01T12:00"
+
+
+async def test_satellite_radiation(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test requesting solar radiation measured by satellites."""
+    mock_endpoint(responses, SATELLITE_URL, "satellite_radiation.json")
+
+    satellite = await open_meteo_client.satellite_radiation(
+        latitude=52.27,
+        longitude=6.87417,
+        timezone="Europe/Amsterdam",
+        start_date=date(2026, 9, 30),
+        end_date=date(2026, 9, 30),
+        # Naive on purpose: the API reads these as local time in the timezone
+        start_hour=datetime(2026, 9, 30, 12, 0),  # noqa: DTZ001
+        end_hour=datetime(2026, 9, 30, 14, 0),  # noqa: DTZ001
+        hourly=[
+            HourlyParameters.SHORTWAVE_RADIATION,
+            HourlyParameters.SHORTWAVE_RADIATION_CLEAR_SKY,
+            HourlyParameters.GLOBAL_TILTED_IRRADIANCE,
+        ],
+        daily=[
+            DailyParameters.SHORTWAVE_RADIATION_SUM,
+            DailyParameters.SUNSHINE_DURATION,
+        ],
+        tilt=35,
+        azimuth=0,
+    )
+
+    # Without a model, the API serves its regular archive instead
+    query = requested_query(responses)
+    assert query["models"] == "satellite_radiation_seamless"
+    assert query["tilt"] == "35"
+
+    assert satellite.hourly is not None
+    assert satellite.hourly.shortwave_radiation is not None
+    assert satellite.hourly.shortwave_radiation_clear_sky is not None
+    assert satellite.daily is not None
+    assert satellite.daily.shortwave_radiation_sum is not None
+    assert satellite == snapshot
+
+
+async def test_satellite_radiation_model(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test a specific satellite data source replaces the default one."""
+    mock_endpoint(responses, SATELLITE_URL, "satellite_radiation.json")
+
+    await open_meteo_client.satellite_radiation(
+        latitude=52.27,
+        longitude=6.87417,
+        past_days=2,
+        hourly=[HourlyParameters.SHORTWAVE_RADIATION],
+        temporal_resolution=TemporalResolution.NATIVE,
+        models=["eumetsat_sarah3"],
+    )
+
+    query = requested_query(responses)
+    assert query["models"] == "eumetsat_sarah3"
+    assert query["past_days"] == "2"
+    assert query["temporal_resolution"] == "native"
+
+
+async def test_satellite_radiation_not_covered(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test a location outside the coverage raises, instead of failing to parse.
+
+    The API returns NaN coordinates for those, like for New York, which isn't
+    valid JSON; hence the fixture is a plain text file.
+    """
+    mock_endpoint(responses, SATELLITE_URL, "satellite_radiation_not_covered.txt")
+
+    with pytest.raises(OpenMeteoError, match="outside the area the API covers"):
+        await open_meteo_client.satellite_radiation(
+            latitude=40.71,
+            longitude=-74.0,
+            hourly=[HourlyParameters.SHORTWAVE_RADIATION],
+        )
 
 
 async def test_air_quality(

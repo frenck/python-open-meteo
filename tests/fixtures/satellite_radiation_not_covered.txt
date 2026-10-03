@@ -1,0 +1,1 @@
+{"latitude":nan,"longitude":nan,"generationtime_ms":0.015020370483398438,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT"}

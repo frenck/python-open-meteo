@@ -194,6 +194,10 @@ class HourlyParameters(StrEnum):
     # Shortwave solar radiation as average of the preceding hour
     SHORTWAVE_RADIATION = "shortwave_radiation"
 
+    # Shortwave solar radiation as it would be without clouds; only some
+    # models have this, like the satellite models
+    SHORTWAVE_RADIATION_CLEAR_SKY = "shortwave_radiation_clear_sky"
+
     # Snow depth on the ground, and the snow height
     SNOW_DEPTH = "snow_depth"
     SNOW_HEIGHT = "snow_height"
@@ -577,6 +581,7 @@ class CurrentForecast(DataClassORJSONMixin):
     sea_level_height_msl: float | None = None
     sea_surface_temperature: float | None = None
     shortwave_radiation: float | None = None
+    shortwave_radiation_clear_sky: float | None = None
     shortwave_radiation_instant: float | None = None
     showers: float | None = None
     snow_depth: float | None = None
@@ -752,6 +757,7 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     sea_level_height_msl: str | None = None
     sea_surface_temperature: str | None = None
     shortwave_radiation: str | None = None
+    shortwave_radiation_clear_sky: str | None = None
     shortwave_radiation_instant: str | None = None
     showers: str | None = None
     snow_depth: str | None = None
@@ -1075,6 +1081,7 @@ class HourlyForecast(DataClassORJSONMixin):
     sea_level_height_msl: list[float | None] | None = None
     sea_surface_temperature: list[float | None] | None = None
     shortwave_radiation: list[float | None] | None = None
+    shortwave_radiation_clear_sky: list[float | None] | None = None
     shortwave_radiation_instant: list[float | None] | None = None
     showers: list[float | None] | None = None
     snow_depth: list[float | None] | None = None
@@ -1260,6 +1267,7 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     sea_level_height_msl: str | None = None
     sea_surface_temperature: str | None = None
     shortwave_radiation: str | None = None
+    shortwave_radiation_clear_sky: str | None = None
     shortwave_radiation_instant: str | None = None
     showers: str | None = None
     snow_depth: str | None = None
