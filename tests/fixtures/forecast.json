@@ -1,7 +1,7 @@
 {
   "latitude": 52.276,
   "longitude": 6.8729997,
-  "generationtime_ms": 7.9135894775390625,
+  "generationtime_ms": 2125.7729530334473,
   "utc_offset_seconds": 7200,
   "timezone": "Europe/Amsterdam",
   "timezone_abbreviation": "GMT+2",
@@ -16,13 +16,13 @@
     "weathercode": "wmo code"
   },
   "current_weather": {
-    "time": "2026-10-03T11:15",
+    "time": "2026-10-03T11:30",
     "interval": 900,
-    "temperature": 16.2,
-    "windspeed": 4.0,
-    "winddirection": 204,
+    "temperature": 15.9,
+    "windspeed": 3.6,
+    "winddirection": 249,
     "is_day": 1,
-    "weathercode": 2
+    "weathercode": 3
   },
   "hourly_units": {
     "time": "iso8601",
@@ -37,7 +37,9 @@
     "direct_radiation": "W/m\u00b2",
     "evapotranspiration": "mm",
     "freezinglevel_height": "m",
+    "is_day": "",
     "precipitation": "mm",
+    "precipitation_probability": "%",
     "pressure_msl": "hPa",
     "relativehumidity_2m": "%",
     "shortwave_radiation": "W/m\u00b2",
@@ -52,7 +54,9 @@
     "soil_temperature_54cm": "\u00b0C",
     "soil_temperature_6cm": "\u00b0C",
     "temperature_2m": "\u00b0C",
+    "uv_index": "",
     "vapor_pressure_deficit": "kPa",
+    "visibility": "m",
     "weathercode": "wmo code",
     "winddirection_10m": "\u00b0",
     "winddirection_120m": "\u00b0",
@@ -125,10 +129,20 @@
       3250.0,
       3300.0
     ],
+    "is_day": [
+      0,
+      0,
+      0
+    ],
     "precipitation": [
       0.0,
       0.0,
       0.0
+    ],
+    "precipitation_probability": [
+      0,
+      0,
+      0
     ],
     "pressure_msl": [
       1031.5,
@@ -200,10 +214,20 @@
       11.2,
       11.0
     ],
+    "uv_index": [
+      0.0,
+      0.0,
+      0.0
+    ],
     "vapor_pressure_deficit": [
       0.18,
       0.13,
       0.11
+    ],
+    "visibility": [
+      50000.0,
+      8340.0,
+      7260.0
     ],
     "weathercode": [
       0,
@@ -260,13 +284,22 @@
     "time": "iso8601",
     "apparent_temperature_max": "\u00b0C",
     "apparent_temperature_min": "\u00b0C",
+    "cloud_cover_mean": "%",
+    "dew_point_2m_mean": "\u00b0C",
     "precipitation_hours": "h",
     "precipitation_sum": "mm",
+    "precipitation_probability_max": "%",
+    "precipitation_probability_mean": "%",
+    "precipitation_probability_min": "%",
+    "pressure_msl_mean": "hPa",
+    "relative_humidity_2m_mean": "%",
     "shortwave_radiation_sum": "MJ/m\u00b2",
     "sunrise": "iso8601",
     "sunset": "iso8601",
     "temperature_2m_max": "\u00b0C",
     "temperature_2m_min": "\u00b0C",
+    "uv_index_max": "",
+    "uv_index_clear_sky_max": "",
     "weathercode": "wmo code",
     "winddirection_10m_dominant": "\u00b0",
     "windgusts_10m_max": "km/h",
@@ -279,14 +312,24 @@
       "2026-10-05"
     ],
     "apparent_temperature_max": [
-      20.5,
-      19.4,
+      19.7,
+      19.9,
       20.0
     ],
     "apparent_temperature_min": [
       6.8,
-      10.6,
-      9.8
+      9.8,
+      10.7
+    ],
+    "cloud_cover_mean": [
+      78,
+      68,
+      57
+    ],
+    "dew_point_2m_mean": [
+      9.4,
+      10.7,
+      9.7
     ],
     "precipitation_hours": [
       0.0,
@@ -298,10 +341,35 @@
       0.0,
       0.0
     ],
+    "precipitation_probability_max": [
+      0,
+      8,
+      0
+    ],
+    "precipitation_probability_mean": [
+      0,
+      3,
+      0
+    ],
+    "precipitation_probability_min": [
+      0,
+      0,
+      0
+    ],
+    "pressure_msl_mean": [
+      1030.3,
+      1028.9,
+      1024.4
+    ],
+    "relative_humidity_2m_mean": [
+      75,
+      78,
+      70
+    ],
     "shortwave_radiation_sum": [
-      12.06,
-      12.51,
-      12.82
+      11.6,
+      9.71,
+      12.57
     ],
     "sunrise": [
       "2026-10-03T07:36",
@@ -314,33 +382,43 @@
       "2026-10-05T19:00"
     ],
     "temperature_2m_max": [
-      21.0,
-      20.1,
+      20.6,
+      20.2,
       22.2
     ],
     "temperature_2m_min": [
       8.4,
-      11.2,
-      10.5
+      10.8,
+      11.6
+    ],
+    "uv_index_max": [
+      3.3,
+      3.2,
+      3.35
+    ],
+    "uv_index_clear_sky_max": [
+      3.5,
+      3.45,
+      3.5
     ],
     "weathercode": [
       3,
-      3,
+      45,
       3
     ],
     "winddirection_10m_dominant": [
-      157,
-      336,
-      223
+      178,
+      347,
+      226
     ],
     "windgusts_10m_max": [
+      17.3,
       14.8,
-      22.3,
-      25.6
+      25.2
     ],
     "windspeed_10m_max": [
       9.0,
-      9.4,
+      6.1,
       10.4
     ]
   }
