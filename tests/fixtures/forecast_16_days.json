@@ -1,0 +1,65 @@
+{
+  "latitude": 52.276,
+  "longitude": 6.8729997,
+  "generationtime_ms": 0.8951425552368164,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 29.0,
+  "hourly_units": {
+    "time": "iso8601",
+    "temperature_2m": "\u00b0C",
+    "weather_code": "wmo code",
+    "is_day": ""
+  },
+  "hourly": {
+    "time": [
+      "2026-10-18T20:00",
+      "2026-10-18T21:00",
+      "2026-10-18T22:00",
+      "2026-10-18T23:00"
+    ],
+    "temperature_2m": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "weather_code": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "is_day": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "daily_units": {
+    "time": "iso8601",
+    "temperature_2m_max": "\u00b0C",
+    "weather_code": "wmo code",
+    "sunrise": "iso8601"
+  },
+  "daily": {
+    "time": [
+      "2026-10-17",
+      "2026-10-18"
+    ],
+    "temperature_2m_max": [
+      18.3,
+      null
+    ],
+    "weather_code": [
+      0,
+      null
+    ],
+    "sunrise": [
+      "2026-10-17T06:01",
+      "2026-10-18T06:02"
+    ]
+  }
+}
