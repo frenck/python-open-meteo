@@ -43,7 +43,10 @@ async def main():
         forecast = await open_meteo.forecast(
             latitude=52.27,
             longitude=6.87417,
-            current_weather=True,
+            current=[
+                HourlyParameters.TEMPERATURE_2M,
+                HourlyParameters.WEATHER_CODE,
+            ],
             daily=[
                 DailyParameters.SUNRISE,
                 DailyParameters.SUNSET,
