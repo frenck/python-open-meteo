@@ -6,8 +6,9 @@ import asyncio
 import socket
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Self
+from typing import Any, Self
 
+import orjson
 from aiohttp.client import ClientError, ClientResponseError, ClientSession
 from yarl import URL
 
@@ -55,6 +56,77 @@ def _build_query(**parameters: object) -> dict[str, str]:
             query[key] = str(value)
 
     return query
+
+
+# Response sections that get a model suffix when multiple models are requested;
+# the current conditions always come from a single model and never do
+MODEL_SECTIONS = (
+    "minutely_15",
+    "minutely_15_units",
+    "hourly",
+    "hourly_units",
+    "daily",
+    "daily_units",
+)
+
+
+def _split_models(data: dict[str, Any], models: list[str]) -> dict[str, Any]:
+    """Split a multiple model response into a response per model.
+
+    With multiple models, the API suffixes every variable with the model name,
+    exactly as it was requested: temperature_2m becomes
+    temperature_2m_icon_seamless. This moves each model's data into a response
+    of its own, under the models key, with the suffixes removed, so it parses
+    into the regular models.
+
+    When only one of the requested models has data for the location, the API
+    leaves out the suffixes, and there is no telling which model the data is
+    from. The response is returned as is then, like a single model response.
+    """
+    # The longest name has to win: temperature_2m_meteoswiss_icon_seamless
+    # also ends in _icon_seamless
+    by_length = sorted(set(models), key=str.__len__, reverse=True)
+    sections = {key: value for key, value in data.items() if key in MODEL_SECTIONS}
+    shared = {key: value for key, value in data.items() if key not in MODEL_SECTIONS}
+
+    # Keep the models in the order they were requested
+    per_model: dict[str, dict[str, Any]] = {
+        model: dict(shared) for model in dict.fromkeys(models)
+    }
+
+    split = False
+    for section, values in sections.items():
+        leftover: dict[str, Any] = {}
+        for key, value in values.items():
+            model = next((m for m in by_length if key.endswith(f"_{m}")), None)
+
+            # Time is shared between the models; anything else without a
+            # model suffix stays where it is
+            if model is None:
+                leftover[key] = value
+                continue
+
+            variable = key.removesuffix(f"_{model}")
+            per_model[model].setdefault(section, {})[variable] = value
+            split = True
+
+        for model in by_length:
+            if section in per_model[model] and "time" in leftover:
+                per_model[model][section]["time"] = leftover["time"]
+
+        # Only keep the section on the top level, if more than time is left
+        if set(leftover) - {"time"}:
+            shared[section] = leftover
+
+    if not split:
+        return data
+
+    # The current conditions are not per model, so they stay on the top level
+    for model in by_length:
+        per_model[model].pop("current", None)
+        per_model[model].pop("current_units", None)
+
+    return {**shared, "models": per_model}
 
 
 @dataclass
@@ -157,6 +229,7 @@ class OpenMeteo:
         cell_selection: CellSelection | None = None,
         tilt: float | None = None,
         azimuth: float | None = None,
+        models: list[str] | None = None,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
         temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
         timeformat: TimeFormat = TimeFormat.ISO_8601,
@@ -205,6 +278,15 @@ class OpenMeteo:
                 irradiance. 0 is horizontal, 90 is vertical.
             azimuth: Orientation of a solar panel in degrees, for global
                 tilted irradiance. 0 is south, -90 is east, 90 is west.
+            models: Weather models to use, by their Open-Meteo name, like
+                "icon_seamless". Leave unset to let the API pick the best
+                model for the location. With a single model, the data is on
+                the forecast itself. With multiple models, the data of each
+                model is in Forecast.models, keyed by the model name as given.
+                The current conditions always come from a single model. When
+                only one of the models has data for the location, the API
+                returns it without telling which model it is from, and it is
+                on the forecast itself, like with a single model.
             precipitation_unit: Precipitation unit.
             temperature_unit: Temperature unit.
             timeformat: Format of the returned timestamps.
@@ -238,6 +320,7 @@ class OpenMeteo:
             cell_selection=cell_selection,
             tilt=tilt,
             azimuth=azimuth,
+            models=models,
             precipitation_unit=precipitation_unit,
             temperature_unit=temperature_unit,
             timeformat=timeformat,
@@ -245,6 +328,10 @@ class OpenMeteo:
         )
         url = URL("https://api.open-meteo.com/v1/forecast").with_query(query)
         data = await self._request(url=url)
+
+        if models is not None and len(set(models)) > 1:
+            return Forecast.from_dict(_split_models(orjson.loads(data), models))
+
         return Forecast.from_json(data)
 
     # pylint: disable-next=too-many-arguments,too-many-locals

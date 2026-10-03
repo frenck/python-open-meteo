@@ -1,0 +1,102 @@
+{
+  "latitude": 47.36,
+  "longitude": 8.539999,
+  "generationtime_ms": 501.4197826385498,
+  "utc_offset_seconds": 7200,
+  "timezone": "Europe/Zurich",
+  "timezone_abbreviation": "GMT+2",
+  "elevation": 422.0,
+  "current_units": {
+    "time": "iso8601",
+    "interval": "seconds",
+    "temperature_2m": "\u00b0C"
+  },
+  "current": {
+    "time": "2026-10-03T13:00",
+    "interval": 900,
+    "temperature_2m": 20.3
+  },
+  "minutely_15_units": {
+    "time": "iso8601",
+    "temperature_2m_icon_seamless": "\u00b0C",
+    "temperature_2m_meteoswiss_icon_seamless": "\u00b0C",
+    "temperature_2m_gfs_seamless": "\u00b0C"
+  },
+  "minutely_15": {
+    "time": [
+      "2026-10-03T13:00",
+      "2026-10-03T13:15"
+    ],
+    "temperature_2m_icon_seamless": [
+      20.3,
+      20.5
+    ],
+    "temperature_2m_meteoswiss_icon_seamless": [
+      20.7,
+      20.9
+    ],
+    "temperature_2m_gfs_seamless": [
+      20.9,
+      21.2
+    ]
+  },
+  "hourly_units": {
+    "time": "iso8601",
+    "temperature_2m_icon_seamless": "\u00b0C",
+    "weather_code_icon_seamless": "wmo code",
+    "temperature_2m_meteoswiss_icon_seamless": "\u00b0C",
+    "weather_code_meteoswiss_icon_seamless": "wmo code",
+    "temperature_2m_gfs_seamless": "\u00b0C",
+    "weather_code_gfs_seamless": "wmo code"
+  },
+  "hourly": {
+    "time": [
+      "2026-10-03T13:00",
+      "2026-10-03T14:00"
+    ],
+    "temperature_2m_icon_seamless": [
+      20.3,
+      21.1
+    ],
+    "weather_code_icon_seamless": [
+      3,
+      3
+    ],
+    "temperature_2m_meteoswiss_icon_seamless": [
+      20.7,
+      21.5
+    ],
+    "weather_code_meteoswiss_icon_seamless": [
+      3,
+      3
+    ],
+    "temperature_2m_gfs_seamless": [
+      20.9,
+      21.9
+    ],
+    "weather_code_gfs_seamless": [
+      3,
+      3
+    ]
+  },
+  "daily_units": {
+    "time": "iso8601",
+    "temperature_2m_max_icon_seamless": "\u00b0C",
+    "temperature_2m_max_meteoswiss_icon_seamless": "\u00b0C",
+    "temperature_2m_max_gfs_seamless": "\u00b0C"
+  },
+  "daily": {
+    "time": [
+      "2026-10-03"
+    ],
+    "temperature_2m_max_icon_seamless": [
+      23.1
+    ],
+    "temperature_2m_max_meteoswiss_icon_seamless": [
+      23.3
+    ],
+    "temperature_2m_max_gfs_seamless": [
+      22.4
+    ]
+  }
+}

@@ -275,6 +275,97 @@ async def test_forecast_location_options(
     assert query["azimuth"] == "-10.5"
 
 
+async def test_forecast_single_model(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test a single model keeps the data on the forecast itself."""
+    mock_endpoint(responses, FORECAST_URL, "forecast_16_days.json")
+
+    forecast = await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        models=["icon_seamless"],
+    )
+
+    assert requested_query(responses)["models"] == "icon_seamless"
+    assert forecast.hourly is not None
+    assert forecast.models is None
+
+
+async def test_forecast_multiple_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test the data of each model ends up in a forecast of its own.
+
+    The fixture is a real response for Zurich, where both icon_seamless and
+    meteoswiss_icon_seamless have data. The latter also ends in
+    _icon_seamless, so the longest model name has to win.
+    """
+    mock_endpoint(responses, FORECAST_URL, "forecast_models.json")
+
+    models = ["icon_seamless", "meteoswiss_icon_seamless", "gfs_seamless"]
+    forecast = await open_meteo_client.forecast(
+        latitude=47.37,
+        longitude=8.54,
+        current=[HourlyParameters.TEMPERATURE_2M],
+        minutely_15=[HourlyParameters.TEMPERATURE_2M],
+        hourly=[HourlyParameters.TEMPERATURE_2M, HourlyParameters.WEATHER_CODE],
+        daily=[DailyParameters.TEMPERATURE_2M_MAX],
+        models=models,
+    )
+
+    assert requested_query(responses)["models"] == ",".join(models)
+
+    # The current conditions always come from a single model
+    assert forecast.current is not None
+    assert forecast.hourly is None
+    assert forecast.daily is None
+    assert forecast.minutely_15 is None
+
+    assert forecast.models is not None
+    assert list(forecast.models) == models
+    icon = forecast.models["icon_seamless"]
+    meteoswiss = forecast.models["meteoswiss_icon_seamless"]
+    assert icon.current is None
+    assert icon.hourly is not None
+    assert meteoswiss.hourly is not None
+    assert icon.hourly.temperature_2m != meteoswiss.hourly.temperature_2m
+    assert icon.hourly.time == meteoswiss.hourly.time
+    assert icon.hourly_units is not None
+    assert icon.hourly_units.temperature_2m == "°C"
+    assert icon.daily is not None
+    assert icon.minutely_15 is not None
+    assert forecast == snapshot
+
+
+async def test_forecast_models_with_one_covering(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test data is not split when only one of the models covers the location.
+
+    meteoswiss_icon_seamless doesn't cover Enschede. The API then leaves out
+    that model, and returns the other one without a model suffix, so there is
+    no telling which model the data is from. It stays on the forecast itself.
+    """
+    mock_endpoint(responses, FORECAST_URL, "forecast_models_one_covering.json")
+
+    forecast = await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        models=["icon_seamless", "meteoswiss_icon_seamless"],
+    )
+
+    assert forecast.models is None
+    assert forecast.hourly is not None
+    assert forecast.hourly.temperature_2m is not None
+
+
 async def test_forecast_beyond_model_range(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,

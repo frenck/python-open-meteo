@@ -1,0 +1,23 @@
+{
+  "latitude": 52.28,
+  "longitude": 6.8799996,
+  "generationtime_ms": 0.06270408630371094,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 29.0,
+  "hourly_units": {
+    "time": "iso8601",
+    "temperature_2m": "\u00b0C"
+  },
+  "hourly": {
+    "time": [
+      "2026-10-03T11:00",
+      "2026-10-03T12:00"
+    ],
+    "temperature_2m": [
+      19.3,
+      20.0
+    ]
+  }
+}
