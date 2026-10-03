@@ -24,6 +24,7 @@ from .models import (
     Flood,
     FloodParameters,
     Forecast,
+    ForecastSection,
     Geocoding,
     GeocodingResult,
     HourlyParameters,
@@ -99,15 +100,12 @@ def _with_previous_days(
 NO_SPREAD = {HourlyParameters.IS_DAY.value, HourlyParameters.WEATHER_CODE.value}
 
 
-def _with_spread(variables: list[str] | None) -> list[str] | None:
+def _with_spread(variables: list[str]) -> list[str]:
     """Add the spread of each variable to a list of variables.
 
     The API takes those as one variable per variable, like
     temperature_2m_spread, next to the regular temperature_2m.
     """
-    if variables is None:
-        return None
-
     return [
         *variables,
         *(f"{variable}_spread" for variable in variables if variable not in NO_SPREAD),
@@ -288,6 +286,7 @@ class OpenMeteo:
         hourly: list[HourlyParameters] | None = None,
         pressure_level_variables: list[PressureLevelVariable] | None = None,
         pressure_levels: list[int] | None = None,
+        pressure_level_sections: list[ForecastSection] | None = None,
         daily: list[DailyParameters] | None = None,
         forecast_days: int | None = None,
         past_days: int = 0,
@@ -329,6 +328,9 @@ class OpenMeteo:
                 level variables for, like 850 or 500. Which levels have data
                 depends on the weather model, from 10 up to 1000 hPa; levels
                 a model doesn't have return no data instead of an error.
+            pressure_level_sections: Which data to get the pressure level
+                variables for: current conditions, 15-minutely, or hourly.
+                Leave unset for hourly data only.
             daily: A list of daily weather variables to query for.
             forecast_days: Number of days to forecast (0-16). Leave unset for
                 the API default of 7 days.
@@ -387,6 +389,7 @@ class OpenMeteo:
             hourly=hourly,
             pressure_level_variables=pressure_level_variables,
             pressure_levels=pressure_levels,
+            pressure_level_sections=pressure_level_sections,
             models=models,
             latitude=latitude,
             longitude=longitude,
@@ -427,6 +430,7 @@ class OpenMeteo:
         hourly: list[HourlyParameters] | None = None,
         pressure_level_variables: list[PressureLevelVariable] | None = None,
         pressure_levels: list[int] | None = None,
+        pressure_level_sections: list[ForecastSection] | None = None,
         daily: list[DailyParameters] | None = None,
         start_hour: datetime | None = None,
         end_hour: datetime | None = None,
@@ -463,6 +467,9 @@ class OpenMeteo:
             pressure_levels: The pressure levels in hPa to query the pressure
                 level variables for, like 850 or 500. Which levels have data
                 depends on the weather model.
+            pressure_level_sections: Which data to get the pressure level
+                variables for: 15-minutely or hourly; there are no current
+                conditions. Leave unset for hourly data only.
             daily: A list of daily weather variables to query for.
             start_hour: First hour to return, to narrow down the time interval
                 for hourly and 15-minutely data. This is local time in the
@@ -500,6 +507,7 @@ class OpenMeteo:
             hourly=hourly,
             pressure_level_variables=pressure_level_variables,
             pressure_levels=pressure_levels,
+            pressure_level_sections=pressure_level_sections,
             models=models,
             latitude=latitude,
             longitude=longitude,
@@ -533,6 +541,7 @@ class OpenMeteo:
         hourly: list[HourlyParameters] | None = None,
         pressure_level_variables: list[PressureLevelVariable] | None = None,
         pressure_levels: list[int] | None = None,
+        pressure_level_sections: list[ForecastSection] | None = None,
         daily: list[DailyParameters] | None = None,
         forecast_days: int | None = None,
         past_days: int | None = None,
@@ -579,6 +588,9 @@ class OpenMeteo:
                 query for on each of the pressure levels.
             pressure_levels: The pressure levels in hPa to query the pressure
                 level variables for, like 850 or 500.
+            pressure_level_sections: Which data to get the pressure level
+                variables for: current conditions, 15-minutely, or hourly.
+                Leave unset for hourly data only.
             daily: A list of daily weather variables to query for.
             forecast_days: Number of days to forecast (0-36). Leave unset for
                 the API default of 7 days.
@@ -629,6 +641,7 @@ class OpenMeteo:
             hourly=hourly,
             pressure_level_variables=pressure_level_variables,
             pressure_levels=pressure_levels,
+            pressure_level_sections=pressure_level_sections,
             models=models,
             # Older model names still work, but the API returns their data
             # under the current name of the model
@@ -796,6 +809,7 @@ class OpenMeteo:
         hourly: list[HourlyParameters] | None = None,
         pressure_level_variables: list[PressureLevelVariable] | None = None,
         pressure_levels: list[int] | None = None,
+        pressure_level_sections: list[ForecastSection] | None = None,
         daily: list[DailyParameters] | None = None,
         forecast_days: int | None = None,
         forecast_hours: int | None = None,
@@ -833,6 +847,9 @@ class OpenMeteo:
                 query for on each of the pressure levels.
             pressure_levels: The pressure levels in hPa to query the pressure
                 level variables for, like 850 or 500.
+            pressure_level_sections: Which data to get the pressure level
+                variables for: 15-minutely or hourly; there are no current
+                conditions. Leave unset for hourly data only.
             daily: A list of daily weather variables to query for.
             forecast_days: Number of days to return from the start of the run
                 (0-16). Leave unset for the API default of 7 days.
@@ -876,6 +893,7 @@ class OpenMeteo:
             hourly=hourly,
             pressure_level_variables=pressure_level_variables,
             pressure_levels=pressure_levels,
+            pressure_level_sections=pressure_level_sections,
             models=models,
             latitude=latitude,
             longitude=longitude,
@@ -1092,6 +1110,7 @@ class OpenMeteo:
         pressure_level_variables: list[PressureLevelVariable] | None,
         pressure_levels: list[int] | None,
         models: list[str] | None,
+        pressure_level_sections: list[ForecastSection] | None = None,
         model_suffixes: dict[str, str] | None = None,
         spread: bool = False,
         **parameters: Any,
@@ -1100,34 +1119,47 @@ class OpenMeteo:
 
         These APIs all have the same parameters and responses, on another
         host. This handles what needs more than passing a parameter on: the
-        pressure levels and the models.
+        pressure levels, the spread, and the models.
         """
         if (pressure_level_variables is None) != (pressure_levels is None):
             msg = "Both pressure_level_variables and pressure_levels are needed"
             raise ValueError(msg)
 
+        # The variables per section; current is only there for the APIs that
+        # offer current conditions
+        variables: dict[str, list[str]] = {"hourly": list(hourly or [])}
+        for section in ("current", "minutely_15"):
+            if section in parameters:
+                variables[section] = list(parameters[section] or [])
+
         # The API takes pressure level data as one variable per level, like
         # temperature_850hPa, so every variable is combined with every level
-        hourly_variables: list[str] = list(hourly or [])
         if pressure_level_variables and pressure_levels:
-            hourly_variables += [
-                f"{variable}_{level}hPa"
-                for variable in pressure_level_variables
-                for level in pressure_levels
-            ]
+            for section in pressure_level_sections or [ForecastSection.HOURLY]:
+                if section not in variables:
+                    msg = f"There is no {section} data for this API"
+                    raise ValueError(msg)
+
+                variables[section] += [
+                    f"{variable}_{level}hPa"
+                    for variable in pressure_level_variables
+                    for level in pressure_levels
+                ]
 
         # The spread of every variable, including those on pressure levels
         if spread:
-            hourly_variables = _with_spread(hourly_variables) or []
-            for section in ("current", "minutely_15"):
-                parameters[section] = _with_spread(parameters.get(section))
+            variables = {
+                section: _with_spread(names) for section, names in variables.items()
+            }
 
+        parameters.update(
+            {section: names or None for section, names in variables.items()}
+        )
         return await self._request_with_models(
             url,
             Forecast,
             models=models,
             model_suffixes=model_suffixes,
-            hourly=hourly_variables or None,
             **parameters,
         )
 

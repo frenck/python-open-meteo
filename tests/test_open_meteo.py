@@ -19,6 +19,7 @@ from open_meteo import (
     CellSelection,
     DailyParameters,
     FloodParameters,
+    ForecastSection,
     HourlyParameters,
     LengthUnit,
     MarineDailyParameters,
@@ -470,6 +471,74 @@ async def test_forecast_pressure_levels_incomplete(
             longitude=6.87417,
             pressure_level_variables=variables,
             pressure_levels=levels,
+        )
+
+
+async def test_forecast_pressure_level_sections(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test pressure levels for the current conditions and 15-minutely data."""
+    mock_endpoint(responses, FORECAST_URL, "forecast_pressure_level_sections.json")
+
+    forecast = await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        current=[HourlyParameters.TEMPERATURE_2M],
+        minutely_15=[HourlyParameters.TEMPERATURE_2M],
+        pressure_level_variables=[
+            PressureLevelVariable.TEMPERATURE,
+            PressureLevelVariable.WIND_SPEED,
+        ],
+        pressure_levels=[850],
+        pressure_level_sections=[ForecastSection.CURRENT, ForecastSection.MINUTELY_15],
+        forecast_minutely_15=2,
+    )
+
+    # Only the chosen sections get the pressure levels
+    query = requested_query(responses)
+    assert query["current"] == "temperature_2m,temperature_850hPa,wind_speed_850hPa"
+    assert query["minutely_15"] == (
+        "temperature_2m,temperature_850hPa,wind_speed_850hPa"
+    )
+    assert "hourly" not in query
+
+    assert forecast.current is not None
+    assert forecast.current.pressure_levels is not None
+    assert forecast.current.pressure_levels[850].temperature is not None
+    assert forecast.current.pressure_levels[850].wind_speed is not None
+    assert forecast.current_units is not None
+    assert forecast.current_units.pressure_levels is not None
+    assert forecast.current_units.pressure_levels[850].wind_speed == "km/h"
+    assert forecast.minutely_15 is not None
+    assert forecast.minutely_15.pressure_levels is not None
+    assert forecast == snapshot
+
+
+async def test_pressure_level_sections_without_current(
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test current conditions can't be chosen where an API doesn't have those."""
+    with pytest.raises(ValueError, match="There is no current data"):
+        await open_meteo_client.historical_forecast(
+            latitude=52.27,
+            longitude=6.87417,
+            start_date=date(2024, 1, 1),
+            end_date=date(2024, 1, 1),
+            pressure_level_variables=[PressureLevelVariable.TEMPERATURE],
+            pressure_levels=[850],
+            pressure_level_sections=[ForecastSection.CURRENT],
+        )
+
+    with pytest.raises(ValueError, match="There is no current data"):
+        await open_meteo_client.single_run(
+            latitude=52.27,
+            longitude=6.87417,
+            run=datetime(2026, 9, 1, tzinfo=ZoneInfo("UTC")),
+            pressure_level_variables=[PressureLevelVariable.TEMPERATURE],
+            pressure_levels=[850],
+            pressure_level_sections=[ForecastSection.CURRENT],
         )
 
 
