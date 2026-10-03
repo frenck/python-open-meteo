@@ -249,8 +249,8 @@ class OpenMeteo:
 
         Returns:
         -------
-            An Elevation object containing the elevation in meters.
-            It is always a list of floats, but for a single coordinate, it will contain only one value.
+            An Elevation object containing the elevation in meters. This is
+            always a list, holding a single value for a single coordinate.
 
         """
         url = URL("https://api.open-meteo.com/v1/elevation").with_query(
