@@ -836,6 +836,10 @@ class PressureLevelVariable(StrEnum):
 # temperature_850hPa
 PRESSURE_LEVEL_KEY = re.compile(r"^(?P<variable>[a-z_]+)_(?P<level>\d+)hPa$")
 
+# A plain set, as checking a string against a StrEnum only works from
+# Python 3.12 on
+PRESSURE_LEVEL_VARIABLES = {variable.value for variable in PressureLevelVariable}
+
 
 def _split_pressure_levels(data: dict[Any, Any]) -> dict[Any, Any]:
     """Group the pressure level variables of a section by pressure level.
@@ -847,7 +851,7 @@ def _split_pressure_levels(data: dict[Any, Any]) -> dict[Any, Any]:
     levels: dict[int, dict[str, Any]] = {}
     for key in list(data):
         match = PRESSURE_LEVEL_KEY.match(key)
-        if match is None or match["variable"] not in PressureLevelVariable:
+        if match is None or match["variable"] not in PRESSURE_LEVEL_VARIABLES:
             continue
 
         levels.setdefault(int(match["level"]), {})[match["variable"]] = data.pop(key)
