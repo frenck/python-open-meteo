@@ -1059,8 +1059,9 @@ class OpenMeteo:
         *,
         latitude: float,
         longitude: float,
-        start_date: date,
-        end_date: date,
+        start_date: date | None = None,
+        end_date: date | None = None,
+        past_days: int | None = None,
         timezone: str = "UTC",
         hourly: list[HourlyParameters] | None = None,
         daily: list[DailyParameters] | None = None,
@@ -1090,8 +1091,12 @@ class OpenMeteo:
             latitude: Latitude of the location.
             longitude: Longitude of the location.
             start_date: First day of the time interval to return, from
-                1940-01-01 on.
+                1940-01-01 on. Use it together with end_date, or use
+                past_days instead.
             end_date: Last day of the time interval to return.
+            past_days: Number of past days to return, up to today, instead
+                of a start and end date. With neither, only today is
+                returned.
             timezone: All timestamps are returned as local time and data is
                 returned starting at 0:00 local time.
             hourly: A list of hourly weather variables to query for.
@@ -1134,6 +1139,7 @@ class OpenMeteo:
             longitude=longitude,
             start_date=start_date,
             end_date=end_date,
+            past_days=past_days,
             timezone=timezone,
             daily=daily,
             start_hour=start_hour,
@@ -1456,6 +1462,7 @@ class OpenMeteo:
         past_days: int | None = None,
         start_date: date | None = None,
         end_date: date | None = None,
+        temporal_resolution: TemporalResolution | None = None,
         cell_selection: CellSelection | None = None,
         models: list[str] | None = None,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
@@ -1491,6 +1498,9 @@ class OpenMeteo:
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
             end_date: Last day of the time interval to return.
+            temporal_resolution: Interpolate the 6-hourly data into hourly or
+                3-hourly time steps, or use the native resolution of the
+                seasonal model, which is the default.
             cell_selection: How to match the location to a grid cell of the
                 seasonal model.
             models: Seasonal models to use, by their Open-Meteo name, like
@@ -1531,6 +1541,7 @@ class OpenMeteo:
             past_days=past_days,
             start_date=start_date,
             end_date=end_date,
+            temporal_resolution=temporal_resolution,
             cell_selection=cell_selection,
             precipitation_unit=precipitation_unit,
             temperature_unit=temperature_unit,

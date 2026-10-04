@@ -453,8 +453,10 @@ class DailyParameters(StrEnum):
     # The sum of solar radiation on a given day in Mega Joules
     SHORTWAVE_RADIATION_SUM = "shortwave_radiation_sum"
 
-    # Mean sea surface temperature, and mean snow depth
+    # Maximum, mean, and minimum sea surface temperature, and mean snow depth
+    SEA_SURFACE_TEMPERATURE_MAX = "sea_surface_temperature_max"
     SEA_SURFACE_TEMPERATURE_MEAN = "sea_surface_temperature_mean"
+    SEA_SURFACE_TEMPERATURE_MIN = "sea_surface_temperature_min"
     SNOW_DEPTH_MEAN = "snow_depth_mean"
 
     # Mean soil moisture, and the soil moisture index, averaged over layers
@@ -468,6 +470,10 @@ class DailyParameters(StrEnum):
     SOIL_MOISTURE_INDEX_7_TO_28CM_MEAN = "soil_moisture_index_7_to_28cm_mean"
     SOIL_MOISTURE_INDEX_28_TO_100CM_MEAN = "soil_moisture_index_28_to_100cm_mean"
     SOIL_MOISTURE_INDEX_100_TO_255CM_MEAN = "soil_moisture_index_100_to_255cm_mean"
+
+    # Mean soil moisture and temperature of the deep soil layer
+    SOIL_MOISTURE_100_TO_255CM_MEAN = "soil_moisture_100_to_255cm_mean"
+    SOIL_TEMPERATURE_100_TO_255CM_MEAN = "soil_temperature_100_to_255cm_mean"
 
     # Mean soil temperature, averaged over layers
     SOIL_TEMPERATURE_0_TO_7CM_MEAN = "soil_temperature_0_to_7cm_mean"
@@ -515,9 +521,10 @@ class DailyParameters(StrEnum):
     WET_BULB_TEMPERATURE_2M_MEAN = "wet_bulb_temperature_2m_mean"
     WET_BULB_TEMPERATURE_2M_MIN = "wet_bulb_temperature_2m_min"
 
-    # Dominant wind direction at 10 and 100 meters above ground
+    # Dominant wind direction at 10, 100, and 200 meters above ground
     WIND_DIRECTION_10M_DOMINANT = "wind_direction_10m_dominant"
     WIND_DIRECTION_100M_DOMINANT = "wind_direction_100m_dominant"
+    WIND_DIRECTION_200M_DOMINANT = "wind_direction_200m_dominant"
 
     # Maximum, mean, and minimum wind gusts on a day
     WIND_GUSTS_10M_MAX = "wind_gusts_10m_max"
@@ -529,10 +536,13 @@ class DailyParameters(StrEnum):
     WIND_SPEED_10M_MEAN = "wind_speed_10m_mean"
     WIND_SPEED_10M_MIN = "wind_speed_10m_min"
 
-    # Maximum, mean, and minimum wind speed at 100 meters above ground
+    # Maximum, mean, and minimum wind speed at 100 and 200 meters above ground
     WIND_SPEED_100M_MAX = "wind_speed_100m_max"
     WIND_SPEED_100M_MEAN = "wind_speed_100m_mean"
     WIND_SPEED_100M_MIN = "wind_speed_100m_min"
+    WIND_SPEED_200M_MAX = "wind_speed_200m_max"
+    WIND_SPEED_200M_MEAN = "wind_speed_200m_mean"
+    WIND_SPEED_200M_MIN = "wind_speed_200m_min"
 
 
 @dataclass
@@ -1511,7 +1521,9 @@ class DailyForecast(DataClassORJSONMixin):
     relative_humidity_2m_max: list[int | None] | None = None
     relative_humidity_2m_mean: list[int | None] | None = None
     relative_humidity_2m_min: list[int | None] | None = None
+    sea_surface_temperature_max: list[float | None] | None = None
     sea_surface_temperature_mean: list[float | None] | None = None
+    sea_surface_temperature_min: list[float | None] | None = None
     shortwave_radiation_sum: list[float | None] | None = None
     showers_sum: list[float | None] | None = None
     snow_depth_mean: list[float | None] | None = None
@@ -1520,6 +1532,7 @@ class DailyForecast(DataClassORJSONMixin):
     soil_moisture_0_to_100cm_mean: list[float | None] | None = None
     soil_moisture_0_to_10cm_mean: list[float | None] | None = None
     soil_moisture_0_to_7cm_mean: list[float | None] | None = None
+    soil_moisture_100_to_255cm_mean: list[float | None] | None = None
     soil_moisture_28_to_100cm_mean: list[float | None] | None = None
     soil_moisture_7_to_28cm_mean: list[float | None] | None = None
     soil_moisture_index_0_to_100cm_mean: list[float | None] | None = None
@@ -1529,6 +1542,7 @@ class DailyForecast(DataClassORJSONMixin):
     soil_moisture_index_7_to_28cm_mean: list[float | None] | None = None
     soil_temperature_0_to_100cm_mean: list[float | None] | None = None
     soil_temperature_0_to_7cm_mean: list[float | None] | None = None
+    soil_temperature_100_to_255cm_mean: list[float | None] | None = None
     soil_temperature_28_to_100cm_mean: list[float | None] | None = None
     soil_temperature_7_to_28cm_mean: list[float | None] | None = None
     sunrise: list[datetime | None] | None = None
@@ -1553,6 +1567,7 @@ class DailyForecast(DataClassORJSONMixin):
     wet_bulb_temperature_2m_min: list[float | None] | None = None
     wind_direction_100m_dominant: list[int | None] | None = None
     wind_direction_10m_dominant: list[int | None] | None = None
+    wind_direction_200m_dominant: list[int | None] | None = None
     wind_gusts_10m_max: list[float | None] | None = None
     wind_gusts_10m_mean: list[float | None] | None = None
     wind_gusts_10m_min: list[float | None] | None = None
@@ -1562,6 +1577,9 @@ class DailyForecast(DataClassORJSONMixin):
     wind_speed_10m_max: list[float | None] | None = None
     wind_speed_10m_mean: list[float | None] | None = None
     wind_speed_10m_min: list[float | None] | None = None
+    wind_speed_200m_max: list[float | None] | None = None
+    wind_speed_200m_mean: list[float | None] | None = None
+    wind_speed_200m_min: list[float | None] | None = None
 
     # Only set for ensemble data, keyed by member number
     members: dict[int, DailyForecast] | None = None
@@ -1609,7 +1627,9 @@ class DailyForecastUnits(DataClassORJSONMixin):
     relative_humidity_2m_max: str | None = None
     relative_humidity_2m_mean: str | None = None
     relative_humidity_2m_min: str | None = None
+    sea_surface_temperature_max: str | None = None
     sea_surface_temperature_mean: str | None = None
+    sea_surface_temperature_min: str | None = None
     shortwave_radiation_sum: str | None = None
     showers_sum: str | None = None
     snow_depth_mean: str | None = None
@@ -1618,6 +1638,7 @@ class DailyForecastUnits(DataClassORJSONMixin):
     soil_moisture_0_to_100cm_mean: str | None = None
     soil_moisture_0_to_10cm_mean: str | None = None
     soil_moisture_0_to_7cm_mean: str | None = None
+    soil_moisture_100_to_255cm_mean: str | None = None
     soil_moisture_28_to_100cm_mean: str | None = None
     soil_moisture_7_to_28cm_mean: str | None = None
     soil_moisture_index_0_to_100cm_mean: str | None = None
@@ -1627,6 +1648,7 @@ class DailyForecastUnits(DataClassORJSONMixin):
     soil_moisture_index_7_to_28cm_mean: str | None = None
     soil_temperature_0_to_100cm_mean: str | None = None
     soil_temperature_0_to_7cm_mean: str | None = None
+    soil_temperature_100_to_255cm_mean: str | None = None
     soil_temperature_28_to_100cm_mean: str | None = None
     soil_temperature_7_to_28cm_mean: str | None = None
     sunrise: TimeFormat | None = None
@@ -1651,6 +1673,7 @@ class DailyForecastUnits(DataClassORJSONMixin):
     wet_bulb_temperature_2m_min: str | None = None
     wind_direction_100m_dominant: str | None = None
     wind_direction_10m_dominant: str | None = None
+    wind_direction_200m_dominant: str | None = None
     wind_gusts_10m_max: str | None = None
     wind_gusts_10m_mean: str | None = None
     wind_gusts_10m_min: str | None = None
@@ -1660,6 +1683,9 @@ class DailyForecastUnits(DataClassORJSONMixin):
     wind_speed_10m_max: str | None = None
     wind_speed_10m_mean: str | None = None
     wind_speed_10m_min: str | None = None
+    wind_speed_200m_max: str | None = None
+    wind_speed_200m_mean: str | None = None
+    wind_speed_200m_min: str | None = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
