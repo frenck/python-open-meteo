@@ -436,7 +436,13 @@ only closes the one it created itself.
 ### Error handling
 
 ```python
-from open_meteo import OpenMeteo, OpenMeteoConnectionError, OpenMeteoError
+from open_meteo import (
+    OpenMeteo,
+    OpenMeteoConnectionError,
+    OpenMeteoError,
+    OpenMeteoRateLimitError,
+    OpenMeteoResponseError,
+)
 
 try:
     async with OpenMeteo() as open_meteo:
@@ -444,14 +450,22 @@ try:
 except OpenMeteoConnectionError:
     # Timeouts, DNS failures, or any other connection problem
     ...
-except OpenMeteoError as err:
-    # The API rejected the request; the message tells you why, like:
+except OpenMeteoRateLimitError as err:
+    # Too many requests; retry_after has the seconds to wait, if the API
+    # said so
+    print(err.retry_after)
+except OpenMeteoResponseError as err:
+    # The API rejected the request; reason tells you why, like:
     # "Latitude must be in range of -90 to 90°. Given: 999.0."
-    print(err)
+    print(err.status, err.reason)
+except OpenMeteoError:
+    # Anything else unexpected, like a response that couldn't be parsed
+    ...
 ```
 
-`OpenMeteoConnectionError` is a subclass of `OpenMeteoError`, so catching
-`OpenMeteoError` alone handles both.
+Every exception is a subclass of `OpenMeteoError`, so catching that alone
+handles all of them. The request timeout covers the whole request, including
+reading the response.
 
 ## Changelog & Releases
 

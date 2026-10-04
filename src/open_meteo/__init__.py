@@ -1,6 +1,11 @@
 """Asynchronous client for the Open-Meteo API."""
 
-from .exceptions import OpenMeteoConnectionError, OpenMeteoError
+from .exceptions import (
+    OpenMeteoConnectionError,
+    OpenMeteoError,
+    OpenMeteoRateLimitError,
+    OpenMeteoResponseError,
+)
 from .models import (
     AirQuality,
     AirQualityDomain,
@@ -105,6 +110,8 @@ __all__ = [
     "OpenMeteo",
     "OpenMeteoConnectionError",
     "OpenMeteoError",
+    "OpenMeteoRateLimitError",
+    "OpenMeteoResponseError",
     "PrecipitationUnit",
     "PressureLevelCurrent",
     "PressureLevelForecast",
