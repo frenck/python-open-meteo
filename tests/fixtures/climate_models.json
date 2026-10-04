@@ -14,30 +14,10 @@
     "precipitation_sum_MPI_ESM1_2_XR": "inch"
   },
   "daily": {
-    "time": [
-      "2050-07-01",
-      "2050-07-02",
-      "2050-07-03"
-    ],
-    "temperature_2m_max_MRI_AGCM3_2_S": [
-      26.9,
-      27.2,
-      30.2
-    ],
-    "precipitation_sum_MRI_AGCM3_2_S": [
-      0.008,
-      0.004,
-      0.069
-    ],
-    "temperature_2m_max_MPI_ESM1_2_XR": [
-      23.9,
-      23.8,
-      23.8
-    ],
-    "precipitation_sum_MPI_ESM1_2_XR": [
-      0.804,
-      0.005,
-      0.0
-    ]
+    "time": ["2050-07-01", "2050-07-02", "2050-07-03"],
+    "temperature_2m_max_MRI_AGCM3_2_S": [26.9, 27.2, 30.2],
+    "precipitation_sum_MRI_AGCM3_2_S": [0.008, 0.004, 0.069],
+    "temperature_2m_max_MPI_ESM1_2_XR": [23.9, 23.8, 23.8],
+    "precipitation_sum_MPI_ESM1_2_XR": [0.804, 0.005, 0.0]
   }
 }

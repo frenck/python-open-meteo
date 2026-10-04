@@ -37,7 +37,7 @@ dynamic = ["dependencies"]
 packages = [{ include = "open_meteo", from = "src" }]
 dependencies = [
   'aiohttp (>=3.8.1)',
-  'mashumaro (>=3.10)',
+  'mashumaro (>=3.17)',
   'orjson (>=3.9.8)',
   'yarl (>=1.6.0)',
 ]

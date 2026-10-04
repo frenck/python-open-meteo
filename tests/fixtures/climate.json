@@ -12,20 +12,8 @@
     "precipitation_sum": "mm"
   },
   "daily": {
-    "time": [
-      "2050-07-01",
-      "2050-07-02",
-      "2050-07-03"
-    ],
-    "temperature_2m_max": [
-      27.0,
-      27.4,
-      30.4
-    ],
-    "precipitation_sum": [
-      0.2,
-      0.1,
-      1.7
-    ]
+    "time": ["2050-07-01", "2050-07-02", "2050-07-03"],
+    "temperature_2m_max": [27.0, 27.4, 30.4],
+    "precipitation_sum": [0.2, 0.1, 1.7]
   }
 }

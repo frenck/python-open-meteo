@@ -459,746 +459,154 @@
     "terrestrial_radiation_instant": "W/m\u00b2"
   },
   "hourly": {
-    "time": [
-      "2026-10-03T00:00",
-      "2026-10-03T01:00",
-      "2026-10-03T02:00"
-    ],
-    "albedo": [
-      null,
-      null,
-      null
-    ],
-    "apparent_temperature": [
-      10.4,
-      9.8,
-      9.9
-    ],
-    "boundary_layer_height": [
-      25.0,
-      35.0,
-      25.0
-    ],
-    "cape": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "cloud_cover": [
-      1,
-      48,
-      47
-    ],
-    "cloud_cover_high": [
-      1,
-      48,
-      47
-    ],
-    "cloud_cover_low": [
-      0,
-      0,
-      0
-    ],
-    "cloud_cover_mid": [
-      0,
-      0,
-      0
-    ],
-    "convective_cloud_base": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "convective_cloud_top": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "convective_inhibition": [
-      12.0,
-      14.0,
-      16.0
-    ],
-    "dew_point_2m": [
-      9.7,
-      9.6,
-      9.7
-    ],
-    "diffuse_radiation": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "direct_normal_irradiance": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "direct_radiation": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "et0_fao_evapotranspiration": [
-      0.01,
-      0.0,
-      0.0
-    ],
-    "evapotranspiration": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "freezing_level_height": [
-      3260.0,
-      3250.0,
-      3300.0
-    ],
-    "freezing_rain_probability": [
-      null,
-      null,
-      null
-    ],
-    "ice_pellets_probability": [
-      null,
-      null,
-      null
-    ],
-    "rain_probability": [
-      null,
-      null,
-      null
-    ],
-    "snowfall_probability": [
-      null,
-      null,
-      null
-    ],
-    "thunderstorm_probability": [
-      null,
-      null,
-      null
-    ],
-    "global_tilted_irradiance": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "is_day": [
-      0,
-      0,
-      0
-    ],
-    "k_index": [
-      null,
-      null,
-      null
-    ],
-    "lifted_index": [
-      null,
-      null,
-      null
-    ],
-    "lightning_density": [
-      null,
-      null,
-      null
-    ],
-    "lightning_potential": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "mass_density_8m": [
-      null,
-      null,
-      null
-    ],
-    "ocean_current_direction": [
-      null,
-      null,
-      null
-    ],
-    "ocean_current_velocity": [
-      null,
-      null,
-      null
-    ],
-    "precipitation": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "precipitation_probability": [
-      0,
-      0,
-      0
-    ],
-    "precipitation_type": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "pressure_msl": [
-      1031.5,
-      1031.7,
-      1031.5
-    ],
-    "rain": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "showers": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "relative_humidity_2m": [
-      87,
-      90,
-      92
-    ],
-    "roughness_length": [
-      null,
-      null,
-      1.0
-    ],
-    "runoff": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "sea_ice_thickness": [
-      null,
-      null,
-      null
-    ],
-    "sea_level_height_msl": [
-      null,
-      null,
-      null
-    ],
-    "sea_surface_temperature": [
-      15.8,
-      15.8,
-      15.7
-    ],
-    "shortwave_radiation": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "snow_depth": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "snow_height": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "snow_depth_water_equivalent": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "snowfall": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "snowfall_water_equivalent": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "snowfall_height": [
-      1900.0,
-      1840.0,
-      1820.0
-    ],
-    "soil_moisture_0_to_1cm": [
-      0.11,
-      0.11,
-      0.11
-    ],
-    "soil_moisture_0_to_7cm": [
-      0.135,
-      0.135,
-      0.131
-    ],
-    "soil_moisture_0_to_10cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_1_to_3cm": [
-      0.11,
-      0.11,
-      0.11
-    ],
-    "soil_moisture_3_to_9cm": [
-      0.11,
-      0.11,
-      0.11
-    ],
-    "soil_moisture_7_to_28cm": [
-      0.144,
-      0.144,
-      0.146
-    ],
-    "soil_moisture_9_to_27cm": [
-      0.094,
-      0.094,
-      0.094
-    ],
-    "soil_moisture_10_to_35cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_10_to_40cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_27_to_81cm": [
-      0.095,
-      0.095,
-      0.095
-    ],
-    "soil_moisture_28_to_100cm": [
-      0.059,
-      0.059,
-      0.059
-    ],
-    "soil_moisture_35_to_100cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_40_to_100cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_81_to_243cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_100_to_200cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_100_to_255cm": [
-      0.177,
-      0.177,
-      0.177
-    ],
-    "soil_moisture_100_to_300cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_243_to_729cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_729_to_2187cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_temperature_0cm": [
-      9.0,
-      8.7,
-      8.7
-    ],
-    "soil_temperature_6cm": [
-      12.6,
-      12.4,
-      11.4
-    ],
-    "soil_temperature_18cm": [
-      15.3,
-      15.0,
-      14.7
-    ],
-    "soil_temperature_54cm": [
-      16.0,
-      16.0,
-      15.9
-    ],
-    "soil_temperature_162cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_temperature_486cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_temperature_1458cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_temperature_0_to_7cm": [
-      13.1,
-      12.7,
-      11.0
-    ],
-    "soil_temperature_0_to_10cm": [
-      13.1,
-      12.7,
-      11.0
-    ],
-    "soil_temperature_7_to_28cm": [
-      16.0,
-      15.8,
-      15.1
-    ],
-    "soil_temperature_10_to_35cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_temperature_10_to_40cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_temperature_28_to_100cm": [
-      14.6,
-      14.6,
-      14.5
-    ],
-    "soil_temperature_35_to_100cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_temperature_40_to_100cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_temperature_100_to_200cm": [
-      null,
-      null,
-      null
-    ],
-    "soil_temperature_100_to_255cm": [
-      15.2,
-      15.2,
-      15.2
-    ],
-    "soil_temperature_100_to_300cm": [
-      null,
-      null,
-      null
-    ],
-    "sunshine_duration": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "surface_pressure": [
-      1027.9,
-      1028.1,
-      1027.9
-    ],
-    "surface_temperature": [
-      9.0,
-      8.7,
-      8.7
-    ],
-    "temperature_2m": [
-      11.8,
-      11.2,
-      11.0
-    ],
-    "temperature_2m_max": [
-      12.5,
-      11.8,
-      11.4
-    ],
-    "temperature_2m_min": [
-      11.8,
-      11.4,
-      11.3
-    ],
-    "temperature_20m": [
-      null,
-      null,
-      null
-    ],
-    "temperature_40m": [
-      null,
-      null,
-      null
-    ],
-    "temperature_50m": [
-      16.7,
-      15.2,
-      15.6
-    ],
-    "temperature_80m": [
-      16.9,
-      16.3,
-      16.2
-    ],
-    "temperature_100m": [
-      16.9,
-      16.3,
-      16.2
-    ],
-    "temperature_120m": [
-      16.9,
-      16.3,
-      16.2
-    ],
-    "temperature_150m": [
-      null,
-      null,
-      null
-    ],
-    "temperature_180m": [
-      16.3,
-      16.0,
-      15.9
-    ],
-    "temperature_200m": [
-      16.3,
-      16.0,
-      15.9
-    ],
-    "terrestrial_radiation": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "total_column_integrated_water_vapour": [
-      17.8,
-      17.4,
-      17.1
-    ],
-    "updraft": [
-      0.06,
-      0.03,
-      0.05
-    ],
-    "uv_index": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "uv_index_clear_sky": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "vapour_pressure_deficit": [
-      0.18,
-      0.13,
-      0.11
-    ],
-    "visibility": [
-      50000.0,
-      8340.0,
-      7260.0
-    ],
-    "weather_code": [
-      0,
-      1,
-      1
-    ],
-    "wet_bulb_temperature_2m": [
-      10.3,
-      10.1,
-      10.1
-    ],
-    "wind_direction_10m": [
-      142,
-      144,
-      153
-    ],
-    "wind_direction_20m": [
-      null,
-      null,
-      null
-    ],
-    "wind_direction_30m": [
-      null,
-      null,
-      null
-    ],
-    "wind_direction_40m": [
-      null,
-      null,
-      null
-    ],
-    "wind_direction_50m": [
-      141,
-      148,
-      154
-    ],
-    "wind_direction_70m": [
-      null,
-      null,
-      null
-    ],
-    "wind_direction_80m": [
-      143,
-      150,
-      157
-    ],
-    "wind_direction_100m": [
-      143,
-      150,
-      157
-    ],
-    "wind_direction_120m": [
-      143,
-      150,
-      157
-    ],
-    "wind_direction_140m": [
-      null,
-      null,
-      null
-    ],
-    "wind_direction_150m": [
-      null,
-      null,
-      null
-    ],
-    "wind_direction_160m": [
-      null,
-      null,
-      null
-    ],
-    "wind_direction_180m": [
-      146,
-      151,
-      160
-    ],
-    "wind_direction_200m": [
-      146,
-      151,
-      160
-    ],
-    "wind_gusts_10m": [
-      14.8,
-      14.0,
-      11.5
-    ],
-    "wind_speed_10m": [
-      9.0,
-      8.3,
-      6.8
-    ],
-    "wind_speed_20m": [
-      null,
-      null,
-      null
-    ],
-    "wind_speed_30m": [
-      null,
-      null,
-      null
-    ],
-    "wind_speed_40m": [
-      null,
-      null,
-      null
-    ],
-    "wind_speed_50m": [
-      24.5,
-      23.4,
-      22.0
-    ],
-    "wind_speed_70m": [
-      null,
-      null,
-      null
-    ],
-    "wind_speed_80m": [
-      23.5,
-      26.0,
-      22.1
-    ],
-    "wind_speed_100m": [
-      24.1,
-      26.6,
-      22.7
-    ],
-    "wind_speed_120m": [
-      24.6,
-      27.2,
-      23.1
-    ],
-    "wind_speed_140m": [
-      null,
-      null,
-      null
-    ],
-    "wind_speed_150m": [
-      null,
-      null,
-      null
-    ],
-    "wind_speed_160m": [
-      null,
-      null,
-      null
-    ],
-    "wind_speed_180m": [
-      21.4,
-      23.5,
-      20.6
-    ],
-    "wind_speed_200m": [
-      21.6,
-      23.8,
-      20.9
-    ],
-    "diffuse_radiation_instant": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "direct_normal_irradiance_instant": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "direct_radiation_instant": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "global_tilted_irradiance_instant": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "shortwave_radiation_instant": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "terrestrial_radiation_instant": [
-      0.0,
-      0.0,
-      0.0
-    ]
+    "time": ["2026-10-03T00:00", "2026-10-03T01:00", "2026-10-03T02:00"],
+    "albedo": [null, null, null],
+    "apparent_temperature": [10.4, 9.8, 9.9],
+    "boundary_layer_height": [25.0, 35.0, 25.0],
+    "cape": [0.0, 0.0, 0.0],
+    "cloud_cover": [1, 48, 47],
+    "cloud_cover_high": [1, 48, 47],
+    "cloud_cover_low": [0, 0, 0],
+    "cloud_cover_mid": [0, 0, 0],
+    "convective_cloud_base": [0.0, 0.0, 0.0],
+    "convective_cloud_top": [0.0, 0.0, 0.0],
+    "convective_inhibition": [12.0, 14.0, 16.0],
+    "dew_point_2m": [9.7, 9.6, 9.7],
+    "diffuse_radiation": [0.0, 0.0, 0.0],
+    "direct_normal_irradiance": [0.0, 0.0, 0.0],
+    "direct_radiation": [0.0, 0.0, 0.0],
+    "et0_fao_evapotranspiration": [0.01, 0.0, 0.0],
+    "evapotranspiration": [0.0, 0.0, 0.0],
+    "freezing_level_height": [3260.0, 3250.0, 3300.0],
+    "freezing_rain_probability": [null, null, null],
+    "ice_pellets_probability": [null, null, null],
+    "rain_probability": [null, null, null],
+    "snowfall_probability": [null, null, null],
+    "thunderstorm_probability": [null, null, null],
+    "global_tilted_irradiance": [0.0, 0.0, 0.0],
+    "is_day": [0, 0, 0],
+    "k_index": [null, null, null],
+    "lifted_index": [null, null, null],
+    "lightning_density": [null, null, null],
+    "lightning_potential": [0.0, 0.0, 0.0],
+    "mass_density_8m": [null, null, null],
+    "ocean_current_direction": [null, null, null],
+    "ocean_current_velocity": [null, null, null],
+    "precipitation": [0.0, 0.0, 0.0],
+    "precipitation_probability": [0, 0, 0],
+    "precipitation_type": [0.0, 0.0, 0.0],
+    "pressure_msl": [1031.5, 1031.7, 1031.5],
+    "rain": [0.0, 0.0, 0.0],
+    "showers": [0.0, 0.0, 0.0],
+    "relative_humidity_2m": [87, 90, 92],
+    "roughness_length": [null, null, 1.0],
+    "runoff": [0.0, 0.0, 0.0],
+    "sea_ice_thickness": [null, null, null],
+    "sea_level_height_msl": [null, null, null],
+    "sea_surface_temperature": [15.8, 15.8, 15.7],
+    "shortwave_radiation": [0.0, 0.0, 0.0],
+    "snow_depth": [0.0, 0.0, 0.0],
+    "snow_height": [0.0, 0.0, 0.0],
+    "snow_depth_water_equivalent": [0.0, 0.0, 0.0],
+    "snowfall": [0.0, 0.0, 0.0],
+    "snowfall_water_equivalent": [0.0, 0.0, 0.0],
+    "snowfall_height": [1900.0, 1840.0, 1820.0],
+    "soil_moisture_0_to_1cm": [0.11, 0.11, 0.11],
+    "soil_moisture_0_to_7cm": [0.135, 0.135, 0.131],
+    "soil_moisture_0_to_10cm": [null, null, null],
+    "soil_moisture_1_to_3cm": [0.11, 0.11, 0.11],
+    "soil_moisture_3_to_9cm": [0.11, 0.11, 0.11],
+    "soil_moisture_7_to_28cm": [0.144, 0.144, 0.146],
+    "soil_moisture_9_to_27cm": [0.094, 0.094, 0.094],
+    "soil_moisture_10_to_35cm": [null, null, null],
+    "soil_moisture_10_to_40cm": [null, null, null],
+    "soil_moisture_27_to_81cm": [0.095, 0.095, 0.095],
+    "soil_moisture_28_to_100cm": [0.059, 0.059, 0.059],
+    "soil_moisture_35_to_100cm": [null, null, null],
+    "soil_moisture_40_to_100cm": [null, null, null],
+    "soil_moisture_81_to_243cm": [null, null, null],
+    "soil_moisture_100_to_200cm": [null, null, null],
+    "soil_moisture_100_to_255cm": [0.177, 0.177, 0.177],
+    "soil_moisture_100_to_300cm": [null, null, null],
+    "soil_moisture_243_to_729cm": [null, null, null],
+    "soil_moisture_729_to_2187cm": [null, null, null],
+    "soil_temperature_0cm": [9.0, 8.7, 8.7],
+    "soil_temperature_6cm": [12.6, 12.4, 11.4],
+    "soil_temperature_18cm": [15.3, 15.0, 14.7],
+    "soil_temperature_54cm": [16.0, 16.0, 15.9],
+    "soil_temperature_162cm": [null, null, null],
+    "soil_temperature_486cm": [null, null, null],
+    "soil_temperature_1458cm": [null, null, null],
+    "soil_temperature_0_to_7cm": [13.1, 12.7, 11.0],
+    "soil_temperature_0_to_10cm": [13.1, 12.7, 11.0],
+    "soil_temperature_7_to_28cm": [16.0, 15.8, 15.1],
+    "soil_temperature_10_to_35cm": [null, null, null],
+    "soil_temperature_10_to_40cm": [null, null, null],
+    "soil_temperature_28_to_100cm": [14.6, 14.6, 14.5],
+    "soil_temperature_35_to_100cm": [null, null, null],
+    "soil_temperature_40_to_100cm": [null, null, null],
+    "soil_temperature_100_to_200cm": [null, null, null],
+    "soil_temperature_100_to_255cm": [15.2, 15.2, 15.2],
+    "soil_temperature_100_to_300cm": [null, null, null],
+    "sunshine_duration": [0.0, 0.0, 0.0],
+    "surface_pressure": [1027.9, 1028.1, 1027.9],
+    "surface_temperature": [9.0, 8.7, 8.7],
+    "temperature_2m": [11.8, 11.2, 11.0],
+    "temperature_2m_max": [12.5, 11.8, 11.4],
+    "temperature_2m_min": [11.8, 11.4, 11.3],
+    "temperature_20m": [null, null, null],
+    "temperature_40m": [null, null, null],
+    "temperature_50m": [16.7, 15.2, 15.6],
+    "temperature_80m": [16.9, 16.3, 16.2],
+    "temperature_100m": [16.9, 16.3, 16.2],
+    "temperature_120m": [16.9, 16.3, 16.2],
+    "temperature_150m": [null, null, null],
+    "temperature_180m": [16.3, 16.0, 15.9],
+    "temperature_200m": [16.3, 16.0, 15.9],
+    "terrestrial_radiation": [0.0, 0.0, 0.0],
+    "total_column_integrated_water_vapour": [17.8, 17.4, 17.1],
+    "updraft": [0.06, 0.03, 0.05],
+    "uv_index": [0.0, 0.0, 0.0],
+    "uv_index_clear_sky": [0.0, 0.0, 0.0],
+    "vapour_pressure_deficit": [0.18, 0.13, 0.11],
+    "visibility": [50000.0, 8340.0, 7260.0],
+    "weather_code": [0, 1, 1],
+    "wet_bulb_temperature_2m": [10.3, 10.1, 10.1],
+    "wind_direction_10m": [142, 144, 153],
+    "wind_direction_20m": [null, null, null],
+    "wind_direction_30m": [null, null, null],
+    "wind_direction_40m": [null, null, null],
+    "wind_direction_50m": [141, 148, 154],
+    "wind_direction_70m": [null, null, null],
+    "wind_direction_80m": [143, 150, 157],
+    "wind_direction_100m": [143, 150, 157],
+    "wind_direction_120m": [143, 150, 157],
+    "wind_direction_140m": [null, null, null],
+    "wind_direction_150m": [null, null, null],
+    "wind_direction_160m": [null, null, null],
+    "wind_direction_180m": [146, 151, 160],
+    "wind_direction_200m": [146, 151, 160],
+    "wind_gusts_10m": [14.8, 14.0, 11.5],
+    "wind_speed_10m": [9.0, 8.3, 6.8],
+    "wind_speed_20m": [null, null, null],
+    "wind_speed_30m": [null, null, null],
+    "wind_speed_40m": [null, null, null],
+    "wind_speed_50m": [24.5, 23.4, 22.0],
+    "wind_speed_70m": [null, null, null],
+    "wind_speed_80m": [23.5, 26.0, 22.1],
+    "wind_speed_100m": [24.1, 26.6, 22.7],
+    "wind_speed_120m": [24.6, 27.2, 23.1],
+    "wind_speed_140m": [null, null, null],
+    "wind_speed_150m": [null, null, null],
+    "wind_speed_160m": [null, null, null],
+    "wind_speed_180m": [21.4, 23.5, 20.6],
+    "wind_speed_200m": [21.6, 23.8, 20.9],
+    "diffuse_radiation_instant": [0.0, 0.0, 0.0],
+    "direct_normal_irradiance_instant": [0.0, 0.0, 0.0],
+    "direct_radiation_instant": [0.0, 0.0, 0.0],
+    "global_tilted_irradiance_instant": [0.0, 0.0, 0.0],
+    "shortwave_radiation_instant": [0.0, 0.0, 0.0],
+    "terrestrial_radiation_instant": [0.0, 0.0, 0.0]
   },
   "daily_units": {
     "time": "iso8601",
@@ -1281,395 +689,83 @@
     "wind_speed_10m_min": "km/h"
   },
   "daily": {
-    "time": [
-      "2026-10-03",
-      "2026-10-04",
-      "2026-10-05"
-    ],
-    "apparent_temperature_max": [
-      19.7,
-      19.9,
-      20.0
-    ],
-    "apparent_temperature_mean": [
-      13.2,
-      14.5,
-      14.7
-    ],
-    "apparent_temperature_min": [
-      6.8,
-      9.8,
-      10.7
-    ],
-    "cape_max": [
-      10.0,
-      0.0,
-      0.0
-    ],
-    "cape_mean": [
-      1.3,
-      0.0,
-      0.0
-    ],
-    "cape_min": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "cloud_cover_max": [
-      100,
-      100,
-      100
-    ],
-    "cloud_cover_mean": [
-      78,
-      68,
-      57
-    ],
-    "cloud_cover_min": [
-      1,
-      1,
-      0
-    ],
-    "daylight_duration": [
-      41331.18,
-      41089.74,
-      40849.16
-    ],
-    "dew_point_2m_max": [
-      11.3,
-      13.7,
-      11.9
-    ],
-    "dew_point_2m_mean": [
-      9.4,
-      10.7,
-      9.7
-    ],
-    "dew_point_2m_min": [
-      7.6,
-      8.4,
-      7.5
-    ],
-    "et0_fao_evapotranspiration": [
-      1.97,
-      1.64,
-      2.32
-    ],
-    "et0_fao_evapotranspiration_sum": [
-      1.97,
-      1.64,
-      2.32
-    ],
-    "growing_degree_days_base_0_limit_50": [
-      13.71,
-      13.97,
-      13.95
-    ],
-    "leaf_wetness_probability_mean": [
-      37,
-      47,
-      41
-    ],
-    "moon_phase": [
-      0.745,
-      0.781,
-      0.817
-    ],
-    "moonrise": [
-      "2026-10-03T23:12",
-      null,
-      "2026-10-05T00:38"
-    ],
-    "moonset": [
-      "2026-10-03T16:13",
-      "2026-10-04T16:49",
-      "2026-10-05T17:13"
-    ],
-    "precipitation_hours": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "precipitation_probability_max": [
-      0,
-      8,
-      0
-    ],
-    "precipitation_probability_mean": [
-      0,
-      3,
-      0
-    ],
-    "precipitation_probability_min": [
-      0,
-      0,
-      0
-    ],
-    "precipitation_sum": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "rain_sum": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "showers_sum": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "snowfall_sum": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "snowfall_water_equivalent_sum": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "pressure_msl_max": [
-      1031.7,
-      1030.1,
-      1027.1
-    ],
-    "pressure_msl_mean": [
-      1030.3,
-      1028.9,
-      1024.4
-    ],
-    "pressure_msl_min": [
-      1029.4,
-      1027.4,
-      1022.2
-    ],
-    "relative_humidity_2m_max": [
-      95,
-      100,
-      91
-    ],
-    "relative_humidity_2m_mean": [
-      75,
-      78,
-      70
-    ],
-    "relative_humidity_2m_min": [
-      46,
-      55,
-      39
-    ],
-    "shortwave_radiation_sum": [
-      11.6,
-      9.71,
-      12.57
-    ],
-    "soil_moisture_0_to_7cm_mean": [
-      0.127,
-      0.115,
-      0.104
-    ],
-    "soil_moisture_0_to_10cm_mean": [
-      null,
-      null,
-      null
-    ],
-    "soil_moisture_0_to_100cm_mean": [
-      0.082,
-      0.08,
-      0.079
-    ],
-    "soil_moisture_7_to_28cm_mean": [
-      0.144,
-      0.142,
-      0.14
-    ],
-    "soil_moisture_28_to_100cm_mean": [
-      0.059,
-      0.059,
-      0.059
-    ],
-    "soil_moisture_index_0_to_7cm_mean": [
-      0.366,
-      0.304,
-      0.243
-    ],
-    "soil_moisture_index_0_to_100cm_mean": [
-      0.123,
-      0.116,
-      0.109
-    ],
-    "soil_moisture_index_7_to_28cm_mean": [
-      0.461,
-      0.45,
-      0.438
-    ],
-    "soil_moisture_index_28_to_100cm_mean": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "soil_moisture_index_100_to_255cm_mean": [
-      0.638,
-      0.638,
-      0.638
-    ],
-    "soil_temperature_0_to_7cm_mean": [
-      13.8,
-      14.1,
-      13.9
-    ],
-    "soil_temperature_0_to_100cm_mean": [
-      14.4,
-      14.3,
-      14.3
-    ],
-    "soil_temperature_7_to_28cm_mean": [
-      14.3,
-      14.1,
-      14.0
-    ],
-    "soil_temperature_28_to_100cm_mean": [
-      14.5,
-      14.4,
-      14.4
-    ],
-    "sunrise": [
-      "2026-10-03T07:36",
-      "2026-10-04T07:38",
-      "2026-10-05T07:40"
-    ],
-    "sunset": [
-      "2026-10-03T19:05",
-      "2026-10-04T19:02",
-      "2026-10-05T19:00"
-    ],
-    "sunshine_duration": [
-      34146.1,
-      25558.04,
-      38255.18
-    ],
-    "surface_pressure_max": [
-      1028.1,
-      1026.5,
-      1023.5
-    ],
-    "surface_pressure_mean": [
-      1026.8,
-      1025.3,
-      1020.9
-    ],
-    "surface_pressure_min": [
-      1025.9,
-      1023.9,
-      1018.7
-    ],
-    "temperature_2m_max": [
-      20.6,
-      20.2,
-      22.2
-    ],
-    "temperature_2m_mean": [
-      14.2,
-      14.7,
-      15.8
-    ],
-    "temperature_2m_min": [
-      8.4,
-      10.8,
-      11.6
-    ],
-    "updraft_max": [
-      0.17,
-      0.17,
-      null
-    ],
-    "uv_index_clear_sky_max": [
-      3.5,
-      3.45,
-      3.5
-    ],
-    "uv_index_max": [
-      3.3,
-      3.2,
-      3.35
-    ],
-    "vapour_pressure_deficit_max": [
-      1.3,
-      1.06,
-      1.63
-    ],
-    "visibility_max": [
-      50000.0,
-      50000.0,
-      50000.0
-    ],
-    "visibility_mean": [
-      30601.67,
-      28506.67,
-      24977.71
-    ],
-    "visibility_min": [
-      4060.0,
-      240.0,
-      8080.0
-    ],
-    "weather_code": [
-      3,
-      45,
-      3
-    ],
-    "wet_bulb_temperature_2m_max": [
-      14.4,
-      15.0,
-      14.5
-    ],
-    "wet_bulb_temperature_2m_mean": [
-      11.2,
-      12.2,
-      12.1
-    ],
-    "wet_bulb_temperature_2m_min": [
-      7.8,
-      9.5,
-      9.7
-    ],
-    "wind_direction_10m_dominant": [
-      178,
-      347,
-      226
-    ],
-    "wind_gusts_10m_max": [
-      17.3,
-      14.8,
-      25.2
-    ],
-    "wind_gusts_10m_mean": [
-      12.0,
-      8.8,
-      14.7
-    ],
-    "wind_gusts_10m_min": [
-      5.0,
-      3.2,
-      3.2
-    ],
-    "wind_speed_10m_max": [
-      9.0,
-      6.1,
-      10.4
-    ],
-    "wind_speed_10m_mean": [
-      5.7,
-      3.6,
-      7.0
-    ],
-    "wind_speed_10m_min": [
-      3.2,
-      0.0,
-      1.8
-    ]
+    "time": ["2026-10-03", "2026-10-04", "2026-10-05"],
+    "apparent_temperature_max": [19.7, 19.9, 20.0],
+    "apparent_temperature_mean": [13.2, 14.5, 14.7],
+    "apparent_temperature_min": [6.8, 9.8, 10.7],
+    "cape_max": [10.0, 0.0, 0.0],
+    "cape_mean": [1.3, 0.0, 0.0],
+    "cape_min": [0.0, 0.0, 0.0],
+    "cloud_cover_max": [100, 100, 100],
+    "cloud_cover_mean": [78, 68, 57],
+    "cloud_cover_min": [1, 1, 0],
+    "daylight_duration": [41331.18, 41089.74, 40849.16],
+    "dew_point_2m_max": [11.3, 13.7, 11.9],
+    "dew_point_2m_mean": [9.4, 10.7, 9.7],
+    "dew_point_2m_min": [7.6, 8.4, 7.5],
+    "et0_fao_evapotranspiration": [1.97, 1.64, 2.32],
+    "et0_fao_evapotranspiration_sum": [1.97, 1.64, 2.32],
+    "growing_degree_days_base_0_limit_50": [13.71, 13.97, 13.95],
+    "leaf_wetness_probability_mean": [37, 47, 41],
+    "moon_phase": [0.745, 0.781, 0.817],
+    "moonrise": ["2026-10-03T23:12", null, "2026-10-05T00:38"],
+    "moonset": ["2026-10-03T16:13", "2026-10-04T16:49", "2026-10-05T17:13"],
+    "precipitation_hours": [0.0, 0.0, 0.0],
+    "precipitation_probability_max": [0, 8, 0],
+    "precipitation_probability_mean": [0, 3, 0],
+    "precipitation_probability_min": [0, 0, 0],
+    "precipitation_sum": [0.0, 0.0, 0.0],
+    "rain_sum": [0.0, 0.0, 0.0],
+    "showers_sum": [0.0, 0.0, 0.0],
+    "snowfall_sum": [0.0, 0.0, 0.0],
+    "snowfall_water_equivalent_sum": [0.0, 0.0, 0.0],
+    "pressure_msl_max": [1031.7, 1030.1, 1027.1],
+    "pressure_msl_mean": [1030.3, 1028.9, 1024.4],
+    "pressure_msl_min": [1029.4, 1027.4, 1022.2],
+    "relative_humidity_2m_max": [95, 100, 91],
+    "relative_humidity_2m_mean": [75, 78, 70],
+    "relative_humidity_2m_min": [46, 55, 39],
+    "shortwave_radiation_sum": [11.6, 9.71, 12.57],
+    "soil_moisture_0_to_7cm_mean": [0.127, 0.115, 0.104],
+    "soil_moisture_0_to_10cm_mean": [null, null, null],
+    "soil_moisture_0_to_100cm_mean": [0.082, 0.08, 0.079],
+    "soil_moisture_7_to_28cm_mean": [0.144, 0.142, 0.14],
+    "soil_moisture_28_to_100cm_mean": [0.059, 0.059, 0.059],
+    "soil_moisture_index_0_to_7cm_mean": [0.366, 0.304, 0.243],
+    "soil_moisture_index_0_to_100cm_mean": [0.123, 0.116, 0.109],
+    "soil_moisture_index_7_to_28cm_mean": [0.461, 0.45, 0.438],
+    "soil_moisture_index_28_to_100cm_mean": [0.0, 0.0, 0.0],
+    "soil_moisture_index_100_to_255cm_mean": [0.638, 0.638, 0.638],
+    "soil_temperature_0_to_7cm_mean": [13.8, 14.1, 13.9],
+    "soil_temperature_0_to_100cm_mean": [14.4, 14.3, 14.3],
+    "soil_temperature_7_to_28cm_mean": [14.3, 14.1, 14.0],
+    "soil_temperature_28_to_100cm_mean": [14.5, 14.4, 14.4],
+    "sunrise": ["2026-10-03T07:36", "2026-10-04T07:38", "2026-10-05T07:40"],
+    "sunset": ["2026-10-03T19:05", "2026-10-04T19:02", "2026-10-05T19:00"],
+    "sunshine_duration": [34146.1, 25558.04, 38255.18],
+    "surface_pressure_max": [1028.1, 1026.5, 1023.5],
+    "surface_pressure_mean": [1026.8, 1025.3, 1020.9],
+    "surface_pressure_min": [1025.9, 1023.9, 1018.7],
+    "temperature_2m_max": [20.6, 20.2, 22.2],
+    "temperature_2m_mean": [14.2, 14.7, 15.8],
+    "temperature_2m_min": [8.4, 10.8, 11.6],
+    "updraft_max": [0.17, 0.17, null],
+    "uv_index_clear_sky_max": [3.5, 3.45, 3.5],
+    "uv_index_max": [3.3, 3.2, 3.35],
+    "vapour_pressure_deficit_max": [1.3, 1.06, 1.63],
+    "visibility_max": [50000.0, 50000.0, 50000.0],
+    "visibility_mean": [30601.67, 28506.67, 24977.71],
+    "visibility_min": [4060.0, 240.0, 8080.0],
+    "weather_code": [3, 45, 3],
+    "wet_bulb_temperature_2m_max": [14.4, 15.0, 14.5],
+    "wet_bulb_temperature_2m_mean": [11.2, 12.2, 12.1],
+    "wet_bulb_temperature_2m_min": [7.8, 9.5, 9.7],
+    "wind_direction_10m_dominant": [178, 347, 226],
+    "wind_gusts_10m_max": [17.3, 14.8, 25.2],
+    "wind_gusts_10m_mean": [12.0, 8.8, 14.7],
+    "wind_gusts_10m_min": [5.0, 3.2, 3.2],
+    "wind_speed_10m_max": [9.0, 6.1, 10.4],
+    "wind_speed_10m_mean": [5.7, 3.6, 7.0],
+    "wind_speed_10m_min": [3.2, 0.0, 1.8]
   }
 }

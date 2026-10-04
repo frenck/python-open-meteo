@@ -15,29 +15,11 @@
     "wind_speed_500hPa": "km/h"
   },
   "hourly": {
-    "time": [
-      "2026-10-03T11:00",
-      "2026-10-03T12:00"
-    ],
-    "temperature_2m": [
-      18.8,
-      19.9
-    ],
-    "temperature_850hPa": [
-      6.0,
-      6.2
-    ],
-    "temperature_500hPa": [
-      -14.7,
-      -14.7
-    ],
-    "wind_speed_850hPa": [
-      21.2,
-      20.4
-    ],
-    "wind_speed_500hPa": [
-      46.6,
-      48.0
-    ]
+    "time": ["2026-10-03T11:00", "2026-10-03T12:00"],
+    "temperature_2m": [18.8, 19.9],
+    "temperature_850hPa": [6.0, 6.2],
+    "temperature_500hPa": [-14.7, -14.7],
+    "wind_speed_850hPa": [21.2, 20.4],
+    "wind_speed_500hPa": [46.6, 48.0]
   }
 }
