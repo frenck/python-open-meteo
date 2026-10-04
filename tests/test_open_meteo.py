@@ -3,8 +3,10 @@
 # pylint: disable=protected-access
 
 import asyncio
+import dataclasses
 import re
 from datetime import date, datetime
+from enum import StrEnum
 from typing import Self, cast
 from urllib.parse import unquote
 from zoneinfo import ZoneInfo
@@ -19,20 +21,45 @@ from open_meteo import (
     AirQualityDomain,
     AirQualityParameters,
     CellSelection,
+    CurrentAirQuality,
+    CurrentAirQualityUnits,
+    CurrentForecast,
+    CurrentForecastUnits,
+    CurrentMarine,
+    CurrentMarineUnits,
+    DailyFlood,
+    DailyFloodUnits,
+    DailyForecast,
+    DailyForecastUnits,
+    DailyMarine,
+    DailyMarineUnits,
     DailyParameters,
     FloodParameters,
     ForecastSection,
+    HourlyAirQuality,
+    HourlyAirQualityUnits,
+    HourlyForecast,
+    HourlyForecastUnits,
+    HourlyMarine,
+    HourlyMarineUnits,
     HourlyParameters,
     LengthUnit,
     MarineDailyParameters,
     MarineParameters,
+    MonthlySeasonal,
+    MonthlySeasonalUnits,
     OpenMeteo,
     PrecipitationUnit,
+    PressureLevelCurrent,
+    PressureLevelForecast,
+    PressureLevelForecastUnits,
     PressureLevelVariable,
     SeasonalMonthlyParameters,
     SeasonalWeeklyParameters,
     TemperatureUnit,
     TemporalResolution,
+    WeeklySeasonal,
+    WeeklySeasonalUnits,
     WindSpeedUnit,
 )
 from open_meteo.exceptions import (
@@ -1061,8 +1088,16 @@ async def test_ensemble_models(
     assert ecmwf is not None
     assert icon.members is not None
     assert ecmwf.members is not None
-    assert len(icon.members) == 39
-    assert len(ecmwf.members) == 50
+    assert list(icon.members) == list(range(1, 40))
+    assert list(ecmwf.members) == list(range(1, 51))
+
+    # The values end up with the right model and member
+    assert icon.temperature_2m == [14.9]
+    assert icon.members[1].temperature_2m == [15.7]
+    assert icon.members[39].temperature_2m == [14.7]
+    assert ecmwf.members[1].temperature_2m == [14.9]
+    assert ecmwf.members[50].temperature_2m == [14.5]
+    assert icon.members[1].time == icon.time == ecmwf.time
 
 
 async def test_ensemble_spread(
@@ -1177,6 +1212,74 @@ async def test_ensemble_model_names_sharing_data(
         "ncep_gefs025": [14.5],
         "icon_seamless": [13.1],
     }
+
+
+async def test_ensemble_models_with_pressure_levels(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test models, members, and pressure levels, all in one response.
+
+    The API suffixes in the order variable, pressure level, member, model,
+    like temperature_850hPa_member01_cmc_gem_geps. The fixture is a real
+    response, of which UKMO has no data at 850 hPa.
+    """
+    mock_endpoint(responses, ENSEMBLE_URL, "ensemble_models_pressure_levels.json")
+
+    forecast = await open_meteo_client.ensemble(
+        latitude=52.27,
+        longitude=6.87417,
+        models=["ukmo_global_ensemble_20km", "cmc_gem_geps"],
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        pressure_level_variables=[PressureLevelVariable.TEMPERATURE],
+        pressure_levels=[850],
+    )
+
+    assert forecast.models is not None
+    cmc = forecast.models["cmc_gem_geps"].hourly
+    ukmo = forecast.models["ukmo_global_ensemble_20km"].hourly
+    assert cmc is not None
+    assert ukmo is not None
+    assert cmc.pressure_levels is not None
+    assert cmc.members is not None
+    assert cmc.temperature_2m == [11.4]
+    assert cmc.pressure_levels[850].temperature == [7.4]
+
+    member = cmc.members[2]
+    assert member.temperature_2m == [12.3]
+    assert member.pressure_levels is not None
+    assert member.pressure_levels[850].temperature == [6.5]
+
+    # A model without data on a pressure level has None, not someone else's
+    assert ukmo.pressure_levels is not None
+    assert ukmo.members is not None
+    assert ukmo.temperature_2m == [12.1]
+    assert ukmo.pressure_levels[850].temperature == [None]
+    assert ukmo.members[1].temperature_2m == [11.5]
+
+
+def test_spread_of_members_on_pressure_levels() -> None:
+    """Test a spread per member, on a pressure level, ends up in the right place."""
+    hourly = HourlyForecast.from_dict(
+        {
+            "time": ["2026-10-04T00:00"],
+            "temperature_850hPa": [7.4],
+            "temperature_850hPa_spread": [0.4],
+            "temperature_850hPa_spread_member01": [0.6],
+        }
+    )
+
+    assert hourly.pressure_levels is not None
+    assert hourly.pressure_levels[850].temperature == [7.4]
+    assert hourly.spread is not None
+    assert hourly.spread.pressure_levels is not None
+    assert hourly.spread.pressure_levels[850].temperature == [0.4]
+    assert hourly.members is not None
+    member_spread = hourly.members[1].spread
+    assert member_spread is not None
+    assert member_spread.pressure_levels is not None
+    assert member_spread.pressure_levels[850].temperature == [0.6]
+    assert hourly.members[1].pressure_levels is None
 
 
 async def test_seasonal(
@@ -1381,9 +1484,17 @@ async def test_previous_runs_models(
 
     assert forecast.models is not None
     icon = forecast.models["icon_seamless"].hourly
+    gfs = forecast.models["gfs_seamless"].hourly
     assert icon is not None
+    assert gfs is not None
     assert icon.previous_days is not None
-    assert icon.previous_days[1].temperature_2m is not None
+    assert gfs.previous_days is not None
+
+    # Each model keeps its own latest run, and its own earlier run
+    assert icon.temperature_2m == [14.4, 13.5]
+    assert icon.previous_days[1].temperature_2m == [13.6, 13.0]
+    assert gfs.temperature_2m == [14.9, 14.2]
+    assert gfs.previous_days[1].temperature_2m == [14.7, 14.0]
 
 
 async def test_single_run(
@@ -2048,3 +2159,91 @@ def mock_endpoint_body(responses: aioresponses, url: str, body: str) -> None:
         body=body,
         content_type="application/json",
     )
+
+
+# Every variable in a parameter enum needs a field in each model it ends up in,
+# or its data is silently dropped while parsing
+VARIABLE_MODELS = [
+    (
+        HourlyParameters,
+        [
+            CurrentForecast,
+            CurrentForecastUnits,
+            HourlyForecast,
+            HourlyForecastUnits,
+        ],
+    ),
+    (
+        DailyParameters,
+        [DailyForecast, DailyForecastUnits],
+    ),
+    (
+        AirQualityParameters,
+        [
+            CurrentAirQuality,
+            CurrentAirQualityUnits,
+            HourlyAirQuality,
+            HourlyAirQualityUnits,
+        ],
+    ),
+    (
+        MarineParameters,
+        [
+            CurrentMarine,
+            CurrentMarineUnits,
+            HourlyMarine,
+            HourlyMarineUnits,
+        ],
+    ),
+    (
+        MarineDailyParameters,
+        [DailyMarine, DailyMarineUnits],
+    ),
+    (
+        FloodParameters,
+        [DailyFlood, DailyFloodUnits],
+    ),
+    (
+        SeasonalWeeklyParameters,
+        [WeeklySeasonal, WeeklySeasonalUnits],
+    ),
+    (
+        SeasonalMonthlyParameters,
+        [MonthlySeasonal, MonthlySeasonalUnits],
+    ),
+    (
+        PressureLevelVariable,
+        [
+            PressureLevelCurrent,
+            PressureLevelForecast,
+            PressureLevelForecastUnits,
+        ],
+    ),
+]
+
+# Fields that hold the structure of a response, not a variable
+STRUCTURAL_FIELDS = {
+    "interval",
+    "members",
+    "pressure_levels",
+    "previous_days",
+    "spread",
+    "time",
+}
+
+
+@pytest.mark.parametrize(
+    ("parameters", "model"),
+    [(parameters, model) for parameters, models in VARIABLE_MODELS for model in models],
+    ids=lambda value: value.__name__,
+)
+def test_parameters_match_model_fields(
+    parameters: type[StrEnum],
+    model: type,
+) -> None:
+    """Test every variable has a field in the model, and every field a variable."""
+    variables = {parameter.value for parameter in parameters}
+    fields = {field.name for field in dataclasses.fields(model)} - STRUCTURAL_FIELDS
+
+    assert sorted(variables - fields) == [], "variables without a field"
+    assert sorted(fields - variables) == [], "fields without a variable"
