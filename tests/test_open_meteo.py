@@ -1076,6 +1076,17 @@ async def test_ensemble_spread(
     assert forecast.current is not None
     assert forecast.current.spread is not None
     assert forecast.current.spread.temperature_2m is not None
+
+    # The spread of a temperature in °C is in K
+    assert forecast.hourly_units is not None
+    assert forecast.hourly_units.temperature_2m == "°C"
+    assert forecast.hourly_units.spread is not None
+    assert forecast.hourly_units.spread.temperature_2m == "K"
+    assert forecast.hourly_units.spread.pressure_levels is not None
+    assert forecast.hourly_units.spread.pressure_levels[850].temperature == "K"
+    assert forecast.current_units is not None
+    assert forecast.current_units.spread is not None
+    assert forecast.current_units.spread.temperature_2m == "K"
     assert forecast == snapshot
 
 
