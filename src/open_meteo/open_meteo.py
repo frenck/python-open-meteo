@@ -49,6 +49,7 @@ from .models import (
     TimeFormat,
     WindSpeedUnit,
 )
+from .models.forecast import PRESSURE_LEVEL_KEY
 
 ResponseT = TypeVar("ResponseT", bound=DataClassORJSONMixin)
 
@@ -143,19 +144,114 @@ def _with_previous_days(
     ]
 
 
-# The API has no spread for these, as they can't be averaged
-NO_SPREAD = {HourlyParameters.IS_DAY.value, HourlyParameters.WEATHER_CODE.value}
+# The variables the API has a spread for, besides those on pressure levels,
+# which all have one. Asking for the spread of any other variable, like
+# weather_code or precipitation_probability, makes the API reject the whole
+# request. Taken from the Open-Meteo source, VariableHourly.swift.
+SPREAD_VARIABLES = frozenset(
+    {
+        "apparent_temperature",
+        "boundary_layer_height",
+        "cape",
+        "cloud_cover",
+        "cloud_cover_high",
+        "cloud_cover_low",
+        "cloud_cover_mid",
+        "convective_inhibition",
+        "dew_point_2m",
+        "diffuse_radiation",
+        "diffuse_radiation_instant",
+        "direct_normal_irradiance",
+        "direct_normal_irradiance_instant",
+        "direct_radiation",
+        "direct_radiation_instant",
+        "et0_fao_evapotranspiration",
+        "freezing_level_height",
+        "global_tilted_irradiance",
+        "global_tilted_irradiance_instant",
+        "precipitation",
+        "pressure_msl",
+        "rain",
+        "relative_humidity_2m",
+        "sea_surface_temperature",
+        "shortwave_radiation",
+        "shortwave_radiation_instant",
+        "showers",
+        "snow_depth",
+        "snow_depth_water_equivalent",
+        "snowfall",
+        "snowfall_height",
+        "snowfall_water_equivalent",
+        "soil_moisture_0_to_10cm",
+        "soil_moisture_0_to_7cm",
+        "soil_moisture_100_to_200cm",
+        "soil_moisture_100_to_255cm",
+        "soil_moisture_10_to_40cm",
+        "soil_moisture_28_to_100cm",
+        "soil_moisture_40_to_100cm",
+        "soil_moisture_7_to_28cm",
+        "soil_temperature_0_to_10cm",
+        "soil_temperature_0_to_7cm",
+        "soil_temperature_100_to_200cm",
+        "soil_temperature_100_to_255cm",
+        "soil_temperature_10_to_40cm",
+        "soil_temperature_28_to_100cm",
+        "soil_temperature_40_to_100cm",
+        "soil_temperature_7_to_28cm",
+        "sunshine_duration",
+        "surface_pressure",
+        "surface_temperature",
+        "temperature_120m",
+        "temperature_2m",
+        "temperature_2m_max",
+        "temperature_2m_min",
+        "temperature_80m",
+        "uv_index",
+        "uv_index_clear_sky",
+        "vapour_pressure_deficit",
+        "visibility",
+        "wave_direction",
+        "wave_height",
+        "wave_peak_period",
+        "wave_period",
+        "wet_bulb_temperature_2m",
+        "wind_direction_100m",
+        "wind_direction_10m",
+        "wind_direction_120m",
+        "wind_direction_200m",
+        "wind_direction_40m",
+        "wind_direction_80m",
+        "wind_gusts_10m",
+        "wind_speed_100m",
+        "wind_speed_10m",
+        "wind_speed_120m",
+        "wind_speed_200m",
+        "wind_speed_40m",
+        "wind_speed_80m",
+        "wind_u_component_100m",
+        "wind_u_component_10m",
+        "wind_u_component_200m",
+        "wind_v_component_100m",
+        "wind_v_component_10m",
+        "wind_v_component_200m",
+    }
+)
 
 
 def _with_spread(variables: list[str]) -> list[str]:
     """Add the spread of each variable to a list of variables.
 
     The API takes those as one variable per variable, like
-    temperature_2m_spread, next to the regular temperature_2m.
+    temperature_2m_spread, next to the regular temperature_2m. Variables
+    without a spread are left as they are.
     """
     return [
         *variables,
-        *(f"{variable}_spread" for variable in variables if variable not in NO_SPREAD),
+        *(
+            f"{variable}_spread"
+            for variable in variables
+            if variable in SPREAD_VARIABLES or PRESSURE_LEVEL_KEY.match(variable)
+        ),
     ]
 
 
@@ -672,8 +768,9 @@ class OpenMeteo:
             spread: Return the spread over the members as well, the standard
                 deviation, for the current, 15-minutely, and hourly data. It
                 ends up in their spread. This is meant for the ensemble mean
-                models, like "dwd_icon_eps_ensemble_mean_seamless". There is
-                no spread for is_day and weather_code.
+                models, like "dwd_icon_eps_ensemble_mean_seamless". Not every
+                variable has a spread, like weather_code and
+                precipitation_probability; those are requested without.
             precipitation_unit: Precipitation unit.
             temperature_unit: Temperature unit.
             wind_speed_unit: Wind speed unit.
@@ -695,10 +792,12 @@ class OpenMeteo:
             pressure_levels=pressure_levels,
             pressure_level_sections=pressure_level_sections,
             models=models,
+            spread=spread,
             # Older model names still work, but the API returns their data
             # under the current name of the model
-            spread=spread,
             model_suffixes={
+                "ecmwf_aifs025": "ecmwf_aifs025_ensemble",
+                "ecmwf_ifs025": "ecmwf_ifs025_ensemble",
                 "gem_global": "gem_global_ensemble",
                 "gfs025": "ncep_gefs025",
                 "gfs05": "ncep_gefs05",
@@ -707,6 +806,8 @@ class OpenMeteo:
                 "icon_eu": "icon_eu_eps",
                 "icon_global": "icon_global_eps",
                 "icon_seamless": "icon_seamless_eps",
+                "meteoswiss_icon_ch1": "meteoswiss_icon_ch1_ensemble",
+                "meteoswiss_icon_ch2": "meteoswiss_icon_ch2_ensemble",
             },
             latitude=latitude,
             longitude=longitude,
