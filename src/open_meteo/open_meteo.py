@@ -34,6 +34,7 @@ from .models import (
     ForecastSection,
     Geocoding,
     GeocodingResult,
+    HeightLevelVariable,
     HourlyParameters,
     LengthUnit,
     Marine,
@@ -452,6 +453,9 @@ class OpenMeteo:
         pressure_level_variables: list[PressureLevelVariable] | None = None,
         pressure_levels: list[int] | None = None,
         pressure_level_sections: list[ForecastSection] | None = None,
+        height_level_variables: list[HeightLevelVariable] | None = None,
+        height_levels: list[int] | None = None,
+        height_level_sections: list[ForecastSection] | None = None,
         daily: list[DailyParameters] | None = None,
         forecast_days: int | None = None,
         past_days: int = 0,
@@ -500,6 +504,17 @@ class OpenMeteo:
             pressure_level_sections: Which data to get the pressure level
                 variables for: current conditions, 15-minutely, or hourly.
                 Leave unset for hourly data only.
+            height_level_variables: A list of weather variables to query for at
+                each of the heights. They end up in hourly.height_levels, keyed
+                by the height. Heights that are a variable of their own, like
+                temperature_80m, end up in that variable instead.
+            height_levels: The heights in meters above ground to query the
+                height level variables for, like 300 or 1000. Which heights
+                have data depends on the weather model; heights a model doesn't
+                have return no data instead of an error.
+            height_level_sections: Which data to get the height level variables
+                for: current conditions, 15-minutely, or hourly. Leave unset
+                for hourly data only.
             daily: A list of daily weather variables to query for.
             forecast_days: Number of days to forecast (0-16). Leave unset for
                 the API default of 7 days.
@@ -561,7 +576,8 @@ class OpenMeteo:
         Raises:
         ------
             ValueError: Only one of pressure_level_variables and
-                pressure_levels is given; nothing would be requested.
+                pressure_levels is given, or of height_level_variables
+                and height_levels; nothing would be requested.
 
         """
         return await self._forecast(
@@ -570,6 +586,9 @@ class OpenMeteo:
             pressure_level_variables=pressure_level_variables,
             pressure_levels=pressure_levels,
             pressure_level_sections=pressure_level_sections,
+            height_level_variables=height_level_variables,
+            height_levels=height_levels,
+            height_level_sections=height_level_sections,
             models=models,
             latitude=latitude,
             longitude=longitude,
@@ -616,6 +635,9 @@ class OpenMeteo:
         pressure_level_variables: list[PressureLevelVariable] | None = None,
         pressure_levels: list[int] | None = None,
         pressure_level_sections: list[ForecastSection] | None = None,
+        height_level_variables: list[HeightLevelVariable] | None = None,
+        height_levels: list[int] | None = None,
+        height_level_sections: list[ForecastSection] | None = None,
         daily: list[DailyParameters] | None = None,
         forecast_days: int | None = None,
         past_days: int | None = None,
@@ -669,6 +691,17 @@ class OpenMeteo:
             pressure_level_sections: Which data to get the pressure level
                 variables for: current conditions, 15-minutely, or hourly.
                 Leave unset for hourly data only.
+            height_level_variables: A list of weather variables to query for at
+                each of the heights. They end up in hourly.height_levels, keyed
+                by the height. Heights that are a variable of their own, like
+                temperature_80m, end up in that variable instead.
+            height_levels: The heights in meters above ground to query the
+                height level variables for, like 300 or 1000. Which heights
+                have data depends on the weather model; heights a model doesn't
+                have return no data instead of an error.
+            height_level_sections: Which data to get the height level variables
+                for: current conditions, 15-minutely, or hourly. Leave unset
+                for hourly data only.
             daily: A list of daily weather variables to query for.
             forecast_days: Number of days to return from today on.
             past_days: Number of past days to include as well.
@@ -719,7 +752,8 @@ class OpenMeteo:
         Raises:
         ------
             ValueError: Only one of pressure_level_variables and
-                pressure_levels is given; nothing would be requested.
+                pressure_levels is given, or of height_level_variables
+                and height_levels; nothing would be requested.
 
         """
         return await self._forecast(
@@ -728,6 +762,9 @@ class OpenMeteo:
             pressure_level_variables=pressure_level_variables,
             pressure_levels=pressure_levels,
             pressure_level_sections=pressure_level_sections,
+            height_level_variables=height_level_variables,
+            height_levels=height_levels,
+            height_level_sections=height_level_sections,
             models=models,
             latitude=latitude,
             longitude=longitude,
@@ -773,6 +810,9 @@ class OpenMeteo:
         pressure_level_variables: list[PressureLevelVariable] | None = None,
         pressure_levels: list[int] | None = None,
         pressure_level_sections: list[ForecastSection] | None = None,
+        height_level_variables: list[HeightLevelVariable] | None = None,
+        height_levels: list[int] | None = None,
+        height_level_sections: list[ForecastSection] | None = None,
         daily: list[DailyParameters] | None = None,
         forecast_days: int | None = None,
         past_days: int | None = None,
@@ -828,6 +868,17 @@ class OpenMeteo:
             pressure_level_sections: Which data to get the pressure level
                 variables for: current conditions, 15-minutely, or hourly.
                 Leave unset for hourly data only.
+            height_level_variables: A list of weather variables to query for at
+                each of the heights. They end up in hourly.height_levels, keyed
+                by the height. Heights that are a variable of their own, like
+                temperature_80m, end up in that variable instead.
+            height_levels: The heights in meters above ground to query the
+                height level variables for, like 300 or 1000. Which heights
+                have data depends on the weather model; heights a model doesn't
+                have return no data instead of an error.
+            height_level_sections: Which data to get the height level variables
+                for: current conditions, 15-minutely, or hourly. Leave unset
+                for hourly data only.
             daily: A list of daily weather variables to query for.
             forecast_days: Number of days to forecast (0-36). Leave unset for
                 the API default of 7 days.
@@ -886,7 +937,8 @@ class OpenMeteo:
         Raises:
         ------
             ValueError: Only one of pressure_level_variables and
-                pressure_levels is given; nothing would be requested.
+                pressure_levels is given, or of height_level_variables
+                and height_levels; nothing would be requested.
 
         """
         return await self._forecast(
@@ -895,6 +947,9 @@ class OpenMeteo:
             pressure_level_variables=pressure_level_variables,
             pressure_levels=pressure_levels,
             pressure_level_sections=pressure_level_sections,
+            height_level_variables=height_level_variables,
+            height_levels=height_levels,
+            height_level_sections=height_level_sections,
             models=models,
             spread=spread,
             # Older model names still work, but the API returns their data
@@ -1100,6 +1155,9 @@ class OpenMeteo:
         pressure_level_variables: list[PressureLevelVariable] | None = None,
         pressure_levels: list[int] | None = None,
         pressure_level_sections: list[ForecastSection] | None = None,
+        height_level_variables: list[HeightLevelVariable] | None = None,
+        height_levels: list[int] | None = None,
+        height_level_sections: list[ForecastSection] | None = None,
         daily: list[DailyParameters] | None = None,
         forecast_days: int | None = None,
         forecast_hours: int | None = None,
@@ -1140,6 +1198,17 @@ class OpenMeteo:
             pressure_level_sections: Which data to get the pressure level
                 variables for: 15-minutely or hourly; there are no current
                 conditions. Leave unset for hourly data only.
+            height_level_variables: A list of weather variables to query for at
+                each of the heights. They end up in hourly.height_levels, keyed
+                by the height. Heights that are a variable of their own, like
+                temperature_80m, end up in that variable instead.
+            height_levels: The heights in meters above ground to query the
+                height level variables for, like 300 or 1000. Which heights
+                have data depends on the weather model; heights a model doesn't
+                have return no data instead of an error.
+            height_level_sections: Which data to get the height level variables
+                for: 15-minutely or hourly; there are no current conditions.
+                Leave unset for hourly data only.
             daily: A list of daily weather variables to query for.
             forecast_days: Number of days to return from the start of the run
                 (0-16). Leave unset for the API default of 7 days.
@@ -1171,7 +1240,8 @@ class OpenMeteo:
         Raises:
         ------
             ValueError: Only one of pressure_level_variables and
-                pressure_levels is given; nothing would be requested.
+                pressure_levels is given, or of height_level_variables
+                and height_levels; nothing would be requested.
 
         """
         # The API takes the start of the run in UTC
@@ -1184,6 +1254,9 @@ class OpenMeteo:
             pressure_level_variables=pressure_level_variables,
             pressure_levels=pressure_levels,
             pressure_level_sections=pressure_level_sections,
+            height_level_variables=height_level_variables,
+            height_levels=height_levels,
+            height_level_sections=height_level_sections,
             models=models,
             latitude=latitude,
             longitude=longitude,
@@ -1404,7 +1477,7 @@ class OpenMeteo:
             wind_speed_unit=wind_speed_unit,
         )
 
-    # pylint: disable-next=too-many-arguments
+    # pylint: disable-next=too-many-arguments,too-many-locals
     async def _forecast(  # noqa: PLR0913
         self,
         url: str,
@@ -1414,6 +1487,9 @@ class OpenMeteo:
         pressure_levels: list[int] | None,
         models: list[str] | None,
         pressure_level_sections: list[ForecastSection] | None = None,
+        height_level_variables: list[HeightLevelVariable] | None = None,
+        height_levels: list[int] | None = None,
+        height_level_sections: list[ForecastSection] | None = None,
         model_suffixes: dict[str, str] | None = None,
         spread: bool = False,
         **parameters: Any,
@@ -1422,10 +1498,14 @@ class OpenMeteo:
 
         These APIs all have the same parameters and responses, on another
         host. This handles what needs more than passing a parameter on: the
-        pressure levels, the spread, and the models.
+        pressure and height levels, the spread, and the models.
         """
         if (pressure_level_variables is None) != (pressure_levels is None):
             msg = "Both pressure_level_variables and pressure_levels are needed"
+            raise ValueError(msg)
+
+        if (height_level_variables is None) != (height_levels is None):
+            msg = "Both height_level_variables and height_levels are needed"
             raise ValueError(msg)
 
         # The variables per section; current is only there for the APIs that
@@ -1435,18 +1515,25 @@ class OpenMeteo:
             if section in parameters:
                 variables[section] = list(parameters[section] or [])
 
-        # The API takes pressure level data as one variable per level, like
-        # temperature_850hPa, so every variable is combined with every level
-        if pressure_level_variables and pressure_levels:
-            for section in pressure_level_sections or [ForecastSection.HOURLY]:
+        # The API takes level data as one variable per level, like
+        # temperature_850hPa or temperature_300m, so every variable is
+        # combined with every level
+        for level_variables, levels, sections, unit in (
+            (pressure_level_variables, pressure_levels, pressure_level_sections, "hPa"),
+            (height_level_variables, height_levels, height_level_sections, "m"),
+        ):
+            if not level_variables or not levels:
+                continue
+
+            for section in sections or [ForecastSection.HOURLY]:
                 if section not in variables:
                     msg = f"There is no {section} data for this API"
                     raise ValueError(msg)
 
                 variables[section] += [
-                    f"{variable}_{level}hPa"
-                    for variable in pressure_level_variables
-                    for level in pressure_levels
+                    f"{variable}_{level}{unit}"
+                    for variable in level_variables
+                    for level in levels
                 ]
 
         # The spread of every variable, including those on pressure levels

@@ -172,6 +172,26 @@ async with OpenMeteo() as open_meteo:
     print(forecast.hourly.pressure_levels[500].temperature)
 ```
 
+Some models, like UKMO, DMI, and KNMI, also have data at heights above ground,
+like 300 or 1000 meters. Those work the same, with `height_level_variables`,
+`height_levels`, and `height_level_sections`, and end up per height in meters.
+Heights that are a variable of their own, like `temperature_80m`, stay there.
+
+```python
+from open_meteo import HeightLevelVariable, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    forecast = await open_meteo.forecast(
+        latitude=51.5,
+        longitude=-0.12,
+        models=["ukmo_seamless"],
+        height_level_variables=[HeightLevelVariable.WIND_SPEED],
+        height_levels=[300, 1000],
+    )
+
+    print(forecast.hourly.height_levels[1000].wind_speed)
+```
+
 ### Ensemble forecast
 
 Ensemble models run the same forecast many times, with slightly different
