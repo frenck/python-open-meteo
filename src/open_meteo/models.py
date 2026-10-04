@@ -887,10 +887,13 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     # Pressure level units, keyed by the pressure level in hPa
     pressure_levels: dict[int, PressureLevelForecastUnits] | None = None
 
+    # Only set for ensemble mean models: the units of the spread
+    spread: CurrentForecastUnits | None = None
+
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the pressure levels, and drop previous run and spread units."""
-        return _split_pressure_levels(_drop_suffixed(d))
+        """Group the pressure levels and spread, and drop previous run units."""
+        return _split_pressure_levels(_split_spread(_drop_suffixed(d)))
 
 
 # The API returns ensemble members and previous model runs as one variable
@@ -973,13 +976,15 @@ def _split_spread(data: dict[Any, Any]) -> dict[Any, Any]:
 
 
 def _drop_suffixed(data: dict[Any, Any]) -> dict[Any, Any]:
-    """Drop the units of members, previous runs, and spread; they are the same."""
+    """Drop the units of members and previous runs.
+
+    Those are the same as the unit of their variable. The spread is not: the
+    spread of a temperature in °C is in K, so its units are split instead.
+    """
     return {
         key: value
         for key, value in data.items()
-        if not ENSEMBLE_MEMBER_KEY.match(key)
-        and not PREVIOUS_DAY_KEY.match(key)
-        and not SPREAD_KEY.match(key)
+        if not ENSEMBLE_MEMBER_KEY.match(key) and not PREVIOUS_DAY_KEY.match(key)
     }
 
 
@@ -1446,10 +1451,13 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     # Pressure level units, keyed by the pressure level in hPa
     pressure_levels: dict[int, PressureLevelForecastUnits] | None = None
 
+    # Only set for ensemble mean models: the units of the spread
+    spread: HourlyForecastUnits | None = None
+
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the pressure levels, and drop member and previous run units."""
-        return _split_pressure_levels(_drop_suffixed(d))
+        """Group the pressure levels and spread, and drop member and run units."""
+        return _split_pressure_levels(_split_spread(_drop_suffixed(d)))
 
 
 @dataclass
