@@ -1135,6 +1135,50 @@ async def test_ensemble_without_spread(
     assert "_spread" not in requested_query(responses)["hourly"]
 
 
+async def test_ensemble_model_names_sharing_data(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test two names for the same model both get its data.
+
+    gfs025 is an older name for ncep_gefs025, and the API returns its data
+    once, under the current name.
+    """
+    responses.get(
+        re.compile(rf"^{re.escape(ENSEMBLE_URL)}\?.*$"),
+        status=200,
+        body=(
+            '{"latitude":52.28,"longitude":6.88,"generationtime_ms":1.0,'
+            '"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT",'
+            '"elevation":28.0,"hourly_units":{"time":"iso8601",'
+            '"temperature_2m_ncep_gefs025":"°C",'
+            '"temperature_2m_icon_seamless_eps":"°C"},'
+            '"hourly":{"time":["2026-10-04T00:00"],'
+            '"temperature_2m_ncep_gefs025":[14.5],'
+            '"temperature_2m_icon_seamless_eps":[13.1]}}'
+        ),
+        content_type="application/json",
+    )
+
+    forecast = await open_meteo_client.ensemble(
+        latitude=52.27,
+        longitude=6.87,
+        models=["gfs025", "ncep_gefs025", "icon_seamless"],
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+    )
+
+    assert forecast.models is not None
+    temperatures = {
+        name: model.hourly.temperature_2m if model.hourly else None
+        for name, model in forecast.models.items()
+    }
+    assert temperatures == {
+        "gfs025": [14.5],
+        "ncep_gefs025": [14.5],
+        "icon_seamless": [13.1],
+    }
+
+
 async def test_seasonal(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,

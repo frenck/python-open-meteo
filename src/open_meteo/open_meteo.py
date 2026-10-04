@@ -196,12 +196,16 @@ def _split_models(
     maps those requested names to the suffix the API uses.
     """
     # Match on the suffix the API uses, but keep the data under the name the
-    # model was requested by
-    suffix_to_model = {(suffixes or {}).get(model, model): model for model in models}
+    # model was requested by. Two names can share a suffix, like an older and
+    # a current name of the same model; both get the data.
+    suffix_to_models: dict[str, list[str]] = {}
+    for model in dict.fromkeys(models):
+        suffix = (suffixes or {}).get(model, model)
+        suffix_to_models.setdefault(suffix, []).append(model)
 
     # The longest suffix has to win: temperature_2m_meteoswiss_icon_seamless
     # also ends in _icon_seamless
-    by_length = sorted(suffix_to_model, key=str.__len__, reverse=True)
+    by_length = sorted(suffix_to_models, key=str.__len__, reverse=True)
     shared = {key: value for key, value in data.items() if key not in MODEL_SECTIONS}
 
     # Keep the models in the order they were requested
@@ -224,8 +228,9 @@ def _split_models(
                 leftover[key] = value
                 continue
 
-            model_section = per_model[suffix_to_model[suffix]].setdefault(section, {})
-            model_section[key.removesuffix(f"_{suffix}")] = value
+            for model in suffix_to_models[suffix]:
+                model_section = per_model[model].setdefault(section, {})
+                model_section[key.removesuffix(f"_{suffix}")] = value
             split = True
 
         for model in per_model.values():
