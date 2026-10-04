@@ -2,8 +2,10 @@
 
 # pylint: disable=protected-access
 
+import asyncio
 import re
 from datetime import date, datetime
+from typing import Self, cast
 from urllib.parse import unquote
 from zoneinfo import ZoneInfo
 
@@ -33,7 +35,12 @@ from open_meteo import (
     TemporalResolution,
     WindSpeedUnit,
 )
-from open_meteo.exceptions import OpenMeteoConnectionError, OpenMeteoError
+from open_meteo.exceptions import (
+    OpenMeteoConnectionError,
+    OpenMeteoError,
+    OpenMeteoRateLimitError,
+    OpenMeteoResponseError,
+)
 
 from .conftest import load_fixture
 
@@ -1703,10 +1710,11 @@ async def test_api_error_without_reason(
         content_type="application/json",
     )
 
-    with pytest.raises(OpenMeteoError) as error:
+    with pytest.raises(OpenMeteoResponseError) as error:
         await open_meteo_client._request(URL("http://example.com/api/"))
 
-    assert error.value.args == (500, {"status": "nok"})
+    assert error.value.status == 500
+    assert error.value.reason == 'HTTP 500: {"status":"nok"}'
 
 
 async def test_http_error_plain_text(
@@ -1721,10 +1729,11 @@ async def test_http_error_plain_text(
         content_type="text/plain",
     )
 
-    with pytest.raises(OpenMeteoError) as error:
+    with pytest.raises(OpenMeteoResponseError) as error:
         await open_meteo_client._request(URL("http://example.com/api/"))
 
-    assert error.value.args == (404, {"message": "OMG PUPPIES!"})
+    assert error.value.status == 404
+    assert error.value.reason == "HTTP 404: OMG PUPPIES!"
 
 
 async def test_unexpected_content_type(
@@ -1741,3 +1750,188 @@ async def test_unexpected_content_type(
 
     with pytest.raises(OpenMeteoError, match="Unexpected response"):
         await open_meteo_client._request(URL("http://example.com/api/"))
+
+
+class _StallingResponse:
+    """A response that sends its headers, but fails while reading the body."""
+
+    def __init__(self, body_error: BaseException | None) -> None:
+        """Fail reading the body with this error, or stall when it is None."""
+        self.status = 200
+        self.headers = {"Content-Type": "application/json"}
+        self._body_error = body_error
+
+    async def __aenter__(self) -> Self:
+        """Enter the response context."""
+        return self
+
+    async def __aexit__(self, *_exc_info: object) -> None:
+        """Release the response."""
+
+    async def read(self) -> bytes:
+        """Stall, or fail, while reading the body."""
+        if self._body_error is not None:
+            raise self._body_error
+        await asyncio.sleep(10)
+        return b"{}"
+
+
+class _StallingSession:  # pylint: disable=too-few-public-methods
+    """A session that returns a response failing while reading its body."""
+
+    def __init__(self, body_error: BaseException | None = None) -> None:
+        """Fail reading the body with this error, or stall when it is None."""
+        self._body_error = body_error
+
+    def get(self, _url: URL) -> _StallingResponse:
+        """Return the response, which only fails once its body is read."""
+        return _StallingResponse(self._body_error)
+
+
+async def test_timeout_while_reading_body() -> None:
+    """Test a body that stalls after the headers counts toward the timeout."""
+    open_meteo = OpenMeteo(
+        request_timeout=0.1,
+        session=cast("aiohttp.ClientSession", _StallingSession()),
+    )
+
+    with pytest.raises(OpenMeteoConnectionError, match="Timeout occurred"):
+        await open_meteo._request(URL("http://example.com/api/"))
+
+
+async def test_connection_error_while_reading_body() -> None:
+    """Test a body that breaks off is raised as a connection error."""
+    open_meteo = OpenMeteo(
+        session=cast(
+            "aiohttp.ClientSession",
+            _StallingSession(aiohttp.ClientPayloadError("broken off")),
+        ),
+    )
+
+    with pytest.raises(OpenMeteoConnectionError, match="Error occurred"):
+        await open_meteo._request(URL("http://example.com/api/"))
+
+
+async def test_api_error_status(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test an API error has the status and the reason the API gave."""
+    responses.get(
+        "http://example.com/api/",
+        status=400,
+        body='{"reason":"Latitude must be in range of -90 to 90°.","error":true}',
+        content_type="application/json",
+    )
+
+    with pytest.raises(OpenMeteoResponseError) as error:
+        await open_meteo_client._request(URL("http://example.com/api/"))
+
+    assert error.value.status == 400
+    assert error.value.reason == "Latitude must be in range of -90 to 90°."
+    assert str(error.value) == "Latitude must be in range of -90 to 90°."
+
+
+@pytest.mark.parametrize(
+    ("headers", "retry_after"),
+    [
+        ({"Retry-After": "60"}, 60),
+        ({}, None),
+        # A date instead of seconds is allowed, but not worth parsing
+        ({"Retry-After": "Wed, 21 Oct 2026 07:28:00 GMT"}, None),
+    ],
+)
+async def test_rate_limit(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    headers: dict[str, str],
+    retry_after: int | None,
+) -> None:
+    """Test a rate limited request raises with how long to wait, if known."""
+    responses.get(
+        "http://example.com/api/",
+        status=429,
+        body='{"reason":"Daily API request limit exceeded.","error":true}',
+        content_type="application/json",
+        headers=headers,
+    )
+
+    with pytest.raises(OpenMeteoRateLimitError) as error:
+        await open_meteo_client._request(URL("http://example.com/api/"))
+
+    assert error.value.status == 429
+    assert error.value.reason == "Daily API request limit exceeded."
+    assert error.value.retry_after == retry_after
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        "null",
+        # A proxy in between can respond with HTML, marked as JSON
+        "<html>Bad Gateway</html>",
+    ],
+)
+async def test_api_error_without_reason_object(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    body: str,
+) -> None:
+    """Test a JSON error without a reason object still raises with the status."""
+    responses.get(
+        "http://example.com/api/",
+        status=502,
+        body=body,
+        content_type="application/json",
+    )
+
+    with pytest.raises(OpenMeteoResponseError) as error:
+        await open_meteo_client._request(URL("http://example.com/api/"))
+
+    assert error.value.status == 502
+    assert error.value.reason == f"HTTP 502: {body}"
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        "not json",
+        # Valid JSON, but missing the fields every response has
+        "{}",
+    ],
+)
+async def test_unexpected_response_body(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    body: str,
+) -> None:
+    """Test a response that doesn't fit the models raises an OpenMeteoError."""
+    mock_endpoint_body(responses, GEOCODING_URL, body)
+
+    with pytest.raises(OpenMeteoError, match="Unexpected response"):
+        await open_meteo_client.geocoding(name="Enschede")
+
+
+async def test_unexpected_response_body_with_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test invalid JSON raises an OpenMeteoError when splitting models too."""
+    mock_endpoint_body(responses, FORECAST_URL, "not json")
+
+    with pytest.raises(OpenMeteoError, match="Unexpected response"):
+        await open_meteo_client.forecast(
+            latitude=52.27,
+            longitude=6.87417,
+            models=["icon_seamless", "gfs_seamless"],
+        )
+
+
+def mock_endpoint_body(responses: aioresponses, url: str, body: str) -> None:
+    """Mock an endpoint with a raw body, regardless of the query string sent."""
+    responses.get(
+        re.compile(rf"^{re.escape(url)}\?.*$"),
+        status=200,
+        body=body,
+        content_type="application/json",
+    )

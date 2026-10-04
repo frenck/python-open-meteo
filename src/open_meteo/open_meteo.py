@@ -9,11 +9,18 @@ from datetime import UTC, date, datetime
 from typing import Any, Self, TypeVar
 
 import orjson
-from aiohttp.client import ClientError, ClientResponseError, ClientSession
+from aiohttp import hdrs
+from aiohttp.client import ClientError, ClientSession
+from mashumaro.exceptions import InvalidFieldValue, MissingField
 from mashumaro.mixins.orjson import DataClassORJSONMixin
 from yarl import URL
 
-from .exceptions import OpenMeteoConnectionError, OpenMeteoError
+from .exceptions import (
+    OpenMeteoConnectionError,
+    OpenMeteoError,
+    OpenMeteoRateLimitError,
+    OpenMeteoResponseError,
+)
 from .models import (
     AirQuality,
     AirQualityDomain,
@@ -44,6 +51,46 @@ from .models import (
 )
 
 ResponseT = TypeVar("ResponseT", bound=DataClassORJSONMixin)
+
+
+def _error_reason(content_type: str, text: str) -> str | None:
+    """Return the reason the API gave for an error, if it gave one.
+
+    The API explains errors in JSON, like {"error": true, "reason": "..."}.
+    """
+    if "application/json" not in content_type:
+        return None
+
+    try:
+        data = orjson.loads(text)
+    except orjson.JSONDecodeError:
+        return None
+
+    if isinstance(data, dict) and isinstance(reason := data.get("reason"), str):
+        return reason
+    return None
+
+
+def _parse_retry_after(value: str | None) -> int | None:
+    """Return the seconds to wait from a Retry-After header, if it has those."""
+    if value is None or not value.isdigit():
+        return None
+    return int(value)
+
+
+def _parse(response_type: type[ResponseT], data: str | dict[str, Any]) -> ResponseT:
+    """Parse a response into its model.
+
+    A response that doesn't fit the model, like invalid JSON or missing
+    fields, raises an OpenMeteoError, instead of a parsing exception.
+    """
+    try:
+        if isinstance(data, str):
+            return response_type.from_json(data)
+        return response_type.from_dict(data)
+    except (orjson.JSONDecodeError, InvalidFieldValue, MissingField) as exception:
+        msg = "Unexpected response from the Open-Meteo API"
+        raise OpenMeteoError(msg) from exception
 
 
 def _build_query(**parameters: object) -> dict[str, str]:
@@ -239,32 +286,32 @@ class OpenMeteo:
             self.session = ClientSession()
             self._close_session = True
 
+        # Reading the body is part of the request: a body that stalls or
+        # breaks off is a timeout or connection problem as well
         try:
             async with asyncio.timeout(self.request_timeout):
-                response = await self.session.get(url)
+                async with self.session.get(url) as response:
+                    status = response.status
+                    content_type = response.headers.get(hdrs.CONTENT_TYPE, "")
+                    retry_after = response.headers.get(hdrs.RETRY_AFTER)
+                    body = await response.read()
         except TimeoutError as exception:
             msg = "Timeout occurred while connecting to the Open-Meteo API"
             raise OpenMeteoConnectionError(msg) from exception
-        except (
-            ClientError,
-            ClientResponseError,
-            socket.gaierror,
-        ) as exception:
+        except (ClientError, socket.gaierror) as exception:
             msg = "Error occurred while communicating with Open-Meteo API"
             raise OpenMeteoConnectionError(msg) from exception
-        content_type = response.headers.get("Content-Type", "")
-        if (response.status // 100) in [4, 5]:
-            if "application/json" in content_type:
-                data = await response.json()
-                response.close()
-                if data.get("error") is True and (reason := data.get("reason")):
-                    raise OpenMeteoError(reason)
-                raise OpenMeteoError(response.status, data)
-            contents = await response.read()
-            response.close()
-            raise OpenMeteoError(response.status, {"message": contents.decode("utf8")})
 
-        text = await response.text()
+        text = body.decode("utf-8", errors="replace")
+
+        if status >= 400:
+            reason = _error_reason(content_type, text) or f"HTTP {status}: {text}"
+            if status == 429:
+                raise OpenMeteoRateLimitError(
+                    status, reason, _parse_retry_after(retry_after)
+                )
+            raise OpenMeteoResponseError(status, reason)
+
         if "application/json" not in content_type:
             msg = "Unexpected response from the Open-Meteo API"
             raise OpenMeteoError(
@@ -1192,11 +1239,14 @@ class OpenMeteo:
             raise OpenMeteoError(msg)
 
         if models is not None and len(set(models)) > 1:
-            return response_type.from_dict(
-                _split_models(orjson.loads(data), models, model_suffixes)
-            )
+            try:
+                split = _split_models(orjson.loads(data), models, model_suffixes)
+            except orjson.JSONDecodeError as exception:
+                msg = "Unexpected response from the Open-Meteo API"
+                raise OpenMeteoError(msg) from exception
+            return _parse(response_type, split)
 
-        return response_type.from_json(data)
+        return _parse(response_type, data)
 
     # pylint: disable-next=too-many-arguments,too-many-locals
     async def marine(  # noqa: PLR0913
@@ -1637,7 +1687,7 @@ class OpenMeteo:
             query
         )
         data = await self._request(url=url)
-        return AirQuality.from_json(data)
+        return _parse(AirQuality, data)
 
     async def geocoding(
         self,
@@ -1681,7 +1731,7 @@ class OpenMeteo:
         )
         url = URL("https://geocoding-api.open-meteo.com/v1/search").with_query(query)
         data = await self._request(url=url)
-        return Geocoding.from_json(data)
+        return _parse(Geocoding, data)
 
     async def geocoding_by_id(
         self,
@@ -1710,7 +1760,7 @@ class OpenMeteo:
         query = _build_query(id=location_id, format="json", language=language)
         url = URL("https://geocoding-api.open-meteo.com/v1/get").with_query(query)
         data = await self._request(url=url)
-        return GeocodingResult.from_json(data)
+        return _parse(GeocodingResult, data)
 
     async def elevation(
         self,
@@ -1737,7 +1787,7 @@ class OpenMeteo:
         query = _build_query(latitude=latitude, longitude=longitude)
         url = URL("https://api.open-meteo.com/v1/elevation").with_query(query)
         data = await self._request(url=url)
-        return Elevation.from_json(data)
+        return _parse(Elevation, data)
 
     async def close(self) -> None:
         """Close open client session."""
