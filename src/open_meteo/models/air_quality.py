@@ -337,3 +337,6 @@ class AirQuality(DataClassORJSONMixin):
     current: CurrentAirQuality | None = None
     hourly_units: HourlyAirQualityUnits | None = None
     hourly: HourlyAirQuality | None = None
+
+    # Only set when multiple models were requested, keyed by the model name
+    models: dict[str, AirQuality] | None = None
