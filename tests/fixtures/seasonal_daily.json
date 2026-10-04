@@ -1,0 +1,31 @@
+{
+  "latitude": 52.131145,
+  "longitude": 7.1223025,
+  "generationtime_ms": 12.341022491455078,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 29.0,
+  "daily_units": {
+    "time": "iso8601",
+    "sea_surface_temperature_max": "\u00b0C",
+    "sea_surface_temperature_min": "\u00b0C",
+    "soil_moisture_100_to_255cm_mean": "m\u00b3/m\u00b3",
+    "soil_temperature_100_to_255cm_mean": "\u00b0C",
+    "wind_direction_200m_dominant": "\u00b0",
+    "wind_speed_200m_max": "km/h",
+    "wind_speed_200m_mean": "km/h",
+    "wind_speed_200m_min": "km/h"
+  },
+  "daily": {
+    "time": ["2026-10-04", "2026-10-05"],
+    "sea_surface_temperature_max": [16.0, 16.0],
+    "sea_surface_temperature_min": [16.0, 16.0],
+    "soil_moisture_100_to_255cm_mean": [0.154, 0.153],
+    "soil_temperature_100_to_255cm_mean": [15.1, 15.1],
+    "wind_direction_200m_dominant": [38, 240],
+    "wind_speed_200m_max": [8.6, 21.2],
+    "wind_speed_200m_mean": [4.8, 16.0],
+    "wind_speed_200m_min": [0.5, 8.3]
+  }
+}

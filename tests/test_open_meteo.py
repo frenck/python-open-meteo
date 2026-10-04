@@ -687,6 +687,27 @@ async def test_historical_weather(
     assert weather == snapshot
 
 
+async def test_historical_weather_past_days(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test requesting the last days, instead of a start and end date."""
+    mock_endpoint(responses, HISTORICAL_WEATHER_URL, "historical_weather.json")
+
+    await open_meteo_client.historical_weather(
+        latitude=52.27,
+        longitude=6.87417,
+        past_days=7,
+        daily=[DailyParameters.TEMPERATURE_2M_MAX],
+    )
+
+    query = requested_query(responses)
+    assert query["past_days"] == "7"
+    # The API rejects past days next to a start or end date
+    assert "start_date" not in query
+    assert "end_date" not in query
+
+
 async def test_historical_weather_best_match(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
@@ -1194,6 +1215,43 @@ async def test_seasonal_models(
     assert ec46.monthly is None
     assert seas5.daily is not None
     assert seas5.daily.members is not None
+
+
+async def test_seasonal_daily_variables(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the daily variables only some models have, like wind at 200 m."""
+    mock_endpoint(responses, SEASONAL_URL, "seasonal_daily.json")
+
+    seasonal = await open_meteo_client.seasonal(
+        latitude=52.27,
+        longitude=6.87417,
+        daily=[
+            DailyParameters.SEA_SURFACE_TEMPERATURE_MAX,
+            DailyParameters.SEA_SURFACE_TEMPERATURE_MIN,
+            DailyParameters.SOIL_MOISTURE_100_TO_255CM_MEAN,
+            DailyParameters.SOIL_TEMPERATURE_100_TO_255CM_MEAN,
+            DailyParameters.WIND_DIRECTION_200M_DOMINANT,
+            DailyParameters.WIND_SPEED_200M_MAX,
+            DailyParameters.WIND_SPEED_200M_MEAN,
+            DailyParameters.WIND_SPEED_200M_MIN,
+        ],
+        models=["ecmwf_seasonal_seamless"],
+        temporal_resolution=TemporalResolution.HOURLY_3,
+    )
+
+    assert requested_query(responses)["temporal_resolution"] == "hourly_3"
+
+    daily = seasonal.daily
+    assert daily is not None
+    assert daily.sea_surface_temperature_max is not None
+    assert daily.soil_moisture_100_to_255cm_mean is not None
+    assert daily.wind_direction_200m_dominant is not None
+    assert all(isinstance(value, int) for value in daily.wind_direction_200m_dominant)
+    assert daily.wind_speed_200m_max is not None
+    assert seasonal.daily_units is not None
+    assert seasonal.daily_units.wind_speed_200m_max == "km/h"
 
 
 async def test_seasonal_best_match_with_other_models(
