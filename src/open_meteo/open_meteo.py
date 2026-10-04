@@ -1316,6 +1316,7 @@ class OpenMeteo:
         tilt: float | None = None,
         azimuth: float | None = None,
         models: list[str] | None = None,
+        spread: bool = False,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
         temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
         wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
@@ -1361,6 +1362,11 @@ class OpenMeteo:
                 tilted irradiance. 0 is south, -90 is east, 90 is west.
             models: Reanalysis datasets to use, by their Open-Meteo name, like
                 "era5" or "era5_land". Works the same as for the forecast.
+            spread: Return the spread over the members of the ERA5 ensemble
+                as well, the standard deviation, for the hourly data. It ends
+                up in hourly.spread. This only has data with the
+                "era5_ensemble" model. Not every variable has a spread; those
+                are requested without.
             precipitation_unit: Precipitation unit.
             temperature_unit: Temperature unit.
             wind_speed_unit: Wind speed unit.
@@ -1378,6 +1384,7 @@ class OpenMeteo:
             models=models,
             # The archive suffixes best_match data as archive_best_match
             model_suffixes={"best_match": "archive_best_match"},
+            spread=spread,
             latitude=latitude,
             longitude=longitude,
             start_date=start_date,
@@ -1744,6 +1751,7 @@ class OpenMeteo:
         elevation: float | None = None,
         cell_selection: CellSelection | None = None,
         models: list[str] | None = None,
+        spread: bool = False,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
         temperature_unit: TemperatureUnit = TemperatureUnit.CELSIUS,
         wind_speed_unit: WindSpeedUnit = WindSpeedUnit.KILOMETERS_PER_HOUR,
@@ -1798,6 +1806,11 @@ class OpenMeteo:
                 "ecmwf_seas5" or "ecmwf_ec46". Works the same as for the
                 forecast, except that best_match can't be combined with other
                 models.
+            spread: Return the spread over the members as well, the standard
+                deviation, for the 6-hourly data. It ends up in hourly.spread.
+                This is meant for the ensemble mean models, like
+                "ecmwf_seas5_ensemble_mean". Not every variable has a spread;
+                those are requested without.
             precipitation_unit: Precipitation unit.
             temperature_unit: Temperature unit.
             wind_speed_unit: Wind speed unit.
@@ -1824,7 +1837,7 @@ class OpenMeteo:
             latitude=latitude,
             longitude=longitude,
             timezone=timezone,
-            hourly=hourly,
+            hourly=_with_spread(list(hourly or [])) if spread else hourly,
             daily=daily,
             weekly=weekly,
             monthly=monthly,
