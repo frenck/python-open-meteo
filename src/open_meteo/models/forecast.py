@@ -3,6 +3,7 @@
 # pylint: disable=too-many-instance-attributes
 from __future__ import annotations
 
+import dataclasses
 import re
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -22,7 +23,7 @@ from .common import TimeFormat
 
 
 class ForecastSection(StrEnum):
-    """Enum to represent the forecast sections pressure levels can be for."""
+    """Enum to represent the forecast sections levels can be requested for."""
 
     CURRENT = "current"
     MINUTELY_15 = "minutely_15"
@@ -730,10 +731,15 @@ class CurrentForecast(DataClassORJSONMixin):
     # Pressure level data, keyed by the pressure level in hPa
     pressure_levels: dict[int, PressureLevelCurrent] | None = None
 
+    # Height level data, keyed by the height above ground in meters
+    height_levels: dict[int, HeightLevelCurrent] | None = None
+
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group previous runs, the spread, and pressure level variables."""
-        return _split_pressure_levels(_split_spread(_split_previous_days(d)))
+        """Group previous runs, the spread, and pressure and height levels."""
+        return _split_height_levels(
+            _split_pressure_levels(_split_spread(_split_previous_days(d))), cls
+        )
 
 
 @dataclass
@@ -919,13 +925,18 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     # Pressure level units, keyed by the pressure level in hPa
     pressure_levels: dict[int, PressureLevelForecastUnits] | None = None
 
+    # Height level units, keyed by the height above ground in meters
+    height_levels: dict[int, HeightLevelForecastUnits] | None = None
+
     # Only set for ensemble mean models: the units of the spread
     spread: CurrentForecastUnits | None = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the pressure levels and spread, and drop previous run units."""
-        return _split_pressure_levels(_split_spread(_drop_suffixed(d)))
+        """Group the levels and spread, and drop previous run units."""
+        return _split_height_levels(
+            _split_pressure_levels(_split_spread(_drop_suffixed(d))), cls
+        )
 
 
 class PressureLevelVariable(StrEnum):
@@ -1034,6 +1045,122 @@ class PressureLevelForecastUnits(DataClassORJSONMixin):
     cloud_cover: str | None = None
     dew_point: str | None = None
     geopotential_height: str | None = None
+    relative_humidity: str | None = None
+    temperature: str | None = None
+    vertical_velocity: str | None = None
+    wind_direction: str | None = None
+    wind_speed: str | None = None
+    wind_u_component: str | None = None
+    wind_v_component: str | None = None
+
+
+class HeightLevelVariable(StrEnum):
+    """Enum to represent the variables available on height levels.
+
+    Height levels are given in meters above ground, like 300 or 1000. Which
+    heights have data depends on the weather model; UKMO, DMI, and KNMI have
+    the most.
+    """
+
+    # Cloud cover as an area fraction
+    CLOUD_COVER = "cloud_cover"
+
+    # Dew point temperature
+    DEW_POINT = "dew_point"
+
+    # Relative humidity
+    RELATIVE_HUMIDITY = "relative_humidity"
+
+    # Air temperature
+    TEMPERATURE = "temperature"
+
+    # Vertical wind speed; positive is upward
+    VERTICAL_VELOCITY = "vertical_velocity"
+
+    # Wind direction and speed
+    WIND_DIRECTION = "wind_direction"
+    WIND_SPEED = "wind_speed"
+
+    # Wind speed from west to east (u) and from south to north (v);
+    # negative is the other way around
+    WIND_U_COMPONENT = "wind_u_component"
+    WIND_V_COMPONENT = "wind_v_component"
+
+
+# The API returns height level data as one variable per height, like
+# temperature_300m
+HEIGHT_LEVEL_KEY = re.compile(r"^(?P<variable>[a-z_]+)_(?P<level>\d+)m$")
+
+# A plain set, as checking a string against a StrEnum only works from
+# Python 3.12 on
+HEIGHT_LEVEL_VARIABLES = {variable.value for variable in HeightLevelVariable}
+
+
+def _split_height_levels(data: dict[Any, Any], cls: type) -> dict[Any, Any]:
+    """Group the height level variables of a section by height.
+
+    temperature_300m and wind_speed_300m end up as the temperature and
+    wind_speed of height_levels[300]. Heights that are a variable of their
+    own, like temperature_2m or wind_speed_80m, stay where they are, as the
+    API returns those as such too.
+    """
+    own_fields = {field.name for field in dataclasses.fields(cls)}
+
+    data = dict(data)
+    levels: dict[int, dict[str, Any]] = {}
+    for key in list(data):
+        match = HEIGHT_LEVEL_KEY.match(key)
+        if (
+            match is None
+            or match["variable"] not in HEIGHT_LEVEL_VARIABLES
+            or key in own_fields
+        ):
+            continue
+
+        levels.setdefault(int(match["level"]), {})[match["variable"]] = data.pop(key)
+
+    if levels:
+        data["height_levels"] = levels
+
+    return data
+
+
+@dataclass
+class HeightLevelForecast(DataClassORJSONMixin):
+    """Hourly weather data at a single height above ground."""
+
+    cloud_cover: list[int | None] | None = None
+    dew_point: list[float | None] | None = None
+    relative_humidity: list[int | None] | None = None
+    temperature: list[float | None] | None = None
+    vertical_velocity: list[float | None] | None = None
+    wind_direction: list[int | None] | None = None
+    wind_speed: list[float | None] | None = None
+    wind_u_component: list[float | None] | None = None
+    wind_v_component: list[float | None] | None = None
+
+
+@dataclass
+class HeightLevelCurrent(DataClassORJSONMixin):
+    """Current weather conditions at a single height above ground."""
+
+    cloud_cover: int | None = None
+    dew_point: float | None = None
+    relative_humidity: int | None = None
+    temperature: float | None = None
+    vertical_velocity: float | None = None
+    wind_direction: int | None = None
+    wind_speed: float | None = None
+    wind_u_component: float | None = None
+    wind_v_component: float | None = None
+
+
+@dataclass
+class HeightLevelForecastUnits(DataClassORJSONMixin):
+    """Hourly weather data units at a single height above ground."""
+
+    cloud_cover: str | None = None
+    dew_point: str | None = None
     relative_humidity: str | None = None
     temperature: str | None = None
     vertical_velocity: str | None = None
@@ -1225,6 +1352,9 @@ class HourlyForecast(DataClassORJSONMixin):
     # Pressure level data, keyed by the pressure level in hPa
     pressure_levels: dict[int, PressureLevelForecast] | None = None
 
+    # Height level data, keyed by the height above ground in meters
+    height_levels: dict[int, HeightLevelForecast] | None = None
+
     # Only set for ensemble data, keyed by member number
     members: dict[int, HourlyForecast] | None = None
 
@@ -1236,14 +1366,17 @@ class HourlyForecast(DataClassORJSONMixin):
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group previous runs, members, spread, and pressure level variables.
+        """Group previous runs, members, spread, and pressure and height levels.
 
         The order follows the API: a member can have a spread, like
         temperature_2m_spread_member01, and both can be on a pressure level,
         like temperature_850hPa_spread. Each group then splits its own.
         """
-        return _split_pressure_levels(
-            _split_spread(_split_members(_split_previous_days(d)))
+        return _split_height_levels(
+            _split_pressure_levels(
+                _split_spread(_split_members(_split_previous_days(d)))
+            ),
+            cls,
         )
 
 
@@ -1429,13 +1562,18 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     # Pressure level units, keyed by the pressure level in hPa
     pressure_levels: dict[int, PressureLevelForecastUnits] | None = None
 
+    # Height level units, keyed by the height above ground in meters
+    height_levels: dict[int, HeightLevelForecastUnits] | None = None
+
     # Only set for ensemble mean models: the units of the spread
     spread: HourlyForecastUnits | None = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the pressure levels and spread, and drop member and run units."""
-        return _split_pressure_levels(_split_spread(_drop_suffixed(d)))
+        """Group the levels and spread, and drop member and run units."""
+        return _split_height_levels(
+            _split_pressure_levels(_split_spread(_drop_suffixed(d))), cls
+        )
 
 
 @dataclass

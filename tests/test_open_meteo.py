@@ -36,6 +36,7 @@ from open_meteo import (
     DailyParameters,
     FloodParameters,
     ForecastSection,
+    HeightLevelVariable,
     HourlyAirQuality,
     HourlyAirQualityUnits,
     HourlyForecast,
@@ -529,6 +530,73 @@ async def test_forecast_pressure_levels_incomplete(
             longitude=6.87417,
             pressure_level_variables=variables,
             pressure_levels=levels,
+        )
+
+
+async def test_forecast_height_levels(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test height level data ends up per height, in a real UKMO response.
+
+    temperature_80m is a variable of its own, so it stays where it is.
+    """
+    mock_endpoint(responses, FORECAST_URL, "forecast_height_levels.json")
+
+    forecast = await open_meteo_client.forecast(
+        latitude=51.5,
+        longitude=-0.12,
+        timezone="Europe/London",
+        models=["ukmo_seamless"],
+        hourly=[HourlyParameters.TEMPERATURE_80M],
+        height_level_variables=[
+            HeightLevelVariable.TEMPERATURE,
+            HeightLevelVariable.WIND_SPEED,
+        ],
+        height_levels=[300, 1000],
+        height_level_sections=[ForecastSection.HOURLY, ForecastSection.CURRENT],
+    )
+
+    heights = "temperature_300m,temperature_1000m,wind_speed_300m,wind_speed_1000m"
+    query = requested_query(responses)
+    assert query["hourly"] == f"temperature_80m,{heights}"
+    assert query["current"] == heights
+
+    hourly = forecast.hourly
+    assert hourly is not None
+    assert hourly.temperature_80m is not None
+    assert hourly.height_levels is not None
+    assert sorted(hourly.height_levels) == [300, 1000]
+    assert hourly.height_levels[300].temperature is not None
+    assert hourly.height_levels[300].wind_speed is not None
+    assert hourly.height_levels[1000].wind_speed is not None
+    assert (
+        hourly.height_levels[1000].temperature != hourly.height_levels[300].temperature
+    )
+
+    assert forecast.hourly_units is not None
+    assert forecast.hourly_units.temperature_80m == "°C"
+    assert forecast.hourly_units.height_levels is not None
+    assert forecast.hourly_units.height_levels[300].wind_speed == "km/h"
+    assert forecast.hourly_units.height_levels[1000].temperature == "°C"
+
+    assert forecast.current is not None
+    assert forecast.current.height_levels is not None
+    assert forecast.current.height_levels[300].temperature == 17.0
+    assert forecast.current_units is not None
+    assert forecast.current_units.height_levels is not None
+    assert forecast.current_units.height_levels[300].temperature == "°C"
+
+
+async def test_forecast_height_levels_incomplete(
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test height levels need both the variables and the heights."""
+    with pytest.raises(ValueError, match="height_level_variables and height_levels"):
+        await open_meteo_client.forecast(
+            latitude=51.5,
+            longitude=-0.12,
+            height_levels=[300],
         )
 
 
@@ -2732,6 +2800,7 @@ VARIABLE_MODELS = [
 
 # Fields that hold the structure of a response, not a variable
 STRUCTURAL_FIELDS = {
+    "height_levels",
     "interval",
     "members",
     "pressure_levels",
