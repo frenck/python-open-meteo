@@ -35,6 +35,9 @@ class HourlyParameters(StrEnum):
     Every hourly parameter can be requested as a current condition as well.
     """
 
+    # Density of the air at 2 meters above ground
+    AIR_DENSITY_2M = "air_density_2m"
+
     # Surface albedo, the share of sunlight the surface reflects
     ALBEDO = "albedo"
 
@@ -48,8 +51,15 @@ class HourlyParameters(StrEnum):
     # Convective available potential energy
     CAPE = "cape"
 
+    # Base and top height of clouds above ground
+    CLOUD_BASE = "cloud_base"
+    CLOUD_TOP = "cloud_top"
+
     # Total cloud cover as an area fraction
     CLOUD_COVER = "cloud_cover"
+
+    # Cloud cover at 2 meters above ground, like fog, as an area fraction
+    CLOUD_COVER_2M = "cloud_cover_2m"
 
     # High level clouds from 8 km altitude
     CLOUD_COVER_HIGH = "cloud_cover_high"
@@ -98,6 +108,9 @@ class HourlyParameters(StrEnum):
     # Growing degree days with a base of 0°C and a limit of 50°C
     GROWING_DEGREE_DAYS_BASE_0_LIMIT_50 = "growing_degree_days_base_0_limit_50"
 
+    # Hail of the preceding hour
+    HAIL = "hail"
+
     # Total solar radiation on a tilted panel, as average of the preceding hour;
     # use the tilt and azimuth parameters to describe the panel
     GLOBAL_TILTED_IRRADIANCE = "global_tilted_irradiance"
@@ -108,6 +121,11 @@ class HourlyParameters(StrEnum):
     # K index and lifted index, indicators of thunderstorm potential
     K_INDEX = "k_index"
     LIFTED_INDEX = "lifted_index"
+
+    # Heat exchanged between the surface and the air, by evaporation
+    # (latent) and by conduction (sensible)
+    LATENT_HEAT_FLUX = "latent_heat_flux"
+    SENSIBLE_HEAT_FLUX = "sensible_heat_flux"
 
     # Probability of leaf wetness
     LEAF_WETNESS_PROBABILITY = "leaf_wetness_probability"
@@ -122,6 +140,9 @@ class HourlyParameters(StrEnum):
     # Ocean current velocity and direction
     OCEAN_CURRENT_DIRECTION = "ocean_current_direction"
     OCEAN_CURRENT_VELOCITY = "ocean_current_velocity"
+
+    # Evapotranspiration as it would be with unlimited water
+    POTENTIAL_EVAPOTRANSPIRATION = "potential_evapotranspiration"
 
     # Total precipitation (rain, showers, snow) sum of the preceding hour
     PRECIPITATION = "precipitation"
@@ -154,12 +175,18 @@ class HourlyParameters(StrEnum):
     SEA_LEVEL_HEIGHT_MSL = "sea_level_height_msl"
     SEA_SURFACE_TEMPERATURE = "sea_surface_temperature"
 
+    # Salinity of the sea water at the surface
+    SEA_WATER_SALINITY = "sea_water_salinity"
+
     # Shortwave solar radiation as average of the preceding hour
     SHORTWAVE_RADIATION = "shortwave_radiation"
 
     # Shortwave solar radiation as it would be without clouds; only some
     # models have this, like the satellite models
     SHORTWAVE_RADIATION_CLEAR_SKY = "shortwave_radiation_clear_sky"
+
+    # Shortwave solar radiation as it would be without clouds, at that moment
+    SHORTWAVE_RADIATION_CLEAR_SKY_INSTANT = "shortwave_radiation_clear_sky_instant"
 
     # Snow depth on the ground, and the snow height
     SNOW_DEPTH = "snow_depth"
@@ -172,6 +199,9 @@ class HourlyParameters(StrEnum):
     # equivalent
     SNOWFALL = "snowfall"
     SNOWFALL_WATER_EQUIVALENT = "snowfall_water_equivalent"
+
+    # Density of the snow cover
+    SNOW_DENSITY = "snow_density"
 
     # Height of the snowfall level
     SNOWFALL_HEIGHT = "snowfall_height"
@@ -206,6 +236,10 @@ class HourlyParameters(StrEnum):
     SOIL_MOISTURE_INDEX_0_TO_100CM = "soil_moisture_index_0_to_100cm"
     SOIL_MOISTURE_INDEX_7_TO_28CM = "soil_moisture_index_7_to_28cm"
     SOIL_MOISTURE_INDEX_28_TO_100CM = "soil_moisture_index_28_to_100cm"
+
+    # Soil moisture index from 100 to 255 cm below ground, from 0 (wilting
+    # point) to 1 (field capacity)
+    SOIL_MOISTURE_INDEX_100_TO_255CM = "soil_moisture_index_100_to_255cm"
 
     # Temperature in the soil, at fixed depths or averaged over layers. 0 cm is
     # the surface temperature on land or water surface temperature on water.
@@ -262,6 +296,9 @@ class HourlyParameters(StrEnum):
 
     # Total amount of water vapour in the entire air column
     TOTAL_COLUMN_INTEGRATED_WATER_VAPOUR = "total_column_integrated_water_vapour"
+
+    # Total amount of water in a column of air, as vapour, liquid, and ice
+    TOTAL_COLUMN_WATER = "total_column_water"
 
     # Maximum updraft speed
     UPDRAFT = "updraft"
@@ -395,6 +432,10 @@ class DailyParameters(StrEnum):
     SNOWFALL_SUM = "snowfall_sum"
     SNOWFALL_WATER_EQUIVALENT_SUM = "snowfall_water_equivalent_sum"
 
+    # Maximum and minimum snow depth of the day
+    SNOW_DEPTH_MAX = "snow_depth_max"
+    SNOW_DEPTH_MIN = "snow_depth_min"
+
     # Maximum, mean, and minimum air pressure reduced to sea level (hPa)
     PRESSURE_MSL_MAX = "pressure_msl_max"
     PRESSURE_MSL_MEAN = "pressure_msl_mean"
@@ -506,14 +547,18 @@ class CurrentForecast(DataClassORJSONMixin):
 
     time: datetime
     interval: int
+    air_density_2m: float | None = None
     albedo: float | None = None
     apparent_temperature: float | None = None
     boundary_layer_height: float | None = None
     cape: float | None = None
+    cloud_base: float | None = None
     cloud_cover: int | None = None
+    cloud_cover_2m: int | None = None
     cloud_cover_high: int | None = None
     cloud_cover_low: int | None = None
     cloud_cover_mid: int | None = None
+    cloud_top: float | None = None
     convective_cloud_base: float | None = None
     convective_cloud_top: float | None = None
     convective_inhibition: float | None = None
@@ -531,9 +576,11 @@ class CurrentForecast(DataClassORJSONMixin):
     global_tilted_irradiance: float | None = None
     global_tilted_irradiance_instant: float | None = None
     growing_degree_days_base_0_limit_50: float | None = None
+    hail: float | None = None
     ice_pellets_probability: int | None = None
     is_day: bool | None = None
     k_index: float | None = None
+    latent_heat_flux: float | None = None
     leaf_wetness_probability: int | None = None
     lifted_index: float | None = None
     lightning_density: float | None = None
@@ -541,6 +588,7 @@ class CurrentForecast(DataClassORJSONMixin):
     mass_density_8m: float | None = None
     ocean_current_direction: float | None = None
     ocean_current_velocity: float | None = None
+    potential_evapotranspiration: float | None = None
     precipitation: float | None = None
     precipitation_probability: int | None = None
     precipitation_type: int | None = None
@@ -553,10 +601,14 @@ class CurrentForecast(DataClassORJSONMixin):
     sea_ice_thickness: float | None = None
     sea_level_height_msl: float | None = None
     sea_surface_temperature: float | None = None
+    sea_water_salinity: float | None = None
+    sensible_heat_flux: float | None = None
     shortwave_radiation: float | None = None
     shortwave_radiation_clear_sky: float | None = None
+    shortwave_radiation_clear_sky_instant: float | None = None
     shortwave_radiation_instant: float | None = None
     showers: float | None = None
+    snow_density: float | None = None
     snow_depth: float | None = None
     snow_depth_water_equivalent: float | None = None
     snow_height: float | None = None
@@ -586,6 +638,7 @@ class CurrentForecast(DataClassORJSONMixin):
     soil_moisture_9_to_27cm: float | None = None
     soil_moisture_index_0_to_100cm: float | None = None
     soil_moisture_index_0_to_7cm: float | None = None
+    soil_moisture_index_100_to_255cm: float | None = None
     soil_moisture_index_28_to_100cm: float | None = None
     soil_moisture_index_7_to_28cm: float | None = None
     soil_temperature_0_to_100cm: float | None = None
@@ -626,6 +679,7 @@ class CurrentForecast(DataClassORJSONMixin):
     terrestrial_radiation_instant: float | None = None
     thunderstorm_probability: int | None = None
     total_column_integrated_water_vapour: float | None = None
+    total_column_water: float | None = None
     updraft: float | None = None
     uv_index: float | None = None
     uv_index_clear_sky: float | None = None
@@ -688,14 +742,18 @@ class CurrentForecastUnits(DataClassORJSONMixin):
 
     time: TimeFormat | None = None
     interval: str | None = None
+    air_density_2m: str | None = None
     albedo: str | None = None
     apparent_temperature: str | None = None
     boundary_layer_height: str | None = None
     cape: str | None = None
+    cloud_base: str | None = None
     cloud_cover: str | None = None
+    cloud_cover_2m: str | None = None
     cloud_cover_high: str | None = None
     cloud_cover_low: str | None = None
     cloud_cover_mid: str | None = None
+    cloud_top: str | None = None
     convective_cloud_base: str | None = None
     convective_cloud_top: str | None = None
     convective_inhibition: str | None = None
@@ -713,9 +771,11 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     global_tilted_irradiance: str | None = None
     global_tilted_irradiance_instant: str | None = None
     growing_degree_days_base_0_limit_50: str | None = None
+    hail: str | None = None
     ice_pellets_probability: str | None = None
     is_day: str | None = None
     k_index: str | None = None
+    latent_heat_flux: str | None = None
     leaf_wetness_probability: str | None = None
     lifted_index: str | None = None
     lightning_density: str | None = None
@@ -723,6 +783,7 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     mass_density_8m: str | None = None
     ocean_current_direction: str | None = None
     ocean_current_velocity: str | None = None
+    potential_evapotranspiration: str | None = None
     precipitation: str | None = None
     precipitation_probability: str | None = None
     precipitation_type: str | None = None
@@ -735,10 +796,14 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     sea_ice_thickness: str | None = None
     sea_level_height_msl: str | None = None
     sea_surface_temperature: str | None = None
+    sea_water_salinity: str | None = None
+    sensible_heat_flux: str | None = None
     shortwave_radiation: str | None = None
     shortwave_radiation_clear_sky: str | None = None
+    shortwave_radiation_clear_sky_instant: str | None = None
     shortwave_radiation_instant: str | None = None
     showers: str | None = None
+    snow_density: str | None = None
     snow_depth: str | None = None
     snow_depth_water_equivalent: str | None = None
     snow_height: str | None = None
@@ -768,6 +833,7 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     soil_moisture_9_to_27cm: str | None = None
     soil_moisture_index_0_to_100cm: str | None = None
     soil_moisture_index_0_to_7cm: str | None = None
+    soil_moisture_index_100_to_255cm: str | None = None
     soil_moisture_index_28_to_100cm: str | None = None
     soil_moisture_index_7_to_28cm: str | None = None
     soil_temperature_0_to_100cm: str | None = None
@@ -808,6 +874,7 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     terrestrial_radiation_instant: str | None = None
     thunderstorm_probability: str | None = None
     total_column_integrated_water_vapour: str | None = None
+    total_column_water: str | None = None
     updraft: str | None = None
     uv_index: str | None = None
     uv_index_clear_sky: str | None = None
@@ -891,6 +958,11 @@ class PressureLevelVariable(StrEnum):
     WIND_DIRECTION = "wind_direction"
     WIND_SPEED = "wind_speed"
 
+    # Wind speed from west to east (u) and from south to north (v);
+    # negative is the other way around
+    WIND_U_COMPONENT = "wind_u_component"
+    WIND_V_COMPONENT = "wind_v_component"
+
 
 # The API returns pressure level data as one variable per level, like
 # temperature_850hPa
@@ -935,6 +1007,8 @@ class PressureLevelForecast(DataClassORJSONMixin):
     vertical_velocity: list[float | None] | None = None
     wind_direction: list[int | None] | None = None
     wind_speed: list[float | None] | None = None
+    wind_u_component: list[float | None] | None = None
+    wind_v_component: list[float | None] | None = None
 
 
 @dataclass
@@ -949,6 +1023,8 @@ class PressureLevelCurrent(DataClassORJSONMixin):
     vertical_velocity: float | None = None
     wind_direction: int | None = None
     wind_speed: float | None = None
+    wind_u_component: float | None = None
+    wind_v_component: float | None = None
 
 
 @dataclass
@@ -963,6 +1039,8 @@ class PressureLevelForecastUnits(DataClassORJSONMixin):
     vertical_velocity: str | None = None
     wind_direction: str | None = None
     wind_speed: str | None = None
+    wind_u_component: str | None = None
+    wind_v_component: str | None = None
 
 
 @dataclass
@@ -970,14 +1048,18 @@ class HourlyForecast(DataClassORJSONMixin):
     """Hourly weather data."""
 
     time: list[datetime]
+    air_density_2m: list[float | None] | None = None
     albedo: list[float | None] | None = None
     apparent_temperature: list[float | None] | None = None
     boundary_layer_height: list[float | None] | None = None
     cape: list[float | None] | None = None
+    cloud_base: list[float | None] | None = None
     cloud_cover: list[int | None] | None = None
+    cloud_cover_2m: list[int | None] | None = None
     cloud_cover_high: list[int | None] | None = None
     cloud_cover_low: list[int | None] | None = None
     cloud_cover_mid: list[int | None] | None = None
+    cloud_top: list[float | None] | None = None
     convective_cloud_base: list[float | None] | None = None
     convective_cloud_top: list[float | None] | None = None
     convective_inhibition: list[float | None] | None = None
@@ -995,9 +1077,11 @@ class HourlyForecast(DataClassORJSONMixin):
     global_tilted_irradiance: list[float | None] | None = None
     global_tilted_irradiance_instant: list[float | None] | None = None
     growing_degree_days_base_0_limit_50: list[float | None] | None = None
+    hail: list[float | None] | None = None
     ice_pellets_probability: list[int | None] | None = None
     is_day: list[bool | None] | None = None
     k_index: list[float | None] | None = None
+    latent_heat_flux: list[float | None] | None = None
     leaf_wetness_probability: list[int | None] | None = None
     lifted_index: list[float | None] | None = None
     lightning_density: list[float | None] | None = None
@@ -1005,6 +1089,7 @@ class HourlyForecast(DataClassORJSONMixin):
     mass_density_8m: list[float | None] | None = None
     ocean_current_direction: list[float | None] | None = None
     ocean_current_velocity: list[float | None] | None = None
+    potential_evapotranspiration: list[float | None] | None = None
     precipitation: list[float | None] | None = None
     precipitation_probability: list[int | None] | None = None
     precipitation_type: list[int | None] | None = None
@@ -1017,10 +1102,14 @@ class HourlyForecast(DataClassORJSONMixin):
     sea_ice_thickness: list[float | None] | None = None
     sea_level_height_msl: list[float | None] | None = None
     sea_surface_temperature: list[float | None] | None = None
+    sea_water_salinity: list[float | None] | None = None
+    sensible_heat_flux: list[float | None] | None = None
     shortwave_radiation: list[float | None] | None = None
     shortwave_radiation_clear_sky: list[float | None] | None = None
+    shortwave_radiation_clear_sky_instant: list[float | None] | None = None
     shortwave_radiation_instant: list[float | None] | None = None
     showers: list[float | None] | None = None
+    snow_density: list[float | None] | None = None
     snow_depth: list[float | None] | None = None
     snow_depth_water_equivalent: list[float | None] | None = None
     snow_height: list[float | None] | None = None
@@ -1050,6 +1139,7 @@ class HourlyForecast(DataClassORJSONMixin):
     soil_moisture_9_to_27cm: list[float | None] | None = None
     soil_moisture_index_0_to_100cm: list[float | None] | None = None
     soil_moisture_index_0_to_7cm: list[float | None] | None = None
+    soil_moisture_index_100_to_255cm: list[float | None] | None = None
     soil_moisture_index_28_to_100cm: list[float | None] | None = None
     soil_moisture_index_7_to_28cm: list[float | None] | None = None
     soil_temperature_0_to_100cm: list[float | None] | None = None
@@ -1090,6 +1180,7 @@ class HourlyForecast(DataClassORJSONMixin):
     terrestrial_radiation_instant: list[float | None] | None = None
     thunderstorm_probability: list[int | None] | None = None
     total_column_integrated_water_vapour: list[float | None] | None = None
+    total_column_water: list[float | None] | None = None
     updraft: list[float | None] | None = None
     uv_index: list[float | None] | None = None
     uv_index_clear_sky: list[float | None] | None = None
@@ -1161,14 +1252,18 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     """Hourly weather data units."""
 
     time: TimeFormat | None = None
+    air_density_2m: str | None = None
     albedo: str | None = None
     apparent_temperature: str | None = None
     boundary_layer_height: str | None = None
     cape: str | None = None
+    cloud_base: str | None = None
     cloud_cover: str | None = None
+    cloud_cover_2m: str | None = None
     cloud_cover_high: str | None = None
     cloud_cover_low: str | None = None
     cloud_cover_mid: str | None = None
+    cloud_top: str | None = None
     convective_cloud_base: str | None = None
     convective_cloud_top: str | None = None
     convective_inhibition: str | None = None
@@ -1186,9 +1281,11 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     global_tilted_irradiance: str | None = None
     global_tilted_irradiance_instant: str | None = None
     growing_degree_days_base_0_limit_50: str | None = None
+    hail: str | None = None
     ice_pellets_probability: str | None = None
     is_day: str | None = None
     k_index: str | None = None
+    latent_heat_flux: str | None = None
     leaf_wetness_probability: str | None = None
     lifted_index: str | None = None
     lightning_density: str | None = None
@@ -1196,6 +1293,7 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     mass_density_8m: str | None = None
     ocean_current_direction: str | None = None
     ocean_current_velocity: str | None = None
+    potential_evapotranspiration: str | None = None
     precipitation: str | None = None
     precipitation_probability: str | None = None
     precipitation_type: str | None = None
@@ -1208,10 +1306,14 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     sea_ice_thickness: str | None = None
     sea_level_height_msl: str | None = None
     sea_surface_temperature: str | None = None
+    sea_water_salinity: str | None = None
+    sensible_heat_flux: str | None = None
     shortwave_radiation: str | None = None
     shortwave_radiation_clear_sky: str | None = None
+    shortwave_radiation_clear_sky_instant: str | None = None
     shortwave_radiation_instant: str | None = None
     showers: str | None = None
+    snow_density: str | None = None
     snow_depth: str | None = None
     snow_depth_water_equivalent: str | None = None
     snow_height: str | None = None
@@ -1241,6 +1343,7 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     soil_moisture_9_to_27cm: str | None = None
     soil_moisture_index_0_to_100cm: str | None = None
     soil_moisture_index_0_to_7cm: str | None = None
+    soil_moisture_index_100_to_255cm: str | None = None
     soil_moisture_index_28_to_100cm: str | None = None
     soil_moisture_index_7_to_28cm: str | None = None
     soil_temperature_0_to_100cm: str | None = None
@@ -1281,6 +1384,7 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     terrestrial_radiation_instant: str | None = None
     thunderstorm_probability: str | None = None
     total_column_integrated_water_vapour: str | None = None
+    total_column_water: str | None = None
     updraft: str | None = None
     uv_index: str | None = None
     uv_index_clear_sky: str | None = None
@@ -1390,7 +1494,9 @@ class DailyForecast(DataClassORJSONMixin):
     sea_surface_temperature_min: list[float | None] | None = None
     shortwave_radiation_sum: list[float | None] | None = None
     showers_sum: list[float | None] | None = None
+    snow_depth_max: list[float | None] | None = None
     snow_depth_mean: list[float | None] | None = None
+    snow_depth_min: list[float | None] | None = None
     snowfall_sum: list[float | None] | None = None
     snowfall_water_equivalent_sum: list[float | None] | None = None
     soil_moisture_0_to_100cm_mean: list[float | None] | None = None
@@ -1496,7 +1602,9 @@ class DailyForecastUnits(DataClassORJSONMixin):
     sea_surface_temperature_min: str | None = None
     shortwave_radiation_sum: str | None = None
     showers_sum: str | None = None
+    snow_depth_max: str | None = None
     snow_depth_mean: str | None = None
+    snow_depth_min: str | None = None
     snowfall_sum: str | None = None
     snowfall_water_equivalent_sum: str | None = None
     soil_moisture_0_to_100cm_mean: str | None = None
