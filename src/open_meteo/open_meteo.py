@@ -457,12 +457,16 @@ class OpenMeteo:
         past_days: int = 0,
         forecast_hours: int | None = None,
         past_hours: int | None = None,
+        initial_hours: int | None = None,
         forecast_minutely_15: int | None = None,
         past_minutely_15: int | None = None,
+        initial_minutely_15: int | None = None,
         start_date: date | None = None,
         end_date: date | None = None,
         start_hour: datetime | None = None,
         end_hour: datetime | None = None,
+        start_minutely_15: datetime | None = None,
+        end_minutely_15: datetime | None = None,
         temporal_resolution: TemporalResolution | None = None,
         elevation: float | None = None,
         cell_selection: CellSelection | None = None,
@@ -504,10 +508,15 @@ class OpenMeteo:
                 instead of whole days.
             past_hours: Number of past hourly steps to include, instead of
                 whole days.
+            initial_hours: Hour of today to count forecast_hours and past_hours
+                from, like 0 for midnight, instead of the current hour.
             forecast_minutely_15: Number of 15-minutely steps to return from
                 now on, instead of whole days.
             past_minutely_15: Number of past 15-minutely steps to include,
                 instead of whole days.
+            initial_minutely_15: 15-minutely step of today to count
+                forecast_minutely_15 and past_minutely_15 from, like 0 for
+                midnight or 4 for 1:00, instead of the current step.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
             end_date: Last day of the time interval to return.
@@ -515,6 +524,12 @@ class OpenMeteo:
                 and 15-minutely data. Use it together with end_hour. This is
                 local time in the requested timezone; tzinfo is not used.
             end_hour: Last hour of the time interval to return.
+            start_minutely_15: First 15-minutely step of the time interval to
+                return, for 15-minutely data. Use it together with
+                end_minutely_15. This is local time in the requested timezone;
+                tzinfo is not used.
+            end_minutely_15: Last 15-minutely step of the time interval to
+                return.
             temporal_resolution: Aggregate hourly data into larger time steps,
                 or use the native resolution of the weather model.
             elevation: Elevation used for statistical downscaling. Leave unset
@@ -566,12 +581,16 @@ class OpenMeteo:
             past_days=past_days,
             forecast_hours=forecast_hours,
             past_hours=past_hours,
+            initial_hours=initial_hours,
             forecast_minutely_15=forecast_minutely_15,
             past_minutely_15=past_minutely_15,
+            initial_minutely_15=initial_minutely_15,
             start_date=start_date,
             end_date=end_date,
             start_hour=start_hour,
             end_hour=end_hour,
+            start_minutely_15=start_minutely_15,
+            end_minutely_15=end_minutely_15,
             temporal_resolution=temporal_resolution,
             elevation=elevation,
             cell_selection=cell_selection,
@@ -588,17 +607,28 @@ class OpenMeteo:
         *,
         latitude: float,
         longitude: float,
-        start_date: date,
-        end_date: date,
+        start_date: date | None = None,
+        end_date: date | None = None,
         timezone: str = "UTC",
+        current: list[HourlyParameters] | None = None,
         minutely_15: list[HourlyParameters] | None = None,
         hourly: list[HourlyParameters] | None = None,
         pressure_level_variables: list[PressureLevelVariable] | None = None,
         pressure_levels: list[int] | None = None,
         pressure_level_sections: list[ForecastSection] | None = None,
         daily: list[DailyParameters] | None = None,
+        forecast_days: int | None = None,
+        past_days: int | None = None,
+        forecast_hours: int | None = None,
+        past_hours: int | None = None,
+        initial_hours: int | None = None,
+        forecast_minutely_15: int | None = None,
+        past_minutely_15: int | None = None,
+        initial_minutely_15: int | None = None,
         start_hour: datetime | None = None,
         end_hour: datetime | None = None,
+        start_minutely_15: datetime | None = None,
+        end_minutely_15: datetime | None = None,
         temporal_resolution: TemporalResolution | None = None,
         elevation: float | None = None,
         cell_selection: CellSelection | None = None,
@@ -619,10 +649,14 @@ class OpenMeteo:
         ----
             latitude: Latitude of the location.
             longitude: Longitude of the location.
-            start_date: First day of the time interval to return.
+            start_date: First day of the time interval to return. Use it
+                together with end_date, or leave both unset for a time
+                interval relative to today, like with forecast_days.
             end_date: Last day of the time interval to return.
             timezone: All timestamps are returned as local time and data is
                 returned starting at 0:00 local time.
+            current: A list of weather variables to get the conditions for at
+                the current time. Every hourly variable is available.
             minutely_15: A list of weather variables to get 15-minutely data
                 for. Every hourly variable is available.
             hourly: A list of hourly weather variables to query for.
@@ -633,13 +667,34 @@ class OpenMeteo:
                 level variables for, like 850 or 500. Which levels have data
                 depends on the weather model.
             pressure_level_sections: Which data to get the pressure level
-                variables for: 15-minutely or hourly; there are no current
-                conditions. Leave unset for hourly data only.
+                variables for: current conditions, 15-minutely, or hourly.
+                Leave unset for hourly data only.
             daily: A list of daily weather variables to query for.
+            forecast_days: Number of days to return from today on.
+            past_days: Number of past days to include as well.
+            forecast_hours: Number of hourly steps to return from now on,
+                instead of whole days.
+            past_hours: Number of past hourly steps to include, instead of
+                whole days.
+            initial_hours: Hour of today to count forecast_hours and past_hours
+                from, like 0 for midnight, instead of the current hour.
+            forecast_minutely_15: Number of 15-minutely steps to return from
+                now on, instead of whole days.
+            past_minutely_15: Number of past 15-minutely steps to include,
+                instead of whole days.
+            initial_minutely_15: 15-minutely step of today to count
+                forecast_minutely_15 and past_minutely_15 from, like 0 for
+                midnight or 4 for 1:00, instead of the current step.
             start_hour: First hour to return, to narrow down the time interval
                 for hourly and 15-minutely data. This is local time in the
                 requested timezone; tzinfo is not used.
             end_hour: Last hour to return.
+            start_minutely_15: First 15-minutely step of the time interval to
+                return, for 15-minutely data. Use it together with
+                end_minutely_15. This is local time in the requested timezone;
+                tzinfo is not used.
+            end_minutely_15: Last 15-minutely step of the time interval to
+                return.
             temporal_resolution: Aggregate hourly data into larger time steps,
                 or use the native resolution of the weather model.
             elevation: Elevation used for statistical downscaling. Leave unset
@@ -679,10 +734,21 @@ class OpenMeteo:
             start_date=start_date,
             end_date=end_date,
             timezone=timezone,
+            current=current,
             minutely_15=minutely_15,
             daily=daily,
+            forecast_days=forecast_days,
+            past_days=past_days,
+            forecast_hours=forecast_hours,
+            past_hours=past_hours,
+            initial_hours=initial_hours,
+            forecast_minutely_15=forecast_minutely_15,
+            past_minutely_15=past_minutely_15,
+            initial_minutely_15=initial_minutely_15,
             start_hour=start_hour,
             end_hour=end_hour,
+            start_minutely_15=start_minutely_15,
+            end_minutely_15=end_minutely_15,
             temporal_resolution=temporal_resolution,
             elevation=elevation,
             cell_selection=cell_selection,
@@ -712,10 +778,16 @@ class OpenMeteo:
         past_days: int | None = None,
         forecast_hours: int | None = None,
         past_hours: int | None = None,
+        initial_hours: int | None = None,
+        forecast_minutely_15: int | None = None,
+        past_minutely_15: int | None = None,
+        initial_minutely_15: int | None = None,
         start_date: date | None = None,
         end_date: date | None = None,
         start_hour: datetime | None = None,
         end_hour: datetime | None = None,
+        start_minutely_15: datetime | None = None,
+        end_minutely_15: datetime | None = None,
         temporal_resolution: TemporalResolution | None = None,
         elevation: float | None = None,
         cell_selection: CellSelection | None = None,
@@ -764,6 +836,15 @@ class OpenMeteo:
                 instead of whole days.
             past_hours: Number of past hourly steps to include, instead of
                 whole days.
+            initial_hours: Hour of today to count forecast_hours and past_hours
+                from, like 0 for midnight, instead of the current hour.
+            forecast_minutely_15: Number of 15-minutely steps to return from
+                now on, instead of whole days.
+            past_minutely_15: Number of past 15-minutely steps to include,
+                instead of whole days.
+            initial_minutely_15: 15-minutely step of today to count
+                forecast_minutely_15 and past_minutely_15 from, like 0 for
+                midnight or 4 for 1:00, instead of the current step.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
             end_date: Last day of the time interval to return.
@@ -771,6 +852,12 @@ class OpenMeteo:
                 and 15-minutely data. Use it together with end_hour. This is
                 local time in the requested timezone; tzinfo is not used.
             end_hour: Last hour of the time interval to return.
+            start_minutely_15: First 15-minutely step of the time interval to
+                return, for 15-minutely data. Use it together with
+                end_minutely_15. This is local time in the requested timezone;
+                tzinfo is not used.
+            end_minutely_15: Last 15-minutely step of the time interval to
+                return.
             temporal_resolution: Aggregate hourly data into larger time steps,
                 or use the native resolution of the ensemble model.
             elevation: Elevation used for statistical downscaling. Leave unset
@@ -836,10 +923,16 @@ class OpenMeteo:
             past_days=past_days,
             forecast_hours=forecast_hours,
             past_hours=past_hours,
+            initial_hours=initial_hours,
+            forecast_minutely_15=forecast_minutely_15,
+            past_minutely_15=past_minutely_15,
+            initial_minutely_15=initial_minutely_15,
             start_date=start_date,
             end_date=end_date,
             start_hour=start_hour,
             end_hour=end_hour,
+            start_minutely_15=start_minutely_15,
+            end_minutely_15=end_minutely_15,
             temporal_resolution=temporal_resolution,
             elevation=elevation,
             cell_selection=cell_selection,
@@ -865,10 +958,16 @@ class OpenMeteo:
         past_days: int | None = None,
         forecast_hours: int | None = None,
         past_hours: int | None = None,
+        initial_hours: int | None = None,
+        forecast_minutely_15: int | None = None,
+        past_minutely_15: int | None = None,
+        initial_minutely_15: int | None = None,
         start_date: date | None = None,
         end_date: date | None = None,
         start_hour: datetime | None = None,
         end_hour: datetime | None = None,
+        start_minutely_15: datetime | None = None,
+        end_minutely_15: datetime | None = None,
         temporal_resolution: TemporalResolution | None = None,
         elevation: float | None = None,
         cell_selection: CellSelection | None = None,
@@ -910,6 +1009,15 @@ class OpenMeteo:
                 instead of whole days.
             past_hours: Number of past hourly steps to include, instead of
                 whole days.
+            initial_hours: Hour of today to count forecast_hours and past_hours
+                from, like 0 for midnight, instead of the current hour.
+            forecast_minutely_15: Number of 15-minutely steps to return from
+                now on, instead of whole days.
+            past_minutely_15: Number of past 15-minutely steps to include,
+                instead of whole days.
+            initial_minutely_15: 15-minutely step of today to count
+                forecast_minutely_15 and past_minutely_15 from, like 0 for
+                midnight or 4 for 1:00, instead of the current step.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
             end_date: Last day of the time interval to return.
@@ -917,6 +1025,12 @@ class OpenMeteo:
                 and 15-minutely data. Use it together with end_hour. This is
                 local time in the requested timezone; tzinfo is not used.
             end_hour: Last hour of the time interval to return.
+            start_minutely_15: First 15-minutely step of the time interval to
+                return, for 15-minutely data. Use it together with
+                end_minutely_15. This is local time in the requested timezone;
+                tzinfo is not used.
+            end_minutely_15: Last 15-minutely step of the time interval to
+                return.
             temporal_resolution: Aggregate hourly data into larger time steps,
                 or use the native resolution of the weather model.
             elevation: Elevation used for statistical downscaling. Leave unset
@@ -953,10 +1067,16 @@ class OpenMeteo:
             past_days=past_days,
             forecast_hours=forecast_hours,
             past_hours=past_hours,
+            initial_hours=initial_hours,
+            forecast_minutely_15=forecast_minutely_15,
+            past_minutely_15=past_minutely_15,
+            initial_minutely_15=initial_minutely_15,
             start_date=start_date,
             end_date=end_date,
             start_hour=start_hour,
             end_hour=end_hour,
+            start_minutely_15=start_minutely_15,
+            end_minutely_15=end_minutely_15,
             temporal_resolution=temporal_resolution,
             elevation=elevation,
             cell_selection=cell_selection,
@@ -1396,12 +1516,16 @@ class OpenMeteo:
         past_days: int | None = None,
         forecast_hours: int | None = None,
         past_hours: int | None = None,
+        initial_hours: int | None = None,
         forecast_minutely_15: int | None = None,
         past_minutely_15: int | None = None,
+        initial_minutely_15: int | None = None,
         start_date: date | None = None,
         end_date: date | None = None,
         start_hour: datetime | None = None,
         end_hour: datetime | None = None,
+        start_minutely_15: datetime | None = None,
+        end_minutely_15: datetime | None = None,
         temporal_resolution: TemporalResolution | None = None,
         cell_selection: CellSelection | None = None,
         models: list[str] | None = None,
@@ -1434,10 +1558,15 @@ class OpenMeteo:
                 instead of whole days.
             past_hours: Number of past hourly steps to include, instead of
                 whole days.
+            initial_hours: Hour of today to count forecast_hours and past_hours
+                from, like 0 for midnight, instead of the current hour.
             forecast_minutely_15: Number of 15-minutely steps to return from
                 now on, instead of whole days.
             past_minutely_15: Number of past 15-minutely steps to include,
                 instead of whole days.
+            initial_minutely_15: 15-minutely step of today to count
+                forecast_minutely_15 and past_minutely_15 from, like 0 for
+                midnight or 4 for 1:00, instead of the current step.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
             end_date: Last day of the time interval to return.
@@ -1445,6 +1574,12 @@ class OpenMeteo:
                 and 15-minutely data. Use it together with end_hour. This is
                 local time in the requested timezone; tzinfo is not used.
             end_hour: Last hour of the time interval to return.
+            start_minutely_15: First 15-minutely step of the time interval to
+                return, for 15-minutely data. Use it together with
+                end_minutely_15. This is local time in the requested timezone;
+                tzinfo is not used.
+            end_minutely_15: Last 15-minutely step of the time interval to
+                return.
             temporal_resolution: Aggregate hourly data into larger time steps,
                 or use the native resolution of the marine model.
             cell_selection: How to match the location to a grid cell of the
@@ -1481,12 +1616,16 @@ class OpenMeteo:
             past_days=past_days,
             forecast_hours=forecast_hours,
             past_hours=past_hours,
+            initial_hours=initial_hours,
             forecast_minutely_15=forecast_minutely_15,
             past_minutely_15=past_minutely_15,
+            initial_minutely_15=initial_minutely_15,
             start_date=start_date,
             end_date=end_date,
             start_hour=start_hour,
             end_hour=end_hour,
+            start_minutely_15=start_minutely_15,
+            end_minutely_15=end_minutely_15,
             temporal_resolution=temporal_resolution,
             cell_selection=cell_selection,
             length_unit=length_unit,
@@ -1505,6 +1644,7 @@ class OpenMeteo:
         daily: list[DailyParameters],
         timezone: str = "UTC",
         disable_bias_correction: bool = False,
+        elevation: float | None = None,
         cell_selection: CellSelection | None = None,
         models: list[str] | None = None,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
@@ -1533,6 +1673,9 @@ class OpenMeteo:
                 returned starting at 0:00 local time.
             disable_bias_correction: Return the raw climate model data,
                 without downscaling and bias correction onto ERA5-Land.
+            elevation: Elevation used for statistical downscaling. Leave unset
+                to use a digital elevation model, or pass float("nan") to
+                switch downscaling off.
             cell_selection: How to match the location to a grid cell of the
                 climate model.
             models: Climate models to use, by their exact, case sensitive
@@ -1570,6 +1713,7 @@ class OpenMeteo:
             timezone=timezone,
             # Only sent when asked for, so the API default applies otherwise
             disable_bias_correction=disable_bias_correction or None,
+            elevation=elevation,
             cell_selection=cell_selection,
             precipitation_unit=precipitation_unit,
             temperature_unit=temperature_unit,
@@ -1589,9 +1733,15 @@ class OpenMeteo:
         monthly: list[SeasonalMonthlyParameters] | None = None,
         forecast_days: int | None = None,
         past_days: int | None = None,
+        forecast_hours: int | None = None,
+        past_hours: int | None = None,
+        initial_hours: int | None = None,
         start_date: date | None = None,
         end_date: date | None = None,
+        start_hour: datetime | None = None,
+        end_hour: datetime | None = None,
         temporal_resolution: TemporalResolution | None = None,
+        elevation: float | None = None,
         cell_selection: CellSelection | None = None,
         models: list[str] | None = None,
         precipitation_unit: PrecipitationUnit = PrecipitationUnit.MILLIMETERS,
@@ -1624,12 +1774,24 @@ class OpenMeteo:
             forecast_days: Number of days to forecast (0-217). Leave unset for
                 the API default of 183 days.
             past_days: Number of past days to include as well.
+            forecast_hours: Number of hours to return from now on, instead of
+                whole days.
+            past_hours: Number of past hours to include, instead of whole days.
+            initial_hours: Hour of today to count forecast_hours and past_hours
+                from, like 0 for midnight, instead of the current hour.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
             end_date: Last day of the time interval to return.
+            start_hour: First hour of the time interval to return, for the
+                6-hourly data. Use it together with end_hour. This is local
+                time in the requested timezone; tzinfo is not used.
+            end_hour: Last hour of the time interval to return.
             temporal_resolution: Interpolate the 6-hourly data into hourly or
                 3-hourly time steps, or use the native resolution of the
                 seasonal model, which is the default.
+            elevation: Elevation used for statistical downscaling. Leave unset
+                to use a digital elevation model, or pass float("nan") to
+                switch downscaling off.
             cell_selection: How to match the location to a grid cell of the
                 seasonal model.
             models: Seasonal models to use, by their Open-Meteo name, like
@@ -1668,9 +1830,15 @@ class OpenMeteo:
             monthly=monthly,
             forecast_days=forecast_days,
             past_days=past_days,
+            forecast_hours=forecast_hours,
+            past_hours=past_hours,
+            initial_hours=initial_hours,
             start_date=start_date,
             end_date=end_date,
+            start_hour=start_hour,
+            end_hour=end_hour,
             temporal_resolution=temporal_resolution,
+            elevation=elevation,
             cell_selection=cell_selection,
             precipitation_unit=precipitation_unit,
             temperature_unit=temperature_unit,
@@ -1759,6 +1927,7 @@ class OpenMeteo:
         past_days: int = 0,
         forecast_hours: int | None = None,
         past_hours: int | None = None,
+        initial_hours: int | None = None,
         start_date: date | None = None,
         end_date: date | None = None,
         start_hour: datetime | None = None,
@@ -1785,6 +1954,8 @@ class OpenMeteo:
                 instead of whole days.
             past_hours: Number of past hourly steps to include, instead of
                 whole days.
+            initial_hours: Hour of today to count forecast_hours and past_hours
+                from, like 0 for midnight, instead of the current hour.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
             end_date: Last day of the time interval to return.
@@ -1813,6 +1984,7 @@ class OpenMeteo:
             past_days=past_days,
             forecast_hours=forecast_hours,
             past_hours=past_hours,
+            initial_hours=initial_hours,
             start_date=start_date,
             end_date=end_date,
             start_hour=start_hour,
