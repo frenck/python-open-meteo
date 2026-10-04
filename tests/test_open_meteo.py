@@ -1457,6 +1457,44 @@ async def test_ensemble_spread_only_where_available(
     )
 
 
+@pytest.mark.parametrize(
+    ("method", "endpoint", "model"),
+    [
+        (
+            "seasonal",
+            (SEASONAL_URL, "seasonal.json"),
+            "ecmwf_seas5_ensemble_mean",
+        ),
+        (
+            "historical_weather",
+            (HISTORICAL_WEATHER_URL, "historical_weather.json"),
+            "era5_ensemble",
+        ),
+    ],
+)
+async def test_spread_of_other_apis(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    method: str,
+    endpoint: tuple[str, str],
+    model: str,
+) -> None:
+    """Test the seasonal and historical weather APIs request the spread too."""
+    mock_endpoint(responses, *endpoint)
+
+    await getattr(open_meteo_client, method)(
+        latitude=52.27,
+        longitude=6.87417,
+        models=[model],
+        hourly=[HourlyParameters.TEMPERATURE_2M, HourlyParameters.WEATHER_CODE],
+        spread=True,
+    )
+
+    assert requested_query(responses)["hourly"] == (
+        "temperature_2m,weather_code,temperature_2m_spread"
+    )
+
+
 async def test_ensemble_older_model_names(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
