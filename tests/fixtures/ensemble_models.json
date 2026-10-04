@@ -101,281 +101,97 @@
     "temperature_2m_member50_ecmwf_ifs025_ensemble": "\u00b0C"
   },
   "hourly": {
-    "time": [
-      "2026-10-03T18:00"
-    ],
-    "temperature_2m_icon_seamless_eps": [
-      14.9
-    ],
-    "temperature_2m_member01_icon_seamless_eps": [
-      15.7
-    ],
-    "temperature_2m_member02_icon_seamless_eps": [
-      15.4
-    ],
-    "temperature_2m_member03_icon_seamless_eps": [
-      15.2
-    ],
-    "temperature_2m_member04_icon_seamless_eps": [
-      15.1
-    ],
-    "temperature_2m_member05_icon_seamless_eps": [
-      14.9
-    ],
-    "temperature_2m_member06_icon_seamless_eps": [
-      15.4
-    ],
-    "temperature_2m_member07_icon_seamless_eps": [
-      15.2
-    ],
-    "temperature_2m_member08_icon_seamless_eps": [
-      15.7
-    ],
-    "temperature_2m_member09_icon_seamless_eps": [
-      15.3
-    ],
-    "temperature_2m_member10_icon_seamless_eps": [
-      14.8
-    ],
-    "temperature_2m_member11_icon_seamless_eps": [
-      15.5
-    ],
-    "temperature_2m_member12_icon_seamless_eps": [
-      14.5
-    ],
-    "temperature_2m_member13_icon_seamless_eps": [
-      14.8
-    ],
-    "temperature_2m_member14_icon_seamless_eps": [
-      13.8
-    ],
-    "temperature_2m_member15_icon_seamless_eps": [
-      15.5
-    ],
-    "temperature_2m_member16_icon_seamless_eps": [
-      14.5
-    ],
-    "temperature_2m_member17_icon_seamless_eps": [
-      15.2
-    ],
-    "temperature_2m_member18_icon_seamless_eps": [
-      14.4
-    ],
-    "temperature_2m_member19_icon_seamless_eps": [
-      14.7
-    ],
-    "temperature_2m_member20_icon_seamless_eps": [
-      15.5
-    ],
-    "temperature_2m_member21_icon_seamless_eps": [
-      14.6
-    ],
-    "temperature_2m_member22_icon_seamless_eps": [
-      14.4
-    ],
-    "temperature_2m_member23_icon_seamless_eps": [
-      14.3
-    ],
-    "temperature_2m_member24_icon_seamless_eps": [
-      16.6
-    ],
-    "temperature_2m_member25_icon_seamless_eps": [
-      15.8
-    ],
-    "temperature_2m_member26_icon_seamless_eps": [
-      14.3
-    ],
-    "temperature_2m_member27_icon_seamless_eps": [
-      15.1
-    ],
-    "temperature_2m_member28_icon_seamless_eps": [
-      15.7
-    ],
-    "temperature_2m_member29_icon_seamless_eps": [
-      14.5
-    ],
-    "temperature_2m_member30_icon_seamless_eps": [
-      13.9
-    ],
-    "temperature_2m_member31_icon_seamless_eps": [
-      14.1
-    ],
-    "temperature_2m_member32_icon_seamless_eps": [
-      15.3
-    ],
-    "temperature_2m_member33_icon_seamless_eps": [
-      14.9
-    ],
-    "temperature_2m_member34_icon_seamless_eps": [
-      15.3
-    ],
-    "temperature_2m_member35_icon_seamless_eps": [
-      14.3
-    ],
-    "temperature_2m_member36_icon_seamless_eps": [
-      15.4
-    ],
-    "temperature_2m_member37_icon_seamless_eps": [
-      15.8
-    ],
-    "temperature_2m_member38_icon_seamless_eps": [
-      14.8
-    ],
-    "temperature_2m_member39_icon_seamless_eps": [
-      14.7
-    ],
-    "temperature_2m_ecmwf_ifs025_ensemble": [
-      14.9
-    ],
-    "temperature_2m_member01_ecmwf_ifs025_ensemble": [
-      14.9
-    ],
-    "temperature_2m_member02_ecmwf_ifs025_ensemble": [
-      15.0
-    ],
-    "temperature_2m_member03_ecmwf_ifs025_ensemble": [
-      14.9
-    ],
-    "temperature_2m_member04_ecmwf_ifs025_ensemble": [
-      14.7
-    ],
-    "temperature_2m_member05_ecmwf_ifs025_ensemble": [
-      15.2
-    ],
-    "temperature_2m_member06_ecmwf_ifs025_ensemble": [
-      14.5
-    ],
-    "temperature_2m_member07_ecmwf_ifs025_ensemble": [
-      14.5
-    ],
-    "temperature_2m_member08_ecmwf_ifs025_ensemble": [
-      15.0
-    ],
-    "temperature_2m_member09_ecmwf_ifs025_ensemble": [
-      15.0
-    ],
-    "temperature_2m_member10_ecmwf_ifs025_ensemble": [
-      14.8
-    ],
-    "temperature_2m_member11_ecmwf_ifs025_ensemble": [
-      15.2
-    ],
-    "temperature_2m_member12_ecmwf_ifs025_ensemble": [
-      14.7
-    ],
-    "temperature_2m_member13_ecmwf_ifs025_ensemble": [
-      15.0
-    ],
-    "temperature_2m_member14_ecmwf_ifs025_ensemble": [
-      15.3
-    ],
-    "temperature_2m_member15_ecmwf_ifs025_ensemble": [
-      14.4
-    ],
-    "temperature_2m_member16_ecmwf_ifs025_ensemble": [
-      15.2
-    ],
-    "temperature_2m_member17_ecmwf_ifs025_ensemble": [
-      14.2
-    ],
-    "temperature_2m_member18_ecmwf_ifs025_ensemble": [
-      15.3
-    ],
-    "temperature_2m_member19_ecmwf_ifs025_ensemble": [
-      14.8
-    ],
-    "temperature_2m_member20_ecmwf_ifs025_ensemble": [
-      15.6
-    ],
-    "temperature_2m_member21_ecmwf_ifs025_ensemble": [
-      14.8
-    ],
-    "temperature_2m_member22_ecmwf_ifs025_ensemble": [
-      14.2
-    ],
-    "temperature_2m_member23_ecmwf_ifs025_ensemble": [
-      14.5
-    ],
-    "temperature_2m_member24_ecmwf_ifs025_ensemble": [
-      14.6
-    ],
-    "temperature_2m_member25_ecmwf_ifs025_ensemble": [
-      14.7
-    ],
-    "temperature_2m_member26_ecmwf_ifs025_ensemble": [
-      15.1
-    ],
-    "temperature_2m_member27_ecmwf_ifs025_ensemble": [
-      14.5
-    ],
-    "temperature_2m_member28_ecmwf_ifs025_ensemble": [
-      14.9
-    ],
-    "temperature_2m_member29_ecmwf_ifs025_ensemble": [
-      14.9
-    ],
-    "temperature_2m_member30_ecmwf_ifs025_ensemble": [
-      14.4
-    ],
-    "temperature_2m_member31_ecmwf_ifs025_ensemble": [
-      14.9
-    ],
-    "temperature_2m_member32_ecmwf_ifs025_ensemble": [
-      14.5
-    ],
-    "temperature_2m_member33_ecmwf_ifs025_ensemble": [
-      13.9
-    ],
-    "temperature_2m_member34_ecmwf_ifs025_ensemble": [
-      15.6
-    ],
-    "temperature_2m_member35_ecmwf_ifs025_ensemble": [
-      15.1
-    ],
-    "temperature_2m_member36_ecmwf_ifs025_ensemble": [
-      15.1
-    ],
-    "temperature_2m_member37_ecmwf_ifs025_ensemble": [
-      14.7
-    ],
-    "temperature_2m_member38_ecmwf_ifs025_ensemble": [
-      14.6
-    ],
-    "temperature_2m_member39_ecmwf_ifs025_ensemble": [
-      14.5
-    ],
-    "temperature_2m_member40_ecmwf_ifs025_ensemble": [
-      14.7
-    ],
-    "temperature_2m_member41_ecmwf_ifs025_ensemble": [
-      15.0
-    ],
-    "temperature_2m_member42_ecmwf_ifs025_ensemble": [
-      14.5
-    ],
-    "temperature_2m_member43_ecmwf_ifs025_ensemble": [
-      14.7
-    ],
-    "temperature_2m_member44_ecmwf_ifs025_ensemble": [
-      14.4
-    ],
-    "temperature_2m_member45_ecmwf_ifs025_ensemble": [
-      15.0
-    ],
-    "temperature_2m_member46_ecmwf_ifs025_ensemble": [
-      14.9
-    ],
-    "temperature_2m_member47_ecmwf_ifs025_ensemble": [
-      14.7
-    ],
-    "temperature_2m_member48_ecmwf_ifs025_ensemble": [
-      14.2
-    ],
-    "temperature_2m_member49_ecmwf_ifs025_ensemble": [
-      15.1
-    ],
-    "temperature_2m_member50_ecmwf_ifs025_ensemble": [
-      14.5
-    ]
+    "time": ["2026-10-03T18:00"],
+    "temperature_2m_icon_seamless_eps": [14.9],
+    "temperature_2m_member01_icon_seamless_eps": [15.7],
+    "temperature_2m_member02_icon_seamless_eps": [15.4],
+    "temperature_2m_member03_icon_seamless_eps": [15.2],
+    "temperature_2m_member04_icon_seamless_eps": [15.1],
+    "temperature_2m_member05_icon_seamless_eps": [14.9],
+    "temperature_2m_member06_icon_seamless_eps": [15.4],
+    "temperature_2m_member07_icon_seamless_eps": [15.2],
+    "temperature_2m_member08_icon_seamless_eps": [15.7],
+    "temperature_2m_member09_icon_seamless_eps": [15.3],
+    "temperature_2m_member10_icon_seamless_eps": [14.8],
+    "temperature_2m_member11_icon_seamless_eps": [15.5],
+    "temperature_2m_member12_icon_seamless_eps": [14.5],
+    "temperature_2m_member13_icon_seamless_eps": [14.8],
+    "temperature_2m_member14_icon_seamless_eps": [13.8],
+    "temperature_2m_member15_icon_seamless_eps": [15.5],
+    "temperature_2m_member16_icon_seamless_eps": [14.5],
+    "temperature_2m_member17_icon_seamless_eps": [15.2],
+    "temperature_2m_member18_icon_seamless_eps": [14.4],
+    "temperature_2m_member19_icon_seamless_eps": [14.7],
+    "temperature_2m_member20_icon_seamless_eps": [15.5],
+    "temperature_2m_member21_icon_seamless_eps": [14.6],
+    "temperature_2m_member22_icon_seamless_eps": [14.4],
+    "temperature_2m_member23_icon_seamless_eps": [14.3],
+    "temperature_2m_member24_icon_seamless_eps": [16.6],
+    "temperature_2m_member25_icon_seamless_eps": [15.8],
+    "temperature_2m_member26_icon_seamless_eps": [14.3],
+    "temperature_2m_member27_icon_seamless_eps": [15.1],
+    "temperature_2m_member28_icon_seamless_eps": [15.7],
+    "temperature_2m_member29_icon_seamless_eps": [14.5],
+    "temperature_2m_member30_icon_seamless_eps": [13.9],
+    "temperature_2m_member31_icon_seamless_eps": [14.1],
+    "temperature_2m_member32_icon_seamless_eps": [15.3],
+    "temperature_2m_member33_icon_seamless_eps": [14.9],
+    "temperature_2m_member34_icon_seamless_eps": [15.3],
+    "temperature_2m_member35_icon_seamless_eps": [14.3],
+    "temperature_2m_member36_icon_seamless_eps": [15.4],
+    "temperature_2m_member37_icon_seamless_eps": [15.8],
+    "temperature_2m_member38_icon_seamless_eps": [14.8],
+    "temperature_2m_member39_icon_seamless_eps": [14.7],
+    "temperature_2m_ecmwf_ifs025_ensemble": [14.9],
+    "temperature_2m_member01_ecmwf_ifs025_ensemble": [14.9],
+    "temperature_2m_member02_ecmwf_ifs025_ensemble": [15.0],
+    "temperature_2m_member03_ecmwf_ifs025_ensemble": [14.9],
+    "temperature_2m_member04_ecmwf_ifs025_ensemble": [14.7],
+    "temperature_2m_member05_ecmwf_ifs025_ensemble": [15.2],
+    "temperature_2m_member06_ecmwf_ifs025_ensemble": [14.5],
+    "temperature_2m_member07_ecmwf_ifs025_ensemble": [14.5],
+    "temperature_2m_member08_ecmwf_ifs025_ensemble": [15.0],
+    "temperature_2m_member09_ecmwf_ifs025_ensemble": [15.0],
+    "temperature_2m_member10_ecmwf_ifs025_ensemble": [14.8],
+    "temperature_2m_member11_ecmwf_ifs025_ensemble": [15.2],
+    "temperature_2m_member12_ecmwf_ifs025_ensemble": [14.7],
+    "temperature_2m_member13_ecmwf_ifs025_ensemble": [15.0],
+    "temperature_2m_member14_ecmwf_ifs025_ensemble": [15.3],
+    "temperature_2m_member15_ecmwf_ifs025_ensemble": [14.4],
+    "temperature_2m_member16_ecmwf_ifs025_ensemble": [15.2],
+    "temperature_2m_member17_ecmwf_ifs025_ensemble": [14.2],
+    "temperature_2m_member18_ecmwf_ifs025_ensemble": [15.3],
+    "temperature_2m_member19_ecmwf_ifs025_ensemble": [14.8],
+    "temperature_2m_member20_ecmwf_ifs025_ensemble": [15.6],
+    "temperature_2m_member21_ecmwf_ifs025_ensemble": [14.8],
+    "temperature_2m_member22_ecmwf_ifs025_ensemble": [14.2],
+    "temperature_2m_member23_ecmwf_ifs025_ensemble": [14.5],
+    "temperature_2m_member24_ecmwf_ifs025_ensemble": [14.6],
+    "temperature_2m_member25_ecmwf_ifs025_ensemble": [14.7],
+    "temperature_2m_member26_ecmwf_ifs025_ensemble": [15.1],
+    "temperature_2m_member27_ecmwf_ifs025_ensemble": [14.5],
+    "temperature_2m_member28_ecmwf_ifs025_ensemble": [14.9],
+    "temperature_2m_member29_ecmwf_ifs025_ensemble": [14.9],
+    "temperature_2m_member30_ecmwf_ifs025_ensemble": [14.4],
+    "temperature_2m_member31_ecmwf_ifs025_ensemble": [14.9],
+    "temperature_2m_member32_ecmwf_ifs025_ensemble": [14.5],
+    "temperature_2m_member33_ecmwf_ifs025_ensemble": [13.9],
+    "temperature_2m_member34_ecmwf_ifs025_ensemble": [15.6],
+    "temperature_2m_member35_ecmwf_ifs025_ensemble": [15.1],
+    "temperature_2m_member36_ecmwf_ifs025_ensemble": [15.1],
+    "temperature_2m_member37_ecmwf_ifs025_ensemble": [14.7],
+    "temperature_2m_member38_ecmwf_ifs025_ensemble": [14.6],
+    "temperature_2m_member39_ecmwf_ifs025_ensemble": [14.5],
+    "temperature_2m_member40_ecmwf_ifs025_ensemble": [14.7],
+    "temperature_2m_member41_ecmwf_ifs025_ensemble": [15.0],
+    "temperature_2m_member42_ecmwf_ifs025_ensemble": [14.5],
+    "temperature_2m_member43_ecmwf_ifs025_ensemble": [14.7],
+    "temperature_2m_member44_ecmwf_ifs025_ensemble": [14.4],
+    "temperature_2m_member45_ecmwf_ifs025_ensemble": [15.0],
+    "temperature_2m_member46_ecmwf_ifs025_ensemble": [14.9],
+    "temperature_2m_member47_ecmwf_ifs025_ensemble": [14.7],
+    "temperature_2m_member48_ecmwf_ifs025_ensemble": [14.2],
+    "temperature_2m_member49_ecmwf_ifs025_ensemble": [15.1],
+    "temperature_2m_member50_ecmwf_ifs025_ensemble": [14.5]
   }
 }

@@ -27,29 +27,11 @@
     "temperature_850hPa_spread": "K"
   },
   "hourly": {
-    "time": [
-      "2026-10-03T19:00",
-      "2026-10-03T20:00"
-    ],
-    "temperature_2m": [
-      13.7,
-      12.9
-    ],
-    "weather_code": [
-      3,
-      3
-    ],
-    "temperature_850hPa": [
-      8.2,
-      8.3
-    ],
-    "temperature_2m_spread": [
-      0.4,
-      0.3
-    ],
-    "temperature_850hPa_spread": [
-      0.4,
-      0.4
-    ]
+    "time": ["2026-10-03T19:00", "2026-10-03T20:00"],
+    "temperature_2m": [13.7, 12.9],
+    "weather_code": [3, 3],
+    "temperature_850hPa": [8.2, 8.3],
+    "temperature_2m_spread": [0.4, 0.3],
+    "temperature_850hPa_spread": [0.4, 0.4]
   }
 }

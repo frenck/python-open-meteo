@@ -52,178 +52,49 @@
     "temperature_850hPa_member20": "\u00b0C"
   },
   "hourly": {
-    "time": [
-      "2026-10-03T00:00",
-      "2026-10-03T01:00"
-    ],
-    "temperature_2m": [
-      10.5,
-      10.1
-    ],
-    "temperature_2m_member01": [
-      10.1,
-      9.8
-    ],
-    "temperature_2m_member02": [
-      10.3,
-      9.8
-    ],
-    "temperature_2m_member03": [
-      10.3,
-      9.7
-    ],
-    "temperature_2m_member04": [
-      11.4,
-      10.8
-    ],
-    "temperature_2m_member05": [
-      11.1,
-      10.6
-    ],
-    "temperature_2m_member06": [
-      11.3,
-      10.7
-    ],
-    "temperature_2m_member07": [
-      10.5,
-      9.8
-    ],
-    "temperature_2m_member08": [
-      10.7,
-      10.1
-    ],
-    "temperature_2m_member09": [
-      10.9,
-      10.6
-    ],
-    "temperature_2m_member10": [
-      11.1,
-      11.0
-    ],
-    "temperature_2m_member11": [
-      10.0,
-      9.5
-    ],
-    "temperature_2m_member12": [
-      11.7,
-      11.5
-    ],
-    "temperature_2m_member13": [
-      10.3,
-      9.8
-    ],
-    "temperature_2m_member14": [
-      11.8,
-      11.3
-    ],
-    "temperature_2m_member15": [
-      10.7,
-      10.2
-    ],
-    "temperature_2m_member16": [
-      10.0,
-      9.4
-    ],
-    "temperature_2m_member17": [
-      10.4,
-      10.0
-    ],
-    "temperature_2m_member18": [
-      10.5,
-      9.9
-    ],
-    "temperature_2m_member19": [
-      11.4,
-      11.0
-    ],
-    "temperature_2m_member20": [
-      11.1,
-      10.8
-    ],
-    "temperature_850hPa": [
-      6.0,
-      6.0
-    ],
-    "temperature_850hPa_member01": [
-      6.5,
-      6.4
-    ],
-    "temperature_850hPa_member02": [
-      6.2,
-      6.2
-    ],
-    "temperature_850hPa_member03": [
-      5.9,
-      6.0
-    ],
-    "temperature_850hPa_member04": [
-      6.3,
-      6.2
-    ],
-    "temperature_850hPa_member05": [
-      6.2,
-      6.3
-    ],
-    "temperature_850hPa_member06": [
-      6.4,
-      6.6
-    ],
-    "temperature_850hPa_member07": [
-      5.9,
-      6.0
-    ],
-    "temperature_850hPa_member08": [
-      6.5,
-      6.5
-    ],
-    "temperature_850hPa_member09": [
-      5.6,
-      5.7
-    ],
-    "temperature_850hPa_member10": [
-      6.2,
-      6.0
-    ],
-    "temperature_850hPa_member11": [
-      5.9,
-      5.8
-    ],
-    "temperature_850hPa_member12": [
-      5.3,
-      5.4
-    ],
-    "temperature_850hPa_member13": [
-      6.3,
-      6.0
-    ],
-    "temperature_850hPa_member14": [
-      4.8,
-      4.9
-    ],
-    "temperature_850hPa_member15": [
-      6.6,
-      6.6
-    ],
-    "temperature_850hPa_member16": [
-      6.2,
-      6.0
-    ],
-    "temperature_850hPa_member17": [
-      5.2,
-      5.1
-    ],
-    "temperature_850hPa_member18": [
-      6.3,
-      6.4
-    ],
-    "temperature_850hPa_member19": [
-      5.7,
-      5.8
-    ],
-    "temperature_850hPa_member20": [
-      6.2,
-      6.3
-    ]
+    "time": ["2026-10-03T00:00", "2026-10-03T01:00"],
+    "temperature_2m": [10.5, 10.1],
+    "temperature_2m_member01": [10.1, 9.8],
+    "temperature_2m_member02": [10.3, 9.8],
+    "temperature_2m_member03": [10.3, 9.7],
+    "temperature_2m_member04": [11.4, 10.8],
+    "temperature_2m_member05": [11.1, 10.6],
+    "temperature_2m_member06": [11.3, 10.7],
+    "temperature_2m_member07": [10.5, 9.8],
+    "temperature_2m_member08": [10.7, 10.1],
+    "temperature_2m_member09": [10.9, 10.6],
+    "temperature_2m_member10": [11.1, 11.0],
+    "temperature_2m_member11": [10.0, 9.5],
+    "temperature_2m_member12": [11.7, 11.5],
+    "temperature_2m_member13": [10.3, 9.8],
+    "temperature_2m_member14": [11.8, 11.3],
+    "temperature_2m_member15": [10.7, 10.2],
+    "temperature_2m_member16": [10.0, 9.4],
+    "temperature_2m_member17": [10.4, 10.0],
+    "temperature_2m_member18": [10.5, 9.9],
+    "temperature_2m_member19": [11.4, 11.0],
+    "temperature_2m_member20": [11.1, 10.8],
+    "temperature_850hPa": [6.0, 6.0],
+    "temperature_850hPa_member01": [6.5, 6.4],
+    "temperature_850hPa_member02": [6.2, 6.2],
+    "temperature_850hPa_member03": [5.9, 6.0],
+    "temperature_850hPa_member04": [6.3, 6.2],
+    "temperature_850hPa_member05": [6.2, 6.3],
+    "temperature_850hPa_member06": [6.4, 6.6],
+    "temperature_850hPa_member07": [5.9, 6.0],
+    "temperature_850hPa_member08": [6.5, 6.5],
+    "temperature_850hPa_member09": [5.6, 5.7],
+    "temperature_850hPa_member10": [6.2, 6.0],
+    "temperature_850hPa_member11": [5.9, 5.8],
+    "temperature_850hPa_member12": [5.3, 5.4],
+    "temperature_850hPa_member13": [6.3, 6.0],
+    "temperature_850hPa_member14": [4.8, 4.9],
+    "temperature_850hPa_member15": [6.6, 6.6],
+    "temperature_850hPa_member16": [6.2, 6.0],
+    "temperature_850hPa_member17": [5.2, 5.1],
+    "temperature_850hPa_member18": [6.3, 6.4],
+    "temperature_850hPa_member19": [5.7, 5.8],
+    "temperature_850hPa_member20": [6.2, 6.3]
   },
   "daily_units": {
     "time": "iso8601",
@@ -250,71 +121,27 @@
     "temperature_2m_max_member20": "\u00b0C"
   },
   "daily": {
-    "time": [
-      "2026-10-03"
-    ],
-    "temperature_2m_max": [
-      20.1
-    ],
-    "temperature_2m_max_member01": [
-      20.2
-    ],
-    "temperature_2m_max_member02": [
-      20.7
-    ],
-    "temperature_2m_max_member03": [
-      20.3
-    ],
-    "temperature_2m_max_member04": [
-      19.5
-    ],
-    "temperature_2m_max_member05": [
-      19.4
-    ],
-    "temperature_2m_max_member06": [
-      19.9
-    ],
-    "temperature_2m_max_member07": [
-      20.3
-    ],
-    "temperature_2m_max_member08": [
-      20.2
-    ],
-    "temperature_2m_max_member09": [
-      19.8
-    ],
-    "temperature_2m_max_member10": [
-      20.1
-    ],
-    "temperature_2m_max_member11": [
-      20.7
-    ],
-    "temperature_2m_max_member12": [
-      21.1
-    ],
-    "temperature_2m_max_member13": [
-      20.4
-    ],
-    "temperature_2m_max_member14": [
-      20.8
-    ],
-    "temperature_2m_max_member15": [
-      20.1
-    ],
-    "temperature_2m_max_member16": [
-      19.4
-    ],
-    "temperature_2m_max_member17": [
-      20.3
-    ],
-    "temperature_2m_max_member18": [
-      20.7
-    ],
-    "temperature_2m_max_member19": [
-      19.3
-    ],
-    "temperature_2m_max_member20": [
-      20.2
-    ]
+    "time": ["2026-10-03"],
+    "temperature_2m_max": [20.1],
+    "temperature_2m_max_member01": [20.2],
+    "temperature_2m_max_member02": [20.7],
+    "temperature_2m_max_member03": [20.3],
+    "temperature_2m_max_member04": [19.5],
+    "temperature_2m_max_member05": [19.4],
+    "temperature_2m_max_member06": [19.9],
+    "temperature_2m_max_member07": [20.3],
+    "temperature_2m_max_member08": [20.2],
+    "temperature_2m_max_member09": [19.8],
+    "temperature_2m_max_member10": [20.1],
+    "temperature_2m_max_member11": [20.7],
+    "temperature_2m_max_member12": [21.1],
+    "temperature_2m_max_member13": [20.4],
+    "temperature_2m_max_member14": [20.8],
+    "temperature_2m_max_member15": [20.1],
+    "temperature_2m_max_member16": [19.4],
+    "temperature_2m_max_member17": [20.3],
+    "temperature_2m_max_member18": [20.7],
+    "temperature_2m_max_member19": [19.3],
+    "temperature_2m_max_member20": [20.2]
   }
 }

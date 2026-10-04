@@ -13,21 +13,9 @@
     "wave_height_ncep_gfswave025": "m"
   },
   "hourly": {
-    "time": [
-      "2026-10-03T11:00",
-      "2026-10-03T12:00"
-    ],
-    "wave_height_marine_best_match": [
-      0.78,
-      0.76
-    ],
-    "wave_height_ecmwf_wam025": [
-      0.88,
-      0.86
-    ],
-    "wave_height_ncep_gfswave025": [
-      0.68,
-      0.7
-    ]
+    "time": ["2026-10-03T11:00", "2026-10-03T12:00"],
+    "wave_height_marine_best_match": [0.78, 0.76],
+    "wave_height_ecmwf_wam025": [0.88, 0.86],
+    "wave_height_ncep_gfswave025": [0.68, 0.7]
   }
 }

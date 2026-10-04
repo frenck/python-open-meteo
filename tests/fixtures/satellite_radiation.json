@@ -13,26 +13,10 @@
     "global_tilted_irradiance": "W/m\u00b2"
   },
   "hourly": {
-    "time": [
-      "2026-09-30T12:00",
-      "2026-09-30T13:00",
-      "2026-09-30T14:00"
-    ],
-    "shortwave_radiation": [
-      448.7,
-      531.5,
-      521.2
-    ],
-    "shortwave_radiation_clear_sky": [
-      478.2,
-      542.0,
-      558.8
-    ],
-    "global_tilted_irradiance": [
-      621.5,
-      771.2,
-      714.9
-    ]
+    "time": ["2026-09-30T12:00", "2026-09-30T13:00", "2026-09-30T14:00"],
+    "shortwave_radiation": [448.7, 531.5, 521.2],
+    "shortwave_radiation_clear_sky": [478.2, 542.0, 558.8],
+    "global_tilted_irradiance": [621.5, 771.2, 714.9]
   },
   "daily_units": {
     "time": "iso8601",
@@ -40,14 +24,8 @@
     "sunshine_duration": "s"
   },
   "daily": {
-    "time": [
-      "2026-09-30"
-    ],
-    "shortwave_radiation_sum": [
-      11.69
-    ],
-    "sunshine_duration": [
-      27216.11
-    ]
+    "time": ["2026-09-30"],
+    "shortwave_radiation_sum": [11.69],
+    "sunshine_duration": [27216.11]
   }
 }

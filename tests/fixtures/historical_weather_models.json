@@ -13,17 +13,9 @@
     "temperature_2m_max_era5_land": "\u00b0C"
   },
   "daily": {
-    "time": [
-      "2024-01-01"
-    ],
-    "temperature_2m_max_archive_best_match": [
-      8.0
-    ],
-    "temperature_2m_max_era5": [
-      8.6
-    ],
-    "temperature_2m_max_era5_land": [
-      7.9
-    ]
+    "time": ["2024-01-01"],
+    "temperature_2m_max_archive_best_match": [8.0],
+    "temperature_2m_max_era5": [8.6],
+    "temperature_2m_max_era5_land": [7.9]
   }
 }

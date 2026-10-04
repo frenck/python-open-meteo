@@ -19,24 +19,9 @@
       "2026-10-18T22:00",
       "2026-10-18T23:00"
     ],
-    "temperature_2m": [
-      null,
-      null,
-      null,
-      null
-    ],
-    "weather_code": [
-      null,
-      null,
-      null,
-      null
-    ],
-    "is_day": [
-      0,
-      0,
-      0,
-      0
-    ]
+    "temperature_2m": [null, null, null, null],
+    "weather_code": [null, null, null, null],
+    "is_day": [0, 0, 0, 0]
   },
   "daily_units": {
     "time": "iso8601",
@@ -45,21 +30,9 @@
     "sunrise": "iso8601"
   },
   "daily": {
-    "time": [
-      "2026-10-17",
-      "2026-10-18"
-    ],
-    "temperature_2m_max": [
-      18.3,
-      null
-    ],
-    "weather_code": [
-      0,
-      null
-    ],
-    "sunrise": [
-      "2026-10-17T06:01",
-      "2026-10-18T06:02"
-    ]
+    "time": ["2026-10-17", "2026-10-18"],
+    "temperature_2m_max": [18.3, null],
+    "weather_code": [0, null],
+    "sunrise": ["2026-10-17T06:01", "2026-10-18T06:02"]
   }
 }

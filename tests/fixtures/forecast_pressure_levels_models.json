@@ -20,49 +20,16 @@
     "wind_speed_500hPa_gfs_seamless": "km/h"
   },
   "hourly": {
-    "time": [
-      "2026-10-03T11:00",
-      "2026-10-03T12:00"
-    ],
-    "temperature_2m_icon_seamless": [
-      19.3,
-      20.0
-    ],
-    "temperature_850hPa_icon_seamless": [
-      6.2,
-      5.7
-    ],
-    "temperature_500hPa_icon_seamless": [
-      -15.4,
-      -14.9
-    ],
-    "wind_speed_850hPa_icon_seamless": [
-      21.0,
-      20.2
-    ],
-    "wind_speed_500hPa_icon_seamless": [
-      42.6,
-      49.9
-    ],
-    "temperature_2m_gfs_seamless": [
-      19.0,
-      19.8
-    ],
-    "temperature_850hPa_gfs_seamless": [
-      6.4,
-      6.5
-    ],
-    "temperature_500hPa_gfs_seamless": [
-      -15.2,
-      -15.2
-    ],
-    "wind_speed_850hPa_gfs_seamless": [
-      14.8,
-      15.5
-    ],
-    "wind_speed_500hPa_gfs_seamless": [
-      58.4,
-      58.0
-    ]
+    "time": ["2026-10-03T11:00", "2026-10-03T12:00"],
+    "temperature_2m_icon_seamless": [19.3, 20.0],
+    "temperature_850hPa_icon_seamless": [6.2, 5.7],
+    "temperature_500hPa_icon_seamless": [-15.4, -14.9],
+    "wind_speed_850hPa_icon_seamless": [21.0, 20.2],
+    "wind_speed_500hPa_icon_seamless": [42.6, 49.9],
+    "temperature_2m_gfs_seamless": [19.0, 19.8],
+    "temperature_850hPa_gfs_seamless": [6.4, 6.5],
+    "temperature_500hPa_gfs_seamless": [-15.2, -15.2],
+    "wind_speed_850hPa_gfs_seamless": [14.8, 15.5],
+    "wind_speed_500hPa_gfs_seamless": [58.4, 58.0]
   }
 }

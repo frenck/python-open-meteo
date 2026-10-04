@@ -30,40 +30,12 @@
     "precipitation_previous_day2": "mm"
   },
   "hourly": {
-    "time": [
-      "2026-10-02T00:00",
-      "2026-10-02T01:00",
-      "2026-10-02T02:00"
-    ],
-    "temperature_2m": [
-      13.8,
-      13.3,
-      12.1
-    ],
-    "precipitation": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "temperature_2m_previous_day1": [
-      14.2,
-      12.9,
-      12.1
-    ],
-    "temperature_2m_previous_day2": [
-      14.4,
-      14.2,
-      13.4
-    ],
-    "precipitation_previous_day1": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "precipitation_previous_day2": [
-      0.0,
-      0.0,
-      0.0
-    ]
+    "time": ["2026-10-02T00:00", "2026-10-02T01:00", "2026-10-02T02:00"],
+    "temperature_2m": [13.8, 13.3, 12.1],
+    "precipitation": [0.0, 0.0, 0.0],
+    "temperature_2m_previous_day1": [14.2, 12.9, 12.1],
+    "temperature_2m_previous_day2": [14.4, 14.2, 13.4],
+    "precipitation_previous_day1": [0.0, 0.0, 0.0],
+    "precipitation_previous_day2": [0.0, 0.0, 0.0]
   }
 }
