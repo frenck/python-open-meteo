@@ -1437,6 +1437,51 @@ async def test_ensemble_models_with_pressure_levels(
     assert ukmo.members[1].temperature_2m == [11.5]
 
 
+def test_newer_variables_parse() -> None:
+    """Test variables that the fixtures have no data for parse their values.
+
+    The values are taken from live responses of the models that have them:
+    UKMO, DMI, ECMWF, GFS, and the pressure levels of the default models.
+    """
+    hourly = HourlyForecast.from_dict(
+        {
+            "time": ["2026-10-04T00:00"],
+            "air_density_2m": [1.25],
+            "cloud_base": [1060.0],
+            "cloud_cover_2m": [12],
+            "cloud_top": [1320.0],
+            "hail": [0.4],
+            "latent_heat_flux": [-6.9],
+            "sea_water_salinity": [33.82],
+            "sensible_heat_flux": [-13.9],
+            "snow_density": [100.0],
+            "soil_moisture_index_100_to_255cm": [0.742],
+            "wind_u_component_850hPa": [19.6],
+            "wind_v_component_850hPa": [-6.8],
+        }
+    )
+
+    assert hourly.air_density_2m == [1.25]
+    assert hourly.cloud_base == [1060.0]
+    assert hourly.cloud_cover_2m == [12]
+    assert hourly.cloud_top == [1320.0]
+    assert hourly.hail == [0.4]
+    assert hourly.latent_heat_flux == [-6.9]
+    assert hourly.sea_water_salinity == [33.82]
+    assert hourly.sensible_heat_flux == [-13.9]
+    assert hourly.snow_density == [100.0]
+    assert hourly.soil_moisture_index_100_to_255cm == [0.742]
+    assert hourly.pressure_levels is not None
+    assert hourly.pressure_levels[850].wind_u_component == [19.6]
+    assert hourly.pressure_levels[850].wind_v_component == [-6.8]
+
+    daily = DailyForecast.from_dict(
+        {"time": ["2026-10-04"], "snow_depth_min": [0.1], "snow_depth_max": [0.25]}
+    )
+    assert daily.snow_depth_min == [0.1]
+    assert daily.snow_depth_max == [0.25]
+
+
 def test_spread_of_members_on_pressure_levels() -> None:
     """Test a spread per member, on a pressure level, ends up in the right place."""
     hourly = HourlyForecast.from_dict(

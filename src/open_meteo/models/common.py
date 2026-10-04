@@ -53,6 +53,12 @@ class TemporalResolution(StrEnum):
 
     # The native time resolution of the weather model
     NATIVE = "native"
+
+    # Every 15 or 30 minutes, in the hourly data; unlike the 15-minutely
+    # data, which is a section of its own
+    MINUTELY_15 = "minutely_15"
+    MINUTELY_30 = "minutely_30"
+
     HOURLY = "hourly"
     HOURLY_3 = "hourly_3"
     HOURLY_6 = "hourly_6"
