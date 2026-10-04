@@ -160,6 +160,30 @@ async def test_external_session_is_left_open(responses: aioresponses) -> None:
         assert not session.closed
 
 
+async def test_external_session_raising_for_status(
+    responses: aioresponses,
+) -> None:
+    """Test a session that raises on errors by itself still gets our errors.
+
+    Otherwise aiohttp raises first, which would end up as a connection error,
+    without the status, reason, or how long to wait.
+    """
+    responses.get(
+        "http://example.com/api/",
+        status=429,
+        body='{"reason":"Daily API request limit exceeded.","error":true}',
+        content_type="application/json",
+        headers={"Retry-After": "60"},
+    )
+    async with aiohttp.ClientSession(raise_for_status=True) as session:
+        open_meteo = OpenMeteo(session=session)
+        with pytest.raises(OpenMeteoRateLimitError) as error:
+            await open_meteo._request(URL("http://example.com/api/"))
+
+    assert error.value.reason == "Daily API request limit exceeded."
+    assert error.value.retry_after == 60
+
+
 async def test_forecast(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
@@ -2162,7 +2186,7 @@ class _StallingSession:  # pylint: disable=too-few-public-methods
         """Fail reading the body with this error, or stall when it is None."""
         self._body_error = body_error
 
-    def get(self, _url: URL) -> _StallingResponse:
+    def get(self, _url: URL, **_kwargs: object) -> _StallingResponse:
         """Return the response, which only fails once its body is read."""
         return _StallingResponse(self._body_error)
 
@@ -2218,6 +2242,10 @@ async def test_api_error_status(
         ({}, None),
         # A date instead of seconds is allowed, but not worth parsing
         ({"Retry-After": "Wed, 21 Oct 2026 07:28:00 GMT"}, None),
+        # A digit to str.isdigit, but not to int()
+        ({"Retry-After": "²"}, None),
+        # More digits than int() converts
+        ({"Retry-After": "9" * 5000}, None),
     ],
 )
 async def test_rate_limit(
@@ -2277,6 +2305,10 @@ async def test_api_error_without_reason_object(
         "not json",
         # Valid JSON, but missing the fields every response has
         "{}",
+        # Valid JSON, but not an object
+        "null",
+        "[]",
+        "42",
     ],
 )
 async def test_unexpected_response_body(
@@ -2291,12 +2323,25 @@ async def test_unexpected_response_body(
         await open_meteo_client.geocoding(name="Enschede")
 
 
+@pytest.mark.parametrize(
+    "body",
+    [
+        "not json",
+        "null",
+        "[]",
+        "42",
+        # A section that isn't an object
+        '{"hourly": []}',
+        '{"hourly": 42}',
+    ],
+)
 async def test_unexpected_response_body_with_models(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
+    body: str,
 ) -> None:
-    """Test invalid JSON raises an OpenMeteoError when splitting models too."""
-    mock_endpoint_body(responses, FORECAST_URL, "not json")
+    """Test an unexpected body raises an OpenMeteoError when splitting models too."""
+    mock_endpoint_body(responses, FORECAST_URL, body)
 
     with pytest.raises(OpenMeteoError, match="Unexpected response"):
         await open_meteo_client.forecast(
