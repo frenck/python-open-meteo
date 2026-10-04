@@ -1431,6 +1431,8 @@ class OpenMeteo:
             models: Marine models to use, by their Open-Meteo name, like
                 "ecmwf_wam025". Works the same as for the forecast: with
                 multiple models, the data of each model is in Marine.models.
+                Ensemble models, like "ecmwf_wam025_ensemble", have their
+                members in the members of the hourly and daily data.
             length_unit: Unit for wave heights and sea level: meters or feet.
             temperature_unit: Temperature unit, for the sea surface
                 temperature.

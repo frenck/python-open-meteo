@@ -6,10 +6,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from enum import StrEnum
+from typing import Any
 
 from mashumaro import field_options
 from mashumaro.mixins.orjson import DataClassORJSONMixin
 
+from ._split import _drop_suffixed, _split_members
 from .common import TimeFormat
 
 
@@ -185,6 +187,14 @@ class HourlyMarine(DataClassORJSONMixin):
     ocean_current_velocity: list[float | None] | None = None
     ocean_current_direction: list[int | None] | None = None
 
+    # Only set for ensemble models, keyed by member number
+    members: dict[int, HourlyMarine] | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the ensemble members by member number."""
+        return _split_members(d)
+
 
 @dataclass
 class HourlyMarineUnits(DataClassORJSONMixin):
@@ -215,6 +225,11 @@ class HourlyMarineUnits(DataClassORJSONMixin):
     ocean_current_velocity: str | None = None
     ocean_current_direction: str | None = None
 
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Drop the units of ensemble members."""
+        return _drop_suffixed(d)
+
 
 @dataclass
 class Minutely15Marine(HourlyMarine):
@@ -243,6 +258,14 @@ class DailyMarine(DataClassORJSONMixin):
     swell_wave_period_max: list[float | None] | None = None
     swell_wave_peak_period_max: list[float | None] | None = None
 
+    # Only set for ensemble models, keyed by member number
+    members: dict[int, DailyMarine] | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the ensemble members by member number."""
+        return _split_members(d)
+
 
 @dataclass
 class DailyMarineUnits(DataClassORJSONMixin):
@@ -260,6 +283,11 @@ class DailyMarineUnits(DataClassORJSONMixin):
     swell_wave_direction_dominant: str | None = None
     swell_wave_period_max: str | None = None
     swell_wave_peak_period_max: str | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Drop the units of ensemble members."""
+        return _drop_suffixed(d)
 
 
 @dataclass

@@ -860,6 +860,84 @@ async def test_marine_models(
     assert best_match.wave_height != ecmwf.wave_height
 
 
+async def test_marine_ensemble_members(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the members of marine ensemble models, of multiple models.
+
+    The keys are laid out like a real response: variable, member, model.
+    """
+    responses.get(
+        re.compile(rf"^{re.escape(MARINE_URL)}\?.*$"),
+        status=200,
+        body=(
+            '{"latitude":53.0,"longitude":4.0,"generationtime_ms":1.0,'
+            '"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT",'
+            '"elevation":0.0,"hourly_units":{"time":"iso8601",'
+            '"wave_height_ecmwf_wam025_ensemble":"m",'
+            '"wave_height_member01_ecmwf_wam025_ensemble":"m",'
+            '"wave_height_ncep_gefswave025":"m",'
+            '"wave_height_member01_ncep_gefswave025":"m"},'
+            '"hourly":{"time":["2026-10-04T00:00"],'
+            '"wave_height_ecmwf_wam025_ensemble":[1.2],'
+            '"wave_height_member01_ecmwf_wam025_ensemble":[1.3],'
+            '"wave_height_member02_ecmwf_wam025_ensemble":[1.1],'
+            '"wave_height_ncep_gefswave025":[1.5],'
+            '"wave_height_member01_ncep_gefswave025":[1.6]},'
+            '"daily_units":{"time":"iso8601",'
+            '"wave_height_max_ecmwf_wam025_ensemble":"m",'
+            '"wave_height_max_member01_ecmwf_wam025_ensemble":"m",'
+            '"wave_height_max_ncep_gefswave025":"m",'
+            '"wave_height_max_member01_ncep_gefswave025":"m"},'
+            '"daily":{"time":["2026-10-04"],'
+            '"wave_height_max_ecmwf_wam025_ensemble":[2.1],'
+            '"wave_height_max_member01_ecmwf_wam025_ensemble":[2.2],'
+            '"wave_height_max_ncep_gefswave025":[2.4],'
+            '"wave_height_max_member01_ncep_gefswave025":[2.5]}}'
+        ),
+        content_type="application/json",
+    )
+
+    marine = await open_meteo_client.marine(
+        latitude=53.0,
+        longitude=4.0,
+        hourly=[MarineParameters.WAVE_HEIGHT],
+        daily=[MarineDailyParameters.WAVE_HEIGHT_MAX],
+        models=["ecmwf_wam025_ensemble", "ncep_gefswave025"],
+    )
+
+    assert marine.models is not None
+    ecmwf = marine.models["ecmwf_wam025_ensemble"]
+    gefs = marine.models["ncep_gefswave025"]
+
+    # The regular variables hold the control run
+    assert ecmwf.hourly is not None
+    assert ecmwf.hourly.wave_height == [1.2]
+    assert ecmwf.hourly.members is not None
+    assert ecmwf.hourly.members[1].wave_height == [1.3]
+    assert ecmwf.hourly.members[2].wave_height == [1.1]
+    assert ecmwf.hourly.members[2].time == ecmwf.hourly.time
+
+    assert gefs.hourly is not None
+    assert gefs.hourly.members is not None
+    assert list(gefs.hourly.members) == [1]
+    assert gefs.hourly.members[1].wave_height == [1.6]
+
+    assert ecmwf.daily is not None
+    assert ecmwf.daily.members is not None
+    assert ecmwf.daily.members[1].wave_height_max == [2.2]
+    assert gefs.daily is not None
+    assert gefs.daily.members is not None
+    assert gefs.daily.members[1].wave_height_max == [2.5]
+
+    # Members share the unit of their variable
+    assert ecmwf.hourly_units is not None
+    assert ecmwf.hourly_units.wave_height == "m"
+    assert ecmwf.daily_units is not None
+    assert ecmwf.daily_units.wave_height_max == "m"
+
+
 async def test_flood(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
