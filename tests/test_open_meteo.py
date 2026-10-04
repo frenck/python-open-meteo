@@ -1170,6 +1170,83 @@ async def test_ensemble_without_spread(
     assert "_spread" not in requested_query(responses)["hourly"]
 
 
+async def test_ensemble_spread_only_where_available(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the spread is only requested for variables that have one.
+
+    The API rejects the whole request when asked for a spread it doesn't
+    have, like that of precipitation_probability or albedo.
+    """
+    mock_endpoint(responses, ENSEMBLE_URL, "ensemble_spread.json")
+
+    await open_meteo_client.ensemble(
+        latitude=52.27,
+        longitude=6.87417,
+        models=["ecmwf_ifs025_ensemble_mean"],
+        hourly=[
+            HourlyParameters.TEMPERATURE_2M,
+            HourlyParameters.PRECIPITATION_PROBABILITY,
+            HourlyParameters.ALBEDO,
+            HourlyParameters.WIND_SPEED_10M,
+        ],
+        spread=True,
+    )
+
+    assert requested_query(responses)["hourly"] == (
+        "temperature_2m,precipitation_probability,albedo,wind_speed_10m,"
+        "temperature_2m_spread,wind_speed_10m_spread"
+    )
+
+
+async def test_ensemble_older_model_names(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test older model names get the data the API returns under the new name.
+
+    The API returns ecmwf_ifs025 as ecmwf_ifs025_ensemble, and
+    meteoswiss_icon_ch1 as meteoswiss_icon_ch1_ensemble.
+    """
+    responses.get(
+        re.compile(rf"^{re.escape(ENSEMBLE_URL)}\?.*$"),
+        status=200,
+        body=(
+            '{"latitude":52.28,"longitude":6.88,"generationtime_ms":1.0,'
+            '"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT",'
+            '"elevation":28.0,"hourly_units":{"time":"iso8601",'
+            '"temperature_2m_ecmwf_ifs025_ensemble":"°C",'
+            '"temperature_2m_meteoswiss_icon_ch1_ensemble":"°C"},'
+            '"hourly":{"time":["2026-10-04T00:00"],'
+            '"temperature_2m_ecmwf_ifs025_ensemble":[14.2],'
+            '"temperature_2m_meteoswiss_icon_ch1_ensemble":[12.8]}}'
+        ),
+        content_type="application/json",
+    )
+
+    forecast = await open_meteo_client.ensemble(
+        latitude=52.27,
+        longitude=6.87,
+        models=["ecmwf_ifs025", "meteoswiss_icon_ch1"],
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+    )
+
+    assert forecast.models is not None
+    temperatures = {
+        name: model.hourly.temperature_2m if model.hourly else None
+        for name, model in forecast.models.items()
+    }
+    assert temperatures == {
+        "ecmwf_ifs025": [14.2],
+        "meteoswiss_icon_ch1": [12.8],
+    }
+
+    units = forecast.models["ecmwf_ifs025"].hourly_units
+    assert units is not None
+    assert units.temperature_2m == "°C"
+
+
 async def test_ensemble_model_names_sharing_data(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
