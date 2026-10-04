@@ -76,7 +76,13 @@ def _parse_retry_after(value: str | None) -> int | None:
     """Return the seconds to wait from a Retry-After header, if it has those."""
     if value is None or not value.isdigit():
         return None
-    return int(value)
+
+    # Some characters count as digits, but int() refuses them, like a
+    # superscript two; so does a number with thousands of digits
+    try:
+        return int(value)
+    except ValueError:
+        return None
 
 
 def _parse(response_type: type[ResponseT], data: str | dict[str, Any]) -> ResponseT:
@@ -85,13 +91,16 @@ def _parse(response_type: type[ResponseT], data: str | dict[str, Any]) -> Respon
     A response that doesn't fit the model, like invalid JSON or missing
     fields, raises an OpenMeteoError, instead of a parsing exception.
     """
+    msg = "Unexpected response from the Open-Meteo API"
     try:
-        if isinstance(data, str):
-            return response_type.from_json(data)
-        return response_type.from_dict(data)
+        decoded = orjson.loads(data) if isinstance(data, str) else data
+        if isinstance(decoded, dict):
+            return response_type.from_dict(decoded)
     except (orjson.JSONDecodeError, InvalidFieldValue, MissingField) as exception:
-        msg = "Unexpected response from the Open-Meteo API"
         raise OpenMeteoError(msg) from exception
+
+    # Valid JSON, but not an object, like null or a list
+    raise OpenMeteoError(msg)
 
 
 def _build_query(**parameters: object) -> dict[str, str]:
@@ -314,6 +323,12 @@ def _split_models(
         if section not in data:
             continue
 
+        # Anything but an object, like null, is left as it is, for parsing
+        # to judge
+        if not isinstance(data[section], dict):
+            shared[section] = data[section]
+            continue
+
         leftover: dict[str, Any] = {}
         for key, value in data[section].items():
             suffix = next((m for m in by_length if key.endswith(f"_{m}")), None)
@@ -391,7 +406,9 @@ class OpenMeteo:
         # breaks off is a timeout or connection problem as well
         try:
             async with asyncio.timeout(self.request_timeout):
-                async with self.session.get(url) as response:
+                # A session passed in can raise on errors by itself, which
+                # would skip the handling of errors and rate limits below
+                async with self.session.get(url, raise_for_status=False) as response:
                     status = response.status
                     content_type = response.headers.get(hdrs.CONTENT_TYPE, "")
                     retry_after = response.headers.get(hdrs.RETRY_AFTER)
@@ -1351,12 +1368,16 @@ class OpenMeteo:
             raise OpenMeteoError(msg)
 
         if models is not None and len(set(models)) > 1:
+            msg = "Unexpected response from the Open-Meteo API"
             try:
-                split = _split_models(orjson.loads(data), models, model_suffixes)
+                decoded = orjson.loads(data)
             except orjson.JSONDecodeError as exception:
-                msg = "Unexpected response from the Open-Meteo API"
                 raise OpenMeteoError(msg) from exception
-            return _parse(response_type, split)
+
+            if not isinstance(decoded, dict):
+                raise OpenMeteoError(msg)
+
+            return _parse(response_type, _split_models(decoded, models, model_suffixes))
 
         return _parse(response_type, data)
 
