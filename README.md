@@ -59,8 +59,19 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-Open-Meteo only returns the variables you ask for, so every field on the
-returned models is optional. Fields you did not request are `None`.
+Open-Meteo only returns the variables you ask for, so the variables and
+sections on the returned models are optional: those you did not request are
+`None`. A requested series can contain `None` values as well, where a weather
+model has no data, like at the end of a long forecast. Those keep their place,
+so the values stay aligned with their timestamps:
+
+```python
+for time, temperature in zip(
+    forecast.hourly.time, forecast.hourly.temperature_2m, strict=True
+):
+    if temperature is not None:
+        print(time, temperature)
+```
 
 ### Weather forecast
 
@@ -116,6 +127,30 @@ async with OpenMeteo() as open_meteo:
 
 Leave out `forecast_days` to get the API default of 7 days (up to 16), and
 use `past_days` to include data from the past as well.
+
+By default, the API picks the best weather models for the location. Pick them
+yourself with `models`. With a single model, the data stays where it is. With
+multiple models, the data of each model ends up in a forecast of its own, in
+`forecast.models`, while the current conditions stay on the forecast itself:
+
+```python
+from open_meteo import HourlyParameters, OpenMeteo
+
+async with OpenMeteo() as open_meteo:
+    forecast = await open_meteo.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        hourly=[HourlyParameters.TEMPERATURE_2M],
+        models=["icon_seamless", "gfs_seamless"],
+    )
+
+    for name, model in forecast.models.items():
+        print(name, model.hourly.temperature_2m)
+```
+
+When only one of the models has data for the location, the API returns its
+data without telling which model it is from. It then stays on the forecast
+itself, like with a single model, and `forecast.models` is `None`.
 
 Weather higher up in the atmosphere is available on pressure levels, like 850
 or 500 hPa. Those end up per level, for the hourly data by default, or for the
@@ -508,6 +543,7 @@ To install all packages, including all development requirements:
 ```bash
 npm install
 poetry install
+poetry run prek install
 ```
 
 As this repository uses the [prek][prek] framework, all changes

@@ -1,0 +1,39 @@
+{
+  "latitude": 52.3125,
+  "longitude": 6.75,
+  "generationtime_ms": 1.332998275756836,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 29.0,
+  "hourly_units": {
+    "time": "iso8601",
+    "temperature_2m_ukmo_global_ensemble_20km": "\u00b0C",
+    "temperature_2m_member01_ukmo_global_ensemble_20km": "\u00b0C",
+    "temperature_2m_member02_ukmo_global_ensemble_20km": "\u00b0C",
+    "temperature_850hPa_ukmo_global_ensemble_20km": "undefined",
+    "temperature_850hPa_member01_ukmo_global_ensemble_20km": "undefined",
+    "temperature_850hPa_member02_ukmo_global_ensemble_20km": "undefined",
+    "temperature_2m_cmc_gem_geps": "\u00b0C",
+    "temperature_2m_member01_cmc_gem_geps": "\u00b0C",
+    "temperature_2m_member02_cmc_gem_geps": "\u00b0C",
+    "temperature_850hPa_cmc_gem_geps": "\u00b0C",
+    "temperature_850hPa_member01_cmc_gem_geps": "\u00b0C",
+    "temperature_850hPa_member02_cmc_gem_geps": "\u00b0C"
+  },
+  "hourly": {
+    "time": ["2026-10-04T08:00"],
+    "temperature_2m_ukmo_global_ensemble_20km": [12.1],
+    "temperature_2m_member01_ukmo_global_ensemble_20km": [11.5],
+    "temperature_2m_member02_ukmo_global_ensemble_20km": [11.8],
+    "temperature_850hPa_ukmo_global_ensemble_20km": [null],
+    "temperature_850hPa_member01_ukmo_global_ensemble_20km": [null],
+    "temperature_850hPa_member02_ukmo_global_ensemble_20km": [null],
+    "temperature_2m_cmc_gem_geps": [11.4],
+    "temperature_2m_member01_cmc_gem_geps": [12.1],
+    "temperature_2m_member02_cmc_gem_geps": [12.3],
+    "temperature_850hPa_cmc_gem_geps": [7.4],
+    "temperature_850hPa_member01_cmc_gem_geps": [7.5],
+    "temperature_850hPa_member02_cmc_gem_geps": [6.5]
+  }
+}
