@@ -1948,6 +1948,7 @@ class OpenMeteo:
         temporal_resolution: TemporalResolution | None = None,
         domains: AirQualityDomain | None = None,
         cell_selection: CellSelection | None = None,
+        models: list[AirQualityDomain] | None = None,
     ) -> AirQuality:
         """Get air quality forecast.
 
@@ -1981,13 +1982,35 @@ class OpenMeteo:
                 the European and global domain automatically.
             cell_selection: How to match the location to a grid cell of the
                 air quality model.
+            models: Air quality models to get the data of, side by side,
+                instead of domains: like CAMS_EUROPE and CAMS_GLOBAL. Works
+                the same as for the forecast: with multiple models, the data
+                of each model is in AirQuality.models. AUTO is not a model of
+                its own, so it can't be used here.
 
         Returns:
         -------
             An AirQuality object.
 
+        Raises:
+        ------
+            ValueError: Both domains and models are given, as domains would
+                win; or models has AUTO, which the API refuses.
+
         """
-        query = _build_query(
+        if domains is not None and models is not None:
+            msg = "Use either domains or models, not both"
+            raise ValueError(msg)
+
+        if models is not None and AirQualityDomain.AUTO in models:
+            msg = "AUTO is not an air quality model; leave models unset instead"
+            raise ValueError(msg)
+
+        # Plain names, so the data ends up keyed by name, like for other APIs
+        return await self._request_with_models(
+            "https://air-quality-api.open-meteo.com/v1/air-quality",
+            AirQuality,
+            models=None if models is None else [model.value for model in models],
             latitude=latitude,
             longitude=longitude,
             timezone=timezone,
@@ -2005,14 +2028,7 @@ class OpenMeteo:
             temporal_resolution=temporal_resolution,
             domains=domains,
             cell_selection=cell_selection,
-            # The models parse timestamps in ISO 8601, so never rely on the default
-            timeformat=TimeFormat.ISO_8601,
         )
-        url = URL("https://air-quality-api.open-meteo.com/v1/air-quality").with_query(
-            query
-        )
-        data = await self._request(url=url)
-        return _parse(AirQuality, data)
 
     async def geocoding(
         self,

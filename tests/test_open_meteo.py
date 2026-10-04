@@ -2077,6 +2077,77 @@ async def test_air_quality(
     assert air_quality == snapshot
 
 
+async def test_air_quality_models(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the data of each air quality model ends up in a response of its own.
+
+    The current conditions come from a single model, so they stay on top.
+    """
+    mock_endpoint(responses, AIR_QUALITY_URL, "air_quality_models.json")
+
+    models = [AirQualityDomain.CAMS_EUROPE, AirQualityDomain.CAMS_GLOBAL]
+    air_quality = await open_meteo_client.air_quality(
+        latitude=52.27,
+        longitude=6.87417,
+        current=[AirQualityParameters.PM10],
+        hourly=[AirQualityParameters.PM10, AirQualityParameters.EUROPEAN_AQI],
+        models=models,
+    )
+
+    assert requested_query(responses)["models"] == "cams_europe,cams_global"
+    assert "domains" not in requested_query(responses)
+
+    assert air_quality.hourly is None
+    assert air_quality.current is not None
+    assert air_quality.current.pm10 is not None
+    assert air_quality.models is not None
+    assert list(air_quality.models) == ["cams_europe", "cams_global"]
+
+    europe = air_quality.models["cams_europe"]
+    world = air_quality.models["cams_global"]
+    assert europe.hourly is not None
+    assert world.hourly is not None
+    assert europe.hourly.pm10 is not None
+    assert europe.hourly.european_aqi is not None
+    assert europe.hourly.pm10 != world.hourly.pm10
+    assert europe.hourly.time == world.hourly.time
+    assert europe.hourly_units is not None
+    assert europe.hourly_units.pm10 == "μg/m³"
+
+
+@pytest.mark.parametrize(
+    ("parameters", "message"),
+    [
+        (
+            {
+                "domains": AirQualityDomain.CAMS_EUROPE,
+                "models": [AirQualityDomain.CAMS_GLOBAL],
+            },
+            "either domains or models",
+        ),
+        (
+            {"models": [AirQualityDomain.AUTO, AirQualityDomain.CAMS_GLOBAL]},
+            "AUTO is not an air quality model",
+        ),
+    ],
+)
+async def test_air_quality_models_invalid(
+    open_meteo_client: OpenMeteo,
+    parameters: dict[str, Any],
+    message: str,
+) -> None:
+    """Test combinations the API would silently ignore or refuse raise early."""
+    with pytest.raises(ValueError, match=message):
+        await open_meteo_client.air_quality(
+            latitude=52.27,
+            longitude=6.87417,
+            hourly=[AirQualityParameters.PM10],
+            **parameters,
+        )
+
+
 async def test_air_quality_defaults(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
