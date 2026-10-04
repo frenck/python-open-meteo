@@ -7,7 +7,7 @@ import dataclasses
 import re
 from datetime import date, datetime
 from enum import StrEnum
-from typing import Self, cast
+from typing import Any, Self, cast
 from urllib.parse import unquote
 from zoneinfo import ZoneInfo
 
@@ -579,17 +579,6 @@ async def test_pressure_level_sections_without_current(
 ) -> None:
     """Test current conditions can't be chosen where an API doesn't have those."""
     with pytest.raises(ValueError, match="There is no current data"):
-        await open_meteo_client.historical_forecast(
-            latitude=52.27,
-            longitude=6.87417,
-            start_date=date(2024, 1, 1),
-            end_date=date(2024, 1, 1),
-            pressure_level_variables=[PressureLevelVariable.TEMPERATURE],
-            pressure_levels=[850],
-            pressure_level_sections=[ForecastSection.CURRENT],
-        )
-
-    with pytest.raises(ValueError, match="There is no current data"):
         await open_meteo_client.single_run(
             latitude=52.27,
             longitude=6.87417,
@@ -671,6 +660,172 @@ async def test_historical_forecast(
     assert forecast.daily is not None
     assert forecast.daily.time == [date(2024, 1, 1), date(2024, 1, 2)]
     assert forecast == snapshot
+
+
+MINUTELY_15_WINDOW = {
+    "start_minutely_15": datetime(2026, 10, 4, 10, 15),  # noqa: DTZ001
+    "end_minutely_15": datetime(2026, 10, 4, 11, 0),  # noqa: DTZ001
+}
+MINUTELY_15_WINDOW_QUERY = {
+    "start_minutely_15": "2026-10-04T10:15",
+    "end_minutely_15": "2026-10-04T11:00",
+}
+RELATIVE_WINDOW = {
+    "initial_hours": 6,
+    "forecast_minutely_15": 8,
+    "past_minutely_15": 4,
+    "initial_minutely_15": 24,
+}
+RELATIVE_WINDOW_QUERY = {
+    "initial_hours": "6",
+    "forecast_minutely_15": "8",
+    "past_minutely_15": "4",
+    "initial_minutely_15": "24",
+}
+
+
+# The endpoint and a fixture to respond with, per method
+TIME_CONTROL_ENDPOINTS = {
+    "air_quality": (AIR_QUALITY_URL, "air_quality.json"),
+    "climate": (CLIMATE_URL, "climate.json"),
+    "ensemble": (ENSEMBLE_URL, "ensemble.json"),
+    "forecast": (FORECAST_URL, "forecast_minimal.json"),
+    "historical_forecast": (HISTORICAL_FORECAST_URL, "historical_forecast.json"),
+    "marine": (MARINE_URL, "marine.json"),
+    "previous_runs": (PREVIOUS_RUNS_URL, "previous_runs.json"),
+    "seasonal": (SEASONAL_URL, "seasonal.json"),
+}
+
+
+@pytest.mark.parametrize(
+    ("method", "parameters", "expected"),
+    [
+        (
+            "forecast",
+            RELATIVE_WINDOW,
+            RELATIVE_WINDOW_QUERY,
+        ),
+        (
+            "forecast",
+            MINUTELY_15_WINDOW,
+            MINUTELY_15_WINDOW_QUERY,
+        ),
+        (
+            "historical_forecast",
+            {
+                "current": [HourlyParameters.TEMPERATURE_2M],
+                "forecast_days": 1,
+                "past_days": 2,
+                "forecast_hours": 12,
+                "past_hours": 6,
+                **RELATIVE_WINDOW,
+            },
+            {
+                "current": "temperature_2m",
+                "forecast_days": "1",
+                "past_days": "2",
+                "forecast_hours": "12",
+                "past_hours": "6",
+                **RELATIVE_WINDOW_QUERY,
+            },
+        ),
+        (
+            "historical_forecast",
+            MINUTELY_15_WINDOW,
+            MINUTELY_15_WINDOW_QUERY,
+        ),
+        (
+            "ensemble",
+            {"models": ["icon_d2"], **RELATIVE_WINDOW},
+            RELATIVE_WINDOW_QUERY,
+        ),
+        (
+            "ensemble",
+            {"models": ["icon_d2"], **MINUTELY_15_WINDOW},
+            MINUTELY_15_WINDOW_QUERY,
+        ),
+        (
+            "previous_runs",
+            {"previous_days": [1], **RELATIVE_WINDOW},
+            RELATIVE_WINDOW_QUERY,
+        ),
+        (
+            "previous_runs",
+            {"previous_days": [1], **MINUTELY_15_WINDOW},
+            MINUTELY_15_WINDOW_QUERY,
+        ),
+        (
+            "marine",
+            {"initial_hours": 6, "initial_minutely_15": 24},
+            {"initial_hours": "6", "initial_minutely_15": "24"},
+        ),
+        (
+            "marine",
+            MINUTELY_15_WINDOW,
+            MINUTELY_15_WINDOW_QUERY,
+        ),
+        (
+            "seasonal",
+            {
+                "forecast_hours": 12,
+                "past_hours": 6,
+                "initial_hours": 0,
+                "elevation": 0.0,
+            },
+            {
+                "forecast_hours": "12",
+                "past_hours": "6",
+                "initial_hours": "0",
+                "elevation": "0.0",
+            },
+        ),
+        (
+            "seasonal",
+            {
+                "start_hour": datetime(2026, 10, 10, 0, 0),  # noqa: DTZ001
+                "end_hour": datetime(2026, 10, 10, 12, 0),  # noqa: DTZ001
+            },
+            {"start_hour": "2026-10-10T00:00", "end_hour": "2026-10-10T12:00"},
+        ),
+        (
+            "climate",
+            {
+                "start_date": date(2030, 1, 1),
+                "end_date": date(2030, 1, 2),
+                "daily": [DailyParameters.TEMPERATURE_2M_MAX],
+                "elevation": 0.0,
+            },
+            {"elevation": "0.0"},
+        ),
+        (
+            "air_quality",
+            {"forecast_hours": 2, "initial_hours": 3},
+            {"forecast_hours": "2", "initial_hours": "3"},
+        ),
+    ],
+)
+async def test_time_controls(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+    method: str,
+    parameters: dict[str, Any],
+    expected: dict[str, str],
+) -> None:
+    """Test the time controls of each API end up in the query."""
+    mock_endpoint(responses, *TIME_CONTROL_ENDPOINTS[method])
+
+    await getattr(open_meteo_client, method)(
+        latitude=52.27,
+        longitude=6.87417,
+        **parameters,
+    )
+
+    query = requested_query(responses)
+    assert {key: query.get(key) for key in expected} == expected
+
+    # Dates are only sent when given, which the historical forecast no longer
+    # needs for a time interval relative to today
+    assert ("start_date" in query) == ("start_date" in parameters)
 
 
 async def test_historical_forecast_models(
