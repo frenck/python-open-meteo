@@ -534,6 +534,9 @@ class OpenMeteo:
                 midnight or 4 for 1:00, instead of the current step.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
+                Any start and end, also of hours or 15-minutely steps, rules
+                out the relative time intervals, like forecast_days or
+                past_hours, for all data.
             end_date: Last day of the time interval to return.
             start_hour: First hour of the time interval to return, for hourly
                 and 15-minutely data. Use it together with end_hour. This is
@@ -674,6 +677,9 @@ class OpenMeteo:
             start_date: First day of the time interval to return. Use it
                 together with end_date, or leave both unset for a time
                 interval relative to today, like with forecast_days.
+                Any start and end, also of hours or 15-minutely steps, rules
+                out the relative time intervals, like forecast_days or
+                past_hours, for all data.
             end_date: Last day of the time interval to return.
             timezone: All timestamps are returned as local time and data is
                 returned starting at 0:00 local time.
@@ -898,6 +904,9 @@ class OpenMeteo:
                 midnight or 4 for 1:00, instead of the current step.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
+                Any start and end, also of hours or 15-minutely steps, rules
+                out the relative time intervals, like forecast_days or
+                past_hours, for all data.
             end_date: Last day of the time interval to return.
             start_hour: First hour of the time interval to return, for hourly
                 and 15-minutely data. Use it together with end_hour. This is
@@ -1077,6 +1086,9 @@ class OpenMeteo:
                 midnight or 4 for 1:00, instead of the current step.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
+                Any start and end, also of hours or 15-minutely steps, rules
+                out the relative time intervals, like forecast_days or
+                past_hours, for all data.
             end_date: Last day of the time interval to return.
             start_hour: First hour of the time interval to return, for hourly
                 and 15-minutely data. Use it together with end_hour. This is
@@ -1667,6 +1679,9 @@ class OpenMeteo:
                 midnight or 4 for 1:00, instead of the current step.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
+                Any start and end, also of hours or 15-minutely steps, rules
+                out the relative time intervals, like forecast_days or
+                past_hours, for all data.
             end_date: Last day of the time interval to return.
             start_hour: First hour of the time interval to return, for hourly
                 and 15-minutely data. Use it together with end_hour. This is
@@ -1771,9 +1786,11 @@ class OpenMeteo:
                 returned starting at 0:00 local time.
             disable_bias_correction: Return the raw climate model data,
                 without downscaling and bias correction onto ERA5-Land.
-            elevation: Elevation used for statistical downscaling. Leave unset
-                to use a digital elevation model, or pass float("nan") to
-                switch downscaling off.
+            elevation: Elevation to correct the temperatures for, at 0.65 °C
+                per 100 meters. Leave unset to use a digital elevation model,
+                or pass float("nan") to use the elevation of the climate model
+                grid cell. The bias correction still corrects for elevation
+                then; set disable_bias_correction as well for raw data.
             cell_selection: How to match the location to a grid cell of the
                 climate model.
             models: Climate models to use, by their exact, case sensitive
@@ -1880,6 +1897,8 @@ class OpenMeteo:
                 from, like 0 for midnight, instead of the current hour.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
+                Any start and end, also of hours, rules out the relative time
+                intervals, like forecast_days or past_hours, for all data.
             end_date: Last day of the time interval to return.
             start_hour: First hour of the time interval to return, for the
                 6-hourly data. Use it together with end_hour. This is local
@@ -2063,6 +2082,8 @@ class OpenMeteo:
                 from, like 0 for midnight, instead of the current hour.
             start_date: First day of the time interval to return. Use it
                 together with end_date, instead of forecast_days.
+                Any start and end, also of hours, rules out the relative time
+                intervals, like forecast_days or past_hours, for all data.
             end_date: Last day of the time interval to return.
             start_hour: First hour of the time interval to return. Use it
                 together with end_hour. This is local time in the requested

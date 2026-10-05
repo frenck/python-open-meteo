@@ -36,6 +36,9 @@ from open_meteo import (
     DailyParameters,
     FloodParameters,
     ForecastSection,
+    HeightLevelCurrent,
+    HeightLevelForecast,
+    HeightLevelForecastUnits,
     HeightLevelVariable,
     HourlyAirQuality,
     HourlyAirQualityUnits,
@@ -2276,13 +2279,19 @@ async def test_air_quality_models(
     assert air_quality.models is not None
     assert list(air_quality.models) == ["cams_europe", "cams_global"]
 
+    # Each model has its own data, not the other's
     europe = air_quality.models["cams_europe"]
     world = air_quality.models["cams_global"]
     assert europe.hourly is not None
     assert world.hourly is not None
     assert europe.hourly.pm10 is not None
+    assert world.hourly.pm10 is not None
+    assert europe.hourly.pm10[:2] == [35.3, 33.9]
+    assert world.hourly.pm10[:2] == [20.5, 19.1]
     assert europe.hourly.european_aqi is not None
-    assert europe.hourly.pm10 != world.hourly.pm10
+    assert world.hourly.european_aqi is not None
+    assert europe.hourly.european_aqi[:2] == [45, 46]
+    assert world.hourly.european_aqi[:2] == [44, 43]
     assert europe.hourly.time == world.hourly.time
     assert europe.hourly_units is not None
     assert europe.hourly_units.pm10 == "μg/m³"
@@ -2803,6 +2812,35 @@ async def test_unexpected_response_body(
         await open_meteo_client.geocoding(name="Enschede")
 
 
+# A multiple model response that parses, to break one section of
+VALID_MODELS_ENVELOPE = (
+    '{"latitude":52.28,"longitude":6.88,"generationtime_ms":1.0,'
+    '"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT",'
+    '"elevation":28.0,"hourly_units":{"time":"iso8601",'
+    '"temperature_2m_icon_seamless":"°C","temperature_2m_gfs_seamless":"°C"},'
+    '"hourly":{"time":["2026-10-04T00:00"],'
+    '"temperature_2m_icon_seamless":[14.5],"temperature_2m_gfs_seamless":[13.1]}}'
+)
+
+
+async def test_valid_models_envelope(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the envelope the next test breaks parses, when it isn't broken."""
+    mock_endpoint_body(responses, FORECAST_URL, VALID_MODELS_ENVELOPE)
+
+    forecast = await open_meteo_client.forecast(
+        latitude=52.27,
+        longitude=6.87417,
+        models=["icon_seamless", "gfs_seamless"],
+    )
+
+    assert forecast.models is not None
+    assert forecast.models["gfs_seamless"].hourly is not None
+    assert forecast.models["gfs_seamless"].hourly.temperature_2m == [13.1]
+
+
 @pytest.mark.parametrize(
     "body",
     [
@@ -2810,9 +2848,16 @@ async def test_unexpected_response_body(
         "null",
         "[]",
         "42",
-        # A section that isn't an object
-        '{"hourly": []}',
-        '{"hourly": 42}',
+        # A valid response with model data, but a section that isn't an
+        # object; it must not be dropped silently
+        pytest.param(
+            VALID_MODELS_ENVELOPE.removesuffix("}") + ',"daily":[]}',
+            id="section-list",
+        ),
+        pytest.param(
+            VALID_MODELS_ENVELOPE.removesuffix("}") + ',"daily":42}',
+            id="section-number",
+        ),
     ],
 )
 async def test_unexpected_response_body_with_models(
@@ -2897,6 +2942,14 @@ VARIABLE_MODELS = [
             PressureLevelCurrent,
             PressureLevelForecast,
             PressureLevelForecastUnits,
+        ],
+    ),
+    (
+        HeightLevelVariable,
+        [
+            HeightLevelCurrent,
+            HeightLevelForecast,
+            HeightLevelForecastUnits,
         ],
     ),
 ]

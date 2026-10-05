@@ -473,15 +473,17 @@ async with OpenMeteo() as open_meteo:
 
     for result in geocoding.results or []:
         print(result.name, result.country, result.latitude, result.longitude)
+
+    # A result can be looked up again later, by its ID
+    if geocoding.results:
+        location = await open_meteo.geocoding_by_id(
+            location_id=geocoding.results[0].geo_id,
+        )
+        print(location.name, location.timezone)
 ```
 
-`results` is `None` when nothing matches. A result can be looked up again
-later by its ID, which returns that single result:
-
-```python
-location = await open_meteo.geocoding_by_id(location_id=result.geo_id)
-print(location.name, location.timezone)
-```
+`results` is `None` when nothing matches. `geocoding_by_id` returns that
+single result.
 
 ### Elevation
 
