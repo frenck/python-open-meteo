@@ -1,7 +1,6 @@
 """Models for the Open-Meteo flood API."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date
@@ -50,7 +49,7 @@ class DailyFlood(DataClassORJSONMixin):
     river_discharge_p75: list[float | None] | None = None
 
     # Only set when ensemble members were requested, keyed by member number
-    members: dict[int, DailyFlood] | None = None
+    members: "dict[int, DailyFlood] | None" = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -92,4 +91,4 @@ class Flood(DataClassORJSONMixin):
     daily: DailyFlood | None = None
 
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, Flood] | None = None
+    models: "dict[str, Flood] | None" = None

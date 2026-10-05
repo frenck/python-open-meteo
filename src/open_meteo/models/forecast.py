@@ -1,7 +1,6 @@
 """Models for the Open-Meteo weather forecast APIs."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 import dataclasses
 import re
@@ -724,16 +723,16 @@ class CurrentForecast(DataClassORJSONMixin):
 
     # Only set for previous model runs, keyed by how many days before each
     # hour the forecast was made
-    previous_days: dict[int, CurrentForecast] | None = None
+    previous_days: "dict[int, CurrentForecast] | None" = None
 
     # Only set for ensemble mean models: the spread over the members
-    spread: CurrentForecast | None = None
+    spread: "CurrentForecast | None" = None
 
     # Pressure level data, keyed by the pressure level in hPa
-    pressure_levels: dict[int, PressureLevelCurrent] | None = None
+    pressure_levels: "dict[int, PressureLevelCurrent] | None" = None
 
     # Height level data, keyed by the height above ground in meters
-    height_levels: dict[int, HeightLevelCurrent] | None = None
+    height_levels: "dict[int, HeightLevelCurrent] | None" = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -924,13 +923,13 @@ class CurrentForecastUnits(DataClassORJSONMixin):
     wind_speed_80m: str | None = None
 
     # Pressure level units, keyed by the pressure level in hPa
-    pressure_levels: dict[int, PressureLevelForecastUnits] | None = None
+    pressure_levels: "dict[int, PressureLevelForecastUnits] | None" = None
 
     # Height level units, keyed by the height above ground in meters
-    height_levels: dict[int, HeightLevelForecastUnits] | None = None
+    height_levels: "dict[int, HeightLevelForecastUnits] | None" = None
 
     # Only set for ensemble mean models: the units of the spread
-    spread: CurrentForecastUnits | None = None
+    spread: "CurrentForecastUnits | None" = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -1357,14 +1356,14 @@ class HourlyForecast(DataClassORJSONMixin):
     height_levels: dict[int, HeightLevelForecast] | None = None
 
     # Only set for ensemble data, keyed by member number
-    members: dict[int, HourlyForecast] | None = None
+    members: "dict[int, HourlyForecast] | None" = None
 
     # Only set for previous model runs, keyed by how many days before each
     # hour the forecast was made
-    previous_days: dict[int, HourlyForecast] | None = None
+    previous_days: "dict[int, HourlyForecast] | None" = None
 
     # Only set for ensemble mean models: the spread over the members
-    spread: HourlyForecast | None = None
+    spread: "HourlyForecast | None" = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -1568,7 +1567,7 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     height_levels: dict[int, HeightLevelForecastUnits] | None = None
 
     # Only set for ensemble mean models: the units of the spread
-    spread: HourlyForecastUnits | None = None
+    spread: "HourlyForecastUnits | None" = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -1692,7 +1691,7 @@ class DailyForecast(DataClassORJSONMixin):
     wind_speed_200m_min: list[float | None] | None = None
 
     # Only set for ensemble data, keyed by member number
-    members: dict[int, DailyForecast] | None = None
+    members: "dict[int, DailyForecast] | None" = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -1826,4 +1825,4 @@ class Forecast(DataClassORJSONMixin):
     minutely_15: Minutely15Forecast | None = None
 
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, Forecast] | None = None
+    models: "dict[str, Forecast] | None" = None

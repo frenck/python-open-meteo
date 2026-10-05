@@ -1,5 +1,7 @@
 """Models for the Open-Meteo APIs."""
 
+from mashumaro.mixins.orjson import DataClassORJSONMixin
+
 from .air_quality import (
     AirQuality,
     AirQualityDomain,
@@ -135,3 +137,27 @@ __all__ = [
     "WeeklySeasonalUnits",
     "WindSpeedUnit",
 ]
+
+
+def _compile_models() -> None:
+    """Compile the parsing of the models mashumaro couldn't compile yet.
+
+    A model that refers to itself, or to one defined after it, like the
+    members of an hourly forecast, has those annotations quoted. mashumaro
+    can't resolve them while the model is being defined, so it compiles that
+    model on first use instead. Under freezegun, as in many test suites, date
+    and datetime are fakes by then, also within mashumaro, and parsing fails.
+    Now that every model exists, compile those right away.
+    """
+    for name in __all__:
+        model = globals()[name]
+        if not (isinstance(model, type) and issubclass(model, DataClassORJSONMixin)):
+            continue
+
+        if any(
+            isinstance(annotation, str) for annotation in model.__annotations__.values()
+        ):
+            model.__init_subclass__()
+
+
+_compile_models()

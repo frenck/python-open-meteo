@@ -1,7 +1,6 @@
 """Models for the Open-Meteo seasonal forecast API."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date
@@ -644,4 +643,4 @@ class Seasonal(DataClassORJSONMixin):
     monthly: MonthlySeasonal | None = None
 
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, Seasonal] | None = None
+    models: "dict[str, Seasonal] | None" = None

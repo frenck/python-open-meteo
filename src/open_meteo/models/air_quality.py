@@ -1,7 +1,6 @@
 """Models for the Open-Meteo air quality API."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -339,4 +338,4 @@ class AirQuality(DataClassORJSONMixin):
     hourly: HourlyAirQuality | None = None
 
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, AirQuality] | None = None
+    models: "dict[str, AirQuality] | None" = None

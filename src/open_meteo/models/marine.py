@@ -1,7 +1,6 @@
 """Models for the Open-Meteo marine weather API."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -188,7 +187,7 @@ class HourlyMarine(DataClassORJSONMixin):
     ocean_current_direction: list[int | None] | None = None
 
     # Only set for ensemble models, keyed by member number
-    members: dict[int, HourlyMarine] | None = None
+    members: "dict[int, HourlyMarine] | None" = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -259,7 +258,7 @@ class DailyMarine(DataClassORJSONMixin):
     swell_wave_peak_period_max: list[float | None] | None = None
 
     # Only set for ensemble models, keyed by member number
-    members: dict[int, DailyMarine] | None = None
+    members: "dict[int, DailyMarine] | None" = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -311,4 +310,4 @@ class Marine(DataClassORJSONMixin):
     daily: DailyMarine | None = None
 
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, Marine] | None = None
+    models: "dict[str, Marine] | None" = None

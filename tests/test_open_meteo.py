@@ -5,6 +5,8 @@
 import asyncio
 import dataclasses
 import re
+import subprocess
+import sys
 from datetime import date, datetime
 from enum import StrEnum
 from typing import Any, Self, cast
@@ -73,7 +75,7 @@ from open_meteo.exceptions import (
     OpenMeteoResponseError,
 )
 
-from .conftest import load_fixture
+from .conftest import FIXTURES_DIR, load_fixture
 
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 HISTORICAL_FORECAST_URL = "https://historical-forecast-api.open-meteo.com/v1/forecast"
@@ -1788,6 +1790,46 @@ async def test_ensemble_models_with_pressure_levels(
     assert ukmo.temperature_2m == [12.1]
     assert ukmo.pressure_levels[850].temperature == [None]
     assert ukmo.members[1].temperature_2m == [11.5]
+
+
+def test_parsing_with_patched_datetime() -> None:
+    """Test parsing works when date and datetime are patched before first use.
+
+    freezegun does that, in every loaded module, as do many test suites. A
+    model that only compiles its parsing on first use picks up those fakes,
+    and fails. It runs in a fresh interpreter, as the models are already in
+    use in this one.
+    """
+    script = """
+import datetime
+import sys
+from pathlib import Path
+
+import open_meteo.models.forecast as forecast
+from open_meteo import Forecast
+
+
+class FakeDate(datetime.date):
+    pass
+
+
+class FakeDatetime(datetime.datetime):
+    pass
+
+
+forecast.date = FakeDate
+forecast.datetime = FakeDatetime
+parsed = Forecast.from_json(Path(sys.argv[1]).read_text())
+assert type(parsed.daily.time[0]) is datetime.date
+"""
+    result = subprocess.run(  # noqa: S603
+        [sys.executable, "-c", script, str(FIXTURES_DIR / "forecast.json")],
+        capture_output=True,
+        check=False,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
 
 
 def test_newer_variables_parse() -> None:
