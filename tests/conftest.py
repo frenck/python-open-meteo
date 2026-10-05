@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 from pathlib import Path
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any
@@ -91,13 +92,14 @@ class ModelSnapshotExtension(AmberSnapshotExtension):
 
     The default repr of a model is a single line with every field, also
     those that are None; for an ensemble that is hundreds of thousands of
-    characters on one line, which no one can review.
+    characters on one line, which no one can review. The values keep their
+    types, unlike with to_dict, so a date that becomes a string shows up.
     """
 
     def serialize(self, data: Any, **kwargs: Any) -> str:
         """Serialize a model as a dictionary of the fields that have data."""
         if isinstance(data, DataClassORJSONMixin):
-            data = _without_none(data.to_dict())
+            data = _without_none(dataclasses.asdict(data))
         return super().serialize(data, **kwargs)
 
 

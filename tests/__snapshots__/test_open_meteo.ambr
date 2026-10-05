@@ -37,7 +37,7 @@
       'sea_salt_aerosol': 2.2,
       'secondary_inorganic_aerosol': 13.3,
       'sulphur_dioxide': 2.5,
-      'time': '2026-10-03T12:00:00',
+      'time': datetime.datetime(2026, 10, 3, 12, 0),
       'total_elementary_carbon': 0.4,
       'us_aqi': 65,
       'us_aqi_carbon_monoxide': 2,
@@ -271,9 +271,9 @@
         0.9,
       ]),
       'time': list([
-        '2026-10-03T00:00:00',
-        '2026-10-03T01:00:00',
-        '2026-10-03T02:00:00',
+        datetime.datetime(2026, 10, 3, 0, 0),
+        datetime.datetime(2026, 10, 3, 1, 0),
+        datetime.datetime(2026, 10, 3, 2, 0),
       ]),
       'total_elementary_carbon': list([
         0.5,
@@ -394,15 +394,15 @@
         30.4,
       ]),
       'time': list([
-        '2050-07-01',
-        '2050-07-02',
-        '2050-07-03',
+        datetime.date(2050, 7, 1),
+        datetime.date(2050, 7, 2),
+        datetime.date(2050, 7, 3),
       ]),
     }),
     'daily_units': dict({
       'precipitation_sum': 'mm',
       'temperature_2m_max': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 29.0,
     'generation_time_ms': 0.164031982421875,
@@ -429,7 +429,7 @@
             20.2,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         2: dict({
@@ -437,7 +437,7 @@
             20.7,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         3: dict({
@@ -445,7 +445,7 @@
             20.3,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         4: dict({
@@ -453,7 +453,7 @@
             19.5,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         5: dict({
@@ -461,7 +461,7 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         6: dict({
@@ -469,7 +469,7 @@
             19.9,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         7: dict({
@@ -477,7 +477,7 @@
             20.3,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         8: dict({
@@ -485,7 +485,7 @@
             20.2,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         9: dict({
@@ -493,7 +493,7 @@
             19.8,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         10: dict({
@@ -501,7 +501,7 @@
             20.1,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         11: dict({
@@ -509,7 +509,7 @@
             20.7,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         12: dict({
@@ -517,7 +517,7 @@
             21.1,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         13: dict({
@@ -525,7 +525,7 @@
             20.4,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         14: dict({
@@ -533,7 +533,7 @@
             20.8,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         15: dict({
@@ -541,7 +541,7 @@
             20.1,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         16: dict({
@@ -549,7 +549,7 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         17: dict({
@@ -557,7 +557,7 @@
             20.3,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         18: dict({
@@ -565,7 +565,7 @@
             20.7,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         19: dict({
@@ -573,7 +573,7 @@
             19.3,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         20: dict({
@@ -581,7 +581,7 @@
             20.2,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
       }),
@@ -589,12 +589,12 @@
         20.1,
       ]),
       'time': list([
-        '2026-10-03',
+        datetime.date(2026, 10, 3),
       ]),
     }),
     'daily_units': dict({
       'temperature_2m_max': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 29.0,
     'generation_time_ms': 1.208662986755371,
@@ -614,8 +614,8 @@
             9.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         2: dict({
@@ -632,8 +632,8 @@
             9.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         3: dict({
@@ -650,8 +650,8 @@
             9.7,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         4: dict({
@@ -668,8 +668,8 @@
             10.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         5: dict({
@@ -686,8 +686,8 @@
             10.6,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         6: dict({
@@ -704,8 +704,8 @@
             10.7,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         7: dict({
@@ -722,8 +722,8 @@
             9.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         8: dict({
@@ -740,8 +740,8 @@
             10.1,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         9: dict({
@@ -758,8 +758,8 @@
             10.6,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         10: dict({
@@ -776,8 +776,8 @@
             11.0,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         11: dict({
@@ -794,8 +794,8 @@
             9.5,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         12: dict({
@@ -812,8 +812,8 @@
             11.5,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         13: dict({
@@ -830,8 +830,8 @@
             9.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         14: dict({
@@ -848,8 +848,8 @@
             11.3,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         15: dict({
@@ -866,8 +866,8 @@
             10.2,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         16: dict({
@@ -884,8 +884,8 @@
             9.4,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         17: dict({
@@ -902,8 +902,8 @@
             10.0,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         18: dict({
@@ -920,8 +920,8 @@
             9.9,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         19: dict({
@@ -938,8 +938,8 @@
             11.0,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
         20: dict({
@@ -956,8 +956,8 @@
             10.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T01:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 1, 0),
           ]),
         }),
       }),
@@ -974,8 +974,8 @@
         10.1,
       ]),
       'time': list([
-        '2026-10-03T00:00:00',
-        '2026-10-03T01:00:00',
+        datetime.datetime(2026, 10, 3, 0, 0),
+        datetime.datetime(2026, 10, 3, 1, 0),
       ]),
     }),
     'hourly_units': dict({
@@ -985,7 +985,7 @@
         }),
       }),
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'latitude': 52.5,
     'longitude': 7.0,
@@ -1001,20 +1001,20 @@
       'spread': dict({
         'interval': 900,
         'temperature_2m': 0.3,
-        'time': '2026-10-03T19:30:00',
+        'time': datetime.datetime(2026, 10, 3, 19, 30),
       }),
       'temperature_2m': 13.3,
-      'time': '2026-10-03T19:30:00',
+      'time': datetime.datetime(2026, 10, 3, 19, 30),
     }),
     'current_units': dict({
       'interval': 'seconds',
       'spread': dict({
         'interval': 'seconds',
         'temperature_2m': 'K',
-        'time': 'iso8601',
+        'time': <TimeFormat.ISO_8601: 'iso8601'>,
       }),
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 29.0,
     'generation_time_ms': 1.4787912368774414,
@@ -1041,8 +1041,8 @@
           0.3,
         ]),
         'time': list([
-          '2026-10-03T19:00:00',
-          '2026-10-03T20:00:00',
+          datetime.datetime(2026, 10, 3, 19, 0),
+          datetime.datetime(2026, 10, 3, 20, 0),
         ]),
       }),
       'temperature_2m': list([
@@ -1050,8 +1050,8 @@
         12.9,
       ]),
       'time': list([
-        '2026-10-03T19:00:00',
-        '2026-10-03T20:00:00',
+        datetime.datetime(2026, 10, 3, 19, 0),
+        datetime.datetime(2026, 10, 3, 20, 0),
       ]),
       'weather_code': list([
         3,
@@ -1071,10 +1071,10 @@
           }),
         }),
         'temperature_2m': 'K',
-        'time': 'iso8601',
+        'time': <TimeFormat.ISO_8601: 'iso8601'>,
       }),
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'weather_code': 'wmo code',
     }),
     'latitude': 52.25,
@@ -1123,9 +1123,9 @@
         690.83,
       ]),
       'time': list([
-        '2026-10-03',
-        '2026-10-04',
-        '2026-10-05',
+        datetime.date(2026, 10, 3),
+        datetime.date(2026, 10, 4),
+        datetime.date(2026, 10, 5),
       ]),
     }),
     'daily_units': dict({
@@ -1136,7 +1136,7 @@
       'river_discharge_min': 'm³/s',
       'river_discharge_p25': 'm³/s',
       'river_discharge_p75': 'm³/s',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 16.0,
     'generation_time_ms': 0.8870363235473633,
@@ -1224,7 +1224,7 @@
       'temperature_80m': 16.0,
       'terrestrial_radiation': 729.7,
       'terrestrial_radiation_instant': 736.4,
-      'time': '2026-10-03T12:30:00',
+      'time': datetime.datetime(2026, 10, 3, 12, 30),
       'total_column_integrated_water_vapour': 17.0,
       'updraft': 0.05,
       'uv_index': 2.75,
@@ -1361,7 +1361,7 @@
       'terrestrial_radiation': 'W/m²',
       'terrestrial_radiation_instant': 'W/m²',
       'thunderstorm_probability': 'undefined',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'total_column_integrated_water_vapour': 'kg/m²',
       'updraft': 'm/s',
       'uv_index': '',
@@ -1492,14 +1492,14 @@
         0.817,
       ]),
       'moonrise': list([
-        '2026-10-03T23:12:00',
+        datetime.datetime(2026, 10, 3, 23, 12),
         None,
-        '2026-10-05T00:38:00',
+        datetime.datetime(2026, 10, 5, 0, 38),
       ]),
       'moonset': list([
-        '2026-10-03T16:13:00',
-        '2026-10-04T16:49:00',
-        '2026-10-05T17:13:00',
+        datetime.datetime(2026, 10, 3, 16, 13),
+        datetime.datetime(2026, 10, 4, 16, 49),
+        datetime.datetime(2026, 10, 5, 17, 13),
       ]),
       'precipitation_hours': list([
         0.0,
@@ -1652,14 +1652,14 @@
         14.0,
       ]),
       'sunrise': list([
-        '2026-10-03T07:36:00',
-        '2026-10-04T07:38:00',
-        '2026-10-05T07:40:00',
+        datetime.datetime(2026, 10, 3, 7, 36),
+        datetime.datetime(2026, 10, 4, 7, 38),
+        datetime.datetime(2026, 10, 5, 7, 40),
       ]),
       'sunset': list([
-        '2026-10-03T19:05:00',
-        '2026-10-04T19:02:00',
-        '2026-10-05T19:00:00',
+        datetime.datetime(2026, 10, 3, 19, 5),
+        datetime.datetime(2026, 10, 4, 19, 2),
+        datetime.datetime(2026, 10, 5, 19, 0),
       ]),
       'sunshine_duration': list([
         34146.1,
@@ -1697,9 +1697,9 @@
         11.6,
       ]),
       'time': list([
-        '2026-10-03',
-        '2026-10-04',
-        '2026-10-05',
+        datetime.date(2026, 10, 3),
+        datetime.date(2026, 10, 4),
+        datetime.date(2026, 10, 5),
       ]),
       'updraft_max': list([
         0.17,
@@ -1811,8 +1811,8 @@
       'growing_degree_days_base_0_limit_50': 'GGDc',
       'leaf_wetness_probability_mean': '%',
       'moon_phase': 'fraction',
-      'moonrise': 'iso8601',
-      'moonset': 'iso8601',
+      'moonrise': <TimeFormat.ISO_8601: 'iso8601'>,
+      'moonset': <TimeFormat.ISO_8601: 'iso8601'>,
       'precipitation_hours': 'h',
       'precipitation_probability_max': '%',
       'precipitation_probability_mean': '%',
@@ -1843,8 +1843,8 @@
       'soil_temperature_0_to_7cm_mean': '°C',
       'soil_temperature_28_to_100cm_mean': '°C',
       'soil_temperature_7_to_28cm_mean': '°C',
-      'sunrise': 'iso8601',
-      'sunset': 'iso8601',
+      'sunrise': <TimeFormat.ISO_8601: 'iso8601'>,
+      'sunset': <TimeFormat.ISO_8601: 'iso8601'>,
       'sunshine_duration': 's',
       'surface_pressure_max': 'hPa',
       'surface_pressure_mean': 'hPa',
@@ -1852,7 +1852,7 @@
       'temperature_2m_max': '°C',
       'temperature_2m_mean': '°C',
       'temperature_2m_min': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'updraft_max': 'm/s',
       'uv_index_clear_sky_max': '',
       'uv_index_max': '',
@@ -2426,9 +2426,9 @@
         None,
       ]),
       'time': list([
-        '2026-10-03T00:00:00',
-        '2026-10-03T01:00:00',
-        '2026-10-03T02:00:00',
+        datetime.datetime(2026, 10, 3, 0, 0),
+        datetime.datetime(2026, 10, 3, 1, 0),
+        datetime.datetime(2026, 10, 3, 2, 0),
       ]),
       'total_column_integrated_water_vapour': list([
         17.8,
@@ -2727,7 +2727,7 @@
       'terrestrial_radiation': 'W/m²',
       'terrestrial_radiation_instant': 'W/m²',
       'thunderstorm_probability': 'undefined',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'total_column_integrated_water_vapour': 'kg/m²',
       'updraft': 'm/s',
       'uv_index': '',
@@ -2777,16 +2777,16 @@
   dict({
     'daily': dict({
       'sunrise': list([
-        '2026-10-17T06:01:00',
-        '2026-10-18T06:02:00',
+        datetime.datetime(2026, 10, 17, 6, 1),
+        datetime.datetime(2026, 10, 18, 6, 2),
       ]),
       'temperature_2m_max': list([
         18.3,
         None,
       ]),
       'time': list([
-        '2026-10-17',
-        '2026-10-18',
+        datetime.date(2026, 10, 17),
+        datetime.date(2026, 10, 18),
       ]),
       'weather_code': list([
         0,
@@ -2794,9 +2794,9 @@
       ]),
     }),
     'daily_units': dict({
-      'sunrise': 'iso8601',
+      'sunrise': <TimeFormat.ISO_8601: 'iso8601'>,
       'temperature_2m_max': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'weather_code': 'wmo code',
     }),
     'elevation': 29.0,
@@ -2815,10 +2815,10 @@
         None,
       ]),
       'time': list([
-        '2026-10-18T20:00:00',
-        '2026-10-18T21:00:00',
-        '2026-10-18T22:00:00',
-        '2026-10-18T23:00:00',
+        datetime.datetime(2026, 10, 18, 20, 0),
+        datetime.datetime(2026, 10, 18, 21, 0),
+        datetime.datetime(2026, 10, 18, 22, 0),
+        datetime.datetime(2026, 10, 18, 23, 0),
       ]),
       'weather_code': list([
         None,
@@ -2830,7 +2830,7 @@
     'hourly_units': dict({
       'is_day': '',
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'weather_code': 'wmo code',
     }),
     'latitude': 52.276,
@@ -2877,17 +2877,17 @@
         18.9,
       ]),
       'time': list([
-        '2026-10-03T12:30:00',
-        '2026-10-03T12:45:00',
-        '2026-10-03T13:00:00',
-        '2026-10-03T13:15:00',
+        datetime.datetime(2026, 10, 3, 12, 30),
+        datetime.datetime(2026, 10, 3, 12, 45),
+        datetime.datetime(2026, 10, 3, 13, 0),
+        datetime.datetime(2026, 10, 3, 13, 15),
       ]),
     }),
     'minutely_15_units': dict({
       'is_day': '',
       'precipitation': 'mm',
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'timezone': 'Europe/Amsterdam',
     'timezone_abbreviation': 'GMT+2',
@@ -2899,12 +2899,12 @@
     'current': dict({
       'interval': 900,
       'temperature_2m': 20.3,
-      'time': '2026-10-03T13:00:00',
+      'time': datetime.datetime(2026, 10, 3, 13, 0),
     }),
     'current_units': dict({
       'interval': 'seconds',
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 422.0,
     'generation_time_ms': 501.4197826385498,
@@ -2917,12 +2917,12 @@
             22.4,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         'daily_units': dict({
           'temperature_2m_max': '°C',
-          'time': 'iso8601',
+          'time': <TimeFormat.ISO_8601: 'iso8601'>,
         }),
         'elevation': 422.0,
         'generation_time_ms': 501.4197826385498,
@@ -2932,8 +2932,8 @@
             21.9,
           ]),
           'time': list([
-            '2026-10-03T13:00:00',
-            '2026-10-03T14:00:00',
+            datetime.datetime(2026, 10, 3, 13, 0),
+            datetime.datetime(2026, 10, 3, 14, 0),
           ]),
           'weather_code': list([
             3,
@@ -2942,7 +2942,7 @@
         }),
         'hourly_units': dict({
           'temperature_2m': '°C',
-          'time': 'iso8601',
+          'time': <TimeFormat.ISO_8601: 'iso8601'>,
           'weather_code': 'wmo code',
         }),
         'latitude': 47.36,
@@ -2953,13 +2953,13 @@
             21.2,
           ]),
           'time': list([
-            '2026-10-03T13:00:00',
-            '2026-10-03T13:15:00',
+            datetime.datetime(2026, 10, 3, 13, 0),
+            datetime.datetime(2026, 10, 3, 13, 15),
           ]),
         }),
         'minutely_15_units': dict({
           'temperature_2m': '°C',
-          'time': 'iso8601',
+          'time': <TimeFormat.ISO_8601: 'iso8601'>,
         }),
         'timezone': 'Europe/Zurich',
         'timezone_abbreviation': 'GMT+2',
@@ -2971,12 +2971,12 @@
             23.1,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         'daily_units': dict({
           'temperature_2m_max': '°C',
-          'time': 'iso8601',
+          'time': <TimeFormat.ISO_8601: 'iso8601'>,
         }),
         'elevation': 422.0,
         'generation_time_ms': 501.4197826385498,
@@ -2986,8 +2986,8 @@
             21.1,
           ]),
           'time': list([
-            '2026-10-03T13:00:00',
-            '2026-10-03T14:00:00',
+            datetime.datetime(2026, 10, 3, 13, 0),
+            datetime.datetime(2026, 10, 3, 14, 0),
           ]),
           'weather_code': list([
             3,
@@ -2996,7 +2996,7 @@
         }),
         'hourly_units': dict({
           'temperature_2m': '°C',
-          'time': 'iso8601',
+          'time': <TimeFormat.ISO_8601: 'iso8601'>,
           'weather_code': 'wmo code',
         }),
         'latitude': 47.36,
@@ -3007,13 +3007,13 @@
             20.5,
           ]),
           'time': list([
-            '2026-10-03T13:00:00',
-            '2026-10-03T13:15:00',
+            datetime.datetime(2026, 10, 3, 13, 0),
+            datetime.datetime(2026, 10, 3, 13, 15),
           ]),
         }),
         'minutely_15_units': dict({
           'temperature_2m': '°C',
-          'time': 'iso8601',
+          'time': <TimeFormat.ISO_8601: 'iso8601'>,
         }),
         'timezone': 'Europe/Zurich',
         'timezone_abbreviation': 'GMT+2',
@@ -3025,12 +3025,12 @@
             23.3,
           ]),
           'time': list([
-            '2026-10-03',
+            datetime.date(2026, 10, 3),
           ]),
         }),
         'daily_units': dict({
           'temperature_2m_max': '°C',
-          'time': 'iso8601',
+          'time': <TimeFormat.ISO_8601: 'iso8601'>,
         }),
         'elevation': 422.0,
         'generation_time_ms': 501.4197826385498,
@@ -3040,8 +3040,8 @@
             21.5,
           ]),
           'time': list([
-            '2026-10-03T13:00:00',
-            '2026-10-03T14:00:00',
+            datetime.datetime(2026, 10, 3, 13, 0),
+            datetime.datetime(2026, 10, 3, 14, 0),
           ]),
           'weather_code': list([
             3,
@@ -3050,7 +3050,7 @@
         }),
         'hourly_units': dict({
           'temperature_2m': '°C',
-          'time': 'iso8601',
+          'time': <TimeFormat.ISO_8601: 'iso8601'>,
           'weather_code': 'wmo code',
         }),
         'latitude': 47.36,
@@ -3061,13 +3061,13 @@
             20.9,
           ]),
           'time': list([
-            '2026-10-03T13:00:00',
-            '2026-10-03T13:15:00',
+            datetime.datetime(2026, 10, 3, 13, 0),
+            datetime.datetime(2026, 10, 3, 13, 15),
           ]),
         }),
         'minutely_15_units': dict({
           'temperature_2m': '°C',
-          'time': 'iso8601',
+          'time': <TimeFormat.ISO_8601: 'iso8601'>,
         }),
         'timezone': 'Europe/Zurich',
         'timezone_abbreviation': 'GMT+2',
@@ -3090,7 +3090,7 @@
         }),
       }),
       'temperature_2m': 13.5,
-      'time': '2026-10-03T19:30:00',
+      'time': datetime.datetime(2026, 10, 3, 19, 30),
     }),
     'current_units': dict({
       'interval': 'seconds',
@@ -3101,7 +3101,7 @@
         }),
       }),
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 29.0,
     'generation_time_ms': 0.3027915954589844,
@@ -3125,8 +3125,8 @@
         13.4,
       ]),
       'time': list([
-        '2026-10-03T19:30:00',
-        '2026-10-03T19:45:00',
+        datetime.datetime(2026, 10, 3, 19, 30),
+        datetime.datetime(2026, 10, 3, 19, 45),
       ]),
     }),
     'minutely_15_units': dict({
@@ -3137,7 +3137,7 @@
         }),
       }),
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'timezone': 'GMT',
     'timezone_abbreviation': 'GMT',
@@ -3176,8 +3176,8 @@
         19.9,
       ]),
       'time': list([
-        '2026-10-03T11:00:00',
-        '2026-10-03T12:00:00',
+        datetime.datetime(2026, 10, 3, 11, 0),
+        datetime.datetime(2026, 10, 3, 12, 0),
       ]),
     }),
     'hourly_units': dict({
@@ -3192,7 +3192,7 @@
         }),
       }),
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'latitude': 52.276,
     'longitude': 6.8729997,
@@ -3364,14 +3364,14 @@
         11.4,
       ]),
       'time': list([
-        '2024-01-01',
-        '2024-01-02',
+        datetime.date(2024, 1, 1),
+        datetime.date(2024, 1, 2),
       ]),
     }),
     'daily_units': dict({
       'precipitation_sum': 'mm',
       'temperature_2m_max': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 29.0,
     'generation_time_ms': 4.917502403259277,
@@ -3382,9 +3382,9 @@
         8.0,
       ]),
       'time': list([
-        '2024-01-01T00:00:00',
-        '2024-01-01T01:00:00',
-        '2024-01-01T02:00:00',
+        datetime.datetime(2024, 1, 1, 0, 0),
+        datetime.datetime(2024, 1, 1, 1, 0),
+        datetime.datetime(2024, 1, 1, 2, 0),
       ]),
       'weather_code': list([
         51,
@@ -3394,7 +3394,7 @@
     }),
     'hourly_units': dict({
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'weather_code': 'wmo code',
     }),
     'latitude': 52.276,
@@ -3412,8 +3412,8 @@
         12.5,
       ]),
       'time': list([
-        '1953-01-31',
-        '1953-02-01',
+        datetime.date(1953, 1, 31),
+        datetime.date(1953, 2, 1),
       ]),
       'wind_gusts_10m_max': list([
         89.6,
@@ -3422,7 +3422,7 @@
     }),
     'daily_units': dict({
       'precipitation_sum': 'mm',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'wind_gusts_10m_max': 'km/h',
     }),
     'elevation': 29.0,
@@ -3439,9 +3439,9 @@
         5.1,
       ]),
       'time': list([
-        '1953-01-31T00:00:00',
-        '1953-01-31T01:00:00',
-        '1953-01-31T02:00:00',
+        datetime.datetime(1953, 1, 31, 0, 0),
+        datetime.datetime(1953, 1, 31, 1, 0),
+        datetime.datetime(1953, 1, 31, 2, 0),
       ]),
       'wind_speed_10m': list([
         23.2,
@@ -3452,7 +3452,7 @@
     'hourly_units': dict({
       'soil_moisture_index_0_to_7cm': 'fraction',
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'wind_speed_10m': 'km/h',
     }),
     'latitude': 52.26713,
@@ -3478,7 +3478,7 @@
       'swell_wave_height': 0.34,
       'swell_wave_peak_period': 4.95,
       'swell_wave_period': 4.25,
-      'time': '2026-10-03T13:45:00',
+      'time': datetime.datetime(2026, 10, 3, 13, 45),
       'wave_direction': 240,
       'wave_height': 0.76,
       'wave_period': 3.85,
@@ -3504,7 +3504,7 @@
       'tertiary_swell_wave_direction': 'undefined',
       'tertiary_swell_wave_height': 'undefined',
       'tertiary_swell_wave_period': 'undefined',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'wave_direction': '°',
       'wave_height': 'm',
       'wave_peak_period': 'undefined',
@@ -3536,9 +3536,9 @@
         4.05,
       ]),
       'time': list([
-        '2026-10-03',
-        '2026-10-04',
-        '2026-10-05',
+        datetime.date(2026, 10, 3),
+        datetime.date(2026, 10, 4),
+        datetime.date(2026, 10, 5),
       ]),
       'wave_direction_dominant': list([
         233,
@@ -3581,7 +3581,7 @@
       'swell_wave_height_max': 'm',
       'swell_wave_peak_period_max': 's',
       'swell_wave_period_max': 's',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'wave_direction_dominant': '°',
       'wave_height_max': 'm',
       'wave_period_max': 's',
@@ -3669,9 +3669,9 @@
         None,
       ]),
       'time': list([
-        '2026-10-03T00:00:00',
-        '2026-10-03T01:00:00',
-        '2026-10-03T02:00:00',
+        datetime.datetime(2026, 10, 3, 0, 0),
+        datetime.datetime(2026, 10, 3, 1, 0),
+        datetime.datetime(2026, 10, 3, 2, 0),
       ]),
       'wave_direction': list([
         222,
@@ -3730,7 +3730,7 @@
       'tertiary_swell_wave_direction': 'undefined',
       'tertiary_swell_wave_height': 'undefined',
       'tertiary_swell_wave_period': 'undefined',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'wave_direction': '°',
       'wave_height': 'm',
       'wave_peak_period': 'undefined',
@@ -3819,9 +3819,9 @@
         None,
       ]),
       'time': list([
-        '2026-10-03T13:45:00',
-        '2026-10-03T14:00:00',
-        '2026-10-03T14:15:00',
+        datetime.datetime(2026, 10, 3, 13, 45),
+        datetime.datetime(2026, 10, 3, 14, 0),
+        datetime.datetime(2026, 10, 3, 14, 15),
       ]),
       'wave_direction': list([
         240,
@@ -3880,7 +3880,7 @@
       'tertiary_swell_wave_direction': 'undefined',
       'tertiary_swell_wave_height': 'undefined',
       'tertiary_swell_wave_period': 'undefined',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
       'wave_direction': '°',
       'wave_height': 'm',
       'wave_peak_period': 'undefined',
@@ -3903,21 +3903,21 @@
         1: dict({
           'interval': 900,
           'temperature_2m': 15.7,
-          'time': '2026-10-03T18:30:00',
+          'time': datetime.datetime(2026, 10, 3, 18, 30),
         }),
         2: dict({
           'interval': 900,
           'temperature_2m': 14.7,
-          'time': '2026-10-03T18:30:00',
+          'time': datetime.datetime(2026, 10, 3, 18, 30),
         }),
       }),
       'temperature_2m': 15.3,
-      'time': '2026-10-03T18:30:00',
+      'time': datetime.datetime(2026, 10, 3, 18, 30),
     }),
     'current_units': dict({
       'interval': 'seconds',
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 29.0,
     'generation_time_ms': 19.65200901031494,
@@ -3940,9 +3940,9 @@
             12.1,
           ]),
           'time': list([
-            '2026-10-02T00:00:00',
-            '2026-10-02T01:00:00',
-            '2026-10-02T02:00:00',
+            datetime.datetime(2026, 10, 2, 0, 0),
+            datetime.datetime(2026, 10, 2, 1, 0),
+            datetime.datetime(2026, 10, 2, 2, 0),
           ]),
         }),
         2: dict({
@@ -3957,9 +3957,9 @@
             13.4,
           ]),
           'time': list([
-            '2026-10-02T00:00:00',
-            '2026-10-02T01:00:00',
-            '2026-10-02T02:00:00',
+            datetime.datetime(2026, 10, 2, 0, 0),
+            datetime.datetime(2026, 10, 2, 1, 0),
+            datetime.datetime(2026, 10, 2, 2, 0),
           ]),
         }),
       }),
@@ -3969,15 +3969,15 @@
         12.1,
       ]),
       'time': list([
-        '2026-10-02T00:00:00',
-        '2026-10-02T01:00:00',
-        '2026-10-02T02:00:00',
+        datetime.datetime(2026, 10, 2, 0, 0),
+        datetime.datetime(2026, 10, 2, 1, 0),
+        datetime.datetime(2026, 10, 2, 2, 0),
       ]),
     }),
     'hourly_units': dict({
       'precipitation': 'mm',
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'latitude': 52.276,
     'longitude': 6.8729997,
@@ -3996,13 +3996,13 @@
         27216.11,
       ]),
       'time': list([
-        '2026-09-30',
+        datetime.date(2026, 9, 30),
       ]),
     }),
     'daily_units': dict({
       'shortwave_radiation_sum': 'MJ/m²',
       'sunshine_duration': 's',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 29.0,
     'generation_time_ms': 0.25069713592529297,
@@ -4023,16 +4023,16 @@
         558.8,
       ]),
       'time': list([
-        '2026-09-30T12:00:00',
-        '2026-09-30T13:00:00',
-        '2026-09-30T14:00:00',
+        datetime.datetime(2026, 9, 30, 12, 0),
+        datetime.datetime(2026, 9, 30, 13, 0),
+        datetime.datetime(2026, 9, 30, 14, 0),
       ]),
     }),
     'hourly_units': dict({
       'global_tilted_irradiance': 'W/m²',
       'shortwave_radiation': 'W/m²',
       'shortwave_radiation_clear_sky': 'W/m²',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'latitude': 52.275,
     'longitude': 6.875,
@@ -4051,8 +4051,8 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         2: dict({
@@ -4061,8 +4061,8 @@
             18.7,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         3: dict({
@@ -4071,8 +4071,8 @@
             19.3,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         4: dict({
@@ -4081,8 +4081,8 @@
             19.9,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         5: dict({
@@ -4091,8 +4091,8 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         6: dict({
@@ -4101,8 +4101,8 @@
             18.9,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         7: dict({
@@ -4111,8 +4111,8 @@
             18.7,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         8: dict({
@@ -4121,8 +4121,8 @@
             19.2,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         9: dict({
@@ -4131,8 +4131,8 @@
             20.2,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         10: dict({
@@ -4141,8 +4141,8 @@
             18.5,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         11: dict({
@@ -4151,8 +4151,8 @@
             20.1,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         12: dict({
@@ -4161,8 +4161,8 @@
             17.9,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         13: dict({
@@ -4171,8 +4171,8 @@
             18.8,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         14: dict({
@@ -4181,8 +4181,8 @@
             19.7,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         15: dict({
@@ -4191,8 +4191,8 @@
             19.1,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         16: dict({
@@ -4201,8 +4201,8 @@
             18.1,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         17: dict({
@@ -4211,8 +4211,8 @@
             17.5,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         18: dict({
@@ -4221,8 +4221,8 @@
             19.9,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         19: dict({
@@ -4231,8 +4231,8 @@
             20.2,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         20: dict({
@@ -4241,8 +4241,8 @@
             19.7,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         21: dict({
@@ -4251,8 +4251,8 @@
             18.5,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         22: dict({
@@ -4261,8 +4261,8 @@
             18.0,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         23: dict({
@@ -4271,8 +4271,8 @@
             19.8,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         24: dict({
@@ -4281,8 +4281,8 @@
             18.5,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         25: dict({
@@ -4291,8 +4291,8 @@
             20.3,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         26: dict({
@@ -4301,8 +4301,8 @@
             19.1,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         27: dict({
@@ -4311,8 +4311,8 @@
             18.5,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         28: dict({
@@ -4321,8 +4321,8 @@
             19.8,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         29: dict({
@@ -4331,8 +4331,8 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         30: dict({
@@ -4341,8 +4341,8 @@
             19.1,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         31: dict({
@@ -4351,8 +4351,8 @@
             20.3,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         32: dict({
@@ -4361,8 +4361,8 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         33: dict({
@@ -4371,8 +4371,8 @@
             19.2,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         34: dict({
@@ -4381,8 +4381,8 @@
             18.9,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         35: dict({
@@ -4391,8 +4391,8 @@
             19.3,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         36: dict({
@@ -4401,8 +4401,8 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         37: dict({
@@ -4411,8 +4411,8 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         38: dict({
@@ -4421,8 +4421,8 @@
             19.0,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         39: dict({
@@ -4431,8 +4431,8 @@
             17.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         40: dict({
@@ -4441,8 +4441,8 @@
             19.6,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         41: dict({
@@ -4451,8 +4451,8 @@
             18.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         42: dict({
@@ -4461,8 +4461,8 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         43: dict({
@@ -4471,8 +4471,8 @@
             19.4,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         44: dict({
@@ -4481,8 +4481,8 @@
             18.6,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         45: dict({
@@ -4491,8 +4491,8 @@
             20.2,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         46: dict({
@@ -4501,8 +4501,8 @@
             19.2,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         47: dict({
@@ -4511,8 +4511,8 @@
             19.2,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         48: dict({
@@ -4521,8 +4521,8 @@
             17.3,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         49: dict({
@@ -4531,8 +4531,8 @@
             20.2,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
         50: dict({
@@ -4541,8 +4541,8 @@
             18.1,
           ]),
           'time': list([
-            '2026-10-03',
-            '2026-10-04',
+            datetime.date(2026, 10, 3),
+            datetime.date(2026, 10, 4),
           ]),
         }),
       }),
@@ -4551,13 +4551,13 @@
         19.7,
       ]),
       'time': list([
-        '2026-10-03',
-        '2026-10-04',
+        datetime.date(2026, 10, 3),
+        datetime.date(2026, 10, 4),
       ]),
     }),
     'daily_units': dict({
       'temperature_2m_max': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 29.0,
     'generation_time_ms': 1.2078285217285156,
@@ -4569,8 +4569,8 @@
             8.6,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         2: dict({
@@ -4579,8 +4579,8 @@
             8.9,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         3: dict({
@@ -4589,8 +4589,8 @@
             9.3,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         4: dict({
@@ -4599,8 +4599,8 @@
             8.7,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         5: dict({
@@ -4609,8 +4609,8 @@
             8.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         6: dict({
@@ -4619,8 +4619,8 @@
             8.6,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         7: dict({
@@ -4629,8 +4629,8 @@
             8.6,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         8: dict({
@@ -4639,8 +4639,8 @@
             9.3,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         9: dict({
@@ -4649,8 +4649,8 @@
             8.6,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         10: dict({
@@ -4659,8 +4659,8 @@
             8.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         11: dict({
@@ -4669,8 +4669,8 @@
             9.5,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         12: dict({
@@ -4679,8 +4679,8 @@
             9.5,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         13: dict({
@@ -4689,8 +4689,8 @@
             9.4,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         14: dict({
@@ -4699,8 +4699,8 @@
             8.7,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         15: dict({
@@ -4709,8 +4709,8 @@
             8.5,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         16: dict({
@@ -4719,8 +4719,8 @@
             9.4,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         17: dict({
@@ -4729,8 +4729,8 @@
             9.2,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         18: dict({
@@ -4739,8 +4739,8 @@
             8.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         19: dict({
@@ -4749,8 +4749,8 @@
             8.5,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         20: dict({
@@ -4759,8 +4759,8 @@
             8.5,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         21: dict({
@@ -4769,8 +4769,8 @@
             8.4,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         22: dict({
@@ -4779,8 +4779,8 @@
             8.7,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         23: dict({
@@ -4789,8 +4789,8 @@
             9.0,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         24: dict({
@@ -4799,8 +4799,8 @@
             8.9,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         25: dict({
@@ -4809,8 +4809,8 @@
             9.3,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         26: dict({
@@ -4819,8 +4819,8 @@
             8.3,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         27: dict({
@@ -4829,8 +4829,8 @@
             8.6,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         28: dict({
@@ -4839,8 +4839,8 @@
             9.1,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         29: dict({
@@ -4849,8 +4849,8 @@
             9.5,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         30: dict({
@@ -4859,8 +4859,8 @@
             9.0,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         31: dict({
@@ -4869,8 +4869,8 @@
             9.2,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         32: dict({
@@ -4879,8 +4879,8 @@
             9.3,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         33: dict({
@@ -4889,8 +4889,8 @@
             8.7,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         34: dict({
@@ -4899,8 +4899,8 @@
             9.0,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         35: dict({
@@ -4909,8 +4909,8 @@
             8.6,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         36: dict({
@@ -4919,8 +4919,8 @@
             8.9,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         37: dict({
@@ -4929,8 +4929,8 @@
             8.1,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         38: dict({
@@ -4939,8 +4939,8 @@
             9.6,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         39: dict({
@@ -4949,8 +4949,8 @@
             9.2,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         40: dict({
@@ -4959,8 +4959,8 @@
             9.3,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         41: dict({
@@ -4969,8 +4969,8 @@
             9.1,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         42: dict({
@@ -4979,8 +4979,8 @@
             8.9,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         43: dict({
@@ -4989,8 +4989,8 @@
             8.9,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         44: dict({
@@ -4999,8 +4999,8 @@
             9.4,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         45: dict({
@@ -5009,8 +5009,8 @@
             8.5,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         46: dict({
@@ -5019,8 +5019,8 @@
             8.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         47: dict({
@@ -5029,8 +5029,8 @@
             9.1,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         48: dict({
@@ -5039,8 +5039,8 @@
             8.9,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         49: dict({
@@ -5049,8 +5049,8 @@
             8.8,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
         50: dict({
@@ -5059,8 +5059,8 @@
             9.0,
           ]),
           'time': list([
-            '2026-10-03T00:00:00',
-            '2026-10-03T06:00:00',
+            datetime.datetime(2026, 10, 3, 0, 0),
+            datetime.datetime(2026, 10, 3, 6, 0),
           ]),
         }),
       }),
@@ -5069,13 +5069,13 @@
         8.9,
       ]),
       'time': list([
-        '2026-10-03T00:00:00',
-        '2026-10-03T06:00:00',
+        datetime.datetime(2026, 10, 3, 0, 0),
+        datetime.datetime(2026, 10, 3, 6, 0),
       ]),
     }),
     'hourly_units': dict({
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'latitude': 52.131145,
     'longitude': 7.1223025,
@@ -5087,13 +5087,13 @@
         11.0,
       ]),
       'time': list([
-        '2026-10-01',
+        datetime.date(2026, 10, 1),
       ]),
     }),
     'monthly_units': dict({
       'precipitation_anomaly': 'mm',
       'temperature_2m_mean': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'timezone': 'GMT',
     'timezone_abbreviation': 'GMT',
@@ -5132,12 +5132,12 @@
         8.1,
       ]),
       'time': list([
-        '2026-09-28',
-        '2026-10-05',
-        '2026-10-12',
-        '2026-10-19',
-        '2026-10-26',
-        '2026-11-02',
+        datetime.date(2026, 9, 28),
+        datetime.date(2026, 10, 5),
+        datetime.date(2026, 10, 12),
+        datetime.date(2026, 10, 19),
+        datetime.date(2026, 10, 26),
+        datetime.date(2026, 11, 2),
       ]),
     }),
     'weekly_units': dict({
@@ -5145,7 +5145,7 @@
       'temperature_2m_anomaly_gt1': '%',
       'temperature_2m_efi': '',
       'temperature_2m_mean': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
   })
 # ---
@@ -5157,13 +5157,13 @@
         20.7,
       ]),
       'time': list([
-        '2026-09-01',
-        '2026-09-02',
+        datetime.date(2026, 9, 1),
+        datetime.date(2026, 9, 2),
       ]),
     }),
     'daily_units': dict({
       'temperature_2m_max': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'elevation': 29.0,
     'generation_time_ms': 0.09036064147949219,
@@ -5174,14 +5174,14 @@
         14.4,
       ]),
       'time': list([
-        '2026-09-01T00:00:00',
-        '2026-09-01T01:00:00',
-        '2026-09-01T02:00:00',
+        datetime.datetime(2026, 9, 1, 0, 0),
+        datetime.datetime(2026, 9, 1, 1, 0),
+        datetime.datetime(2026, 9, 1, 2, 0),
       ]),
     }),
     'hourly_units': dict({
       'temperature_2m': '°C',
-      'time': 'iso8601',
+      'time': <TimeFormat.ISO_8601: 'iso8601'>,
     }),
     'latitude': 52.26713,
     'longitude': 6.820702,
