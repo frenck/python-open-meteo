@@ -1,7 +1,6 @@
 """Models for the Open-Meteo seasonal forecast API."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date
@@ -621,8 +620,8 @@ class MonthlySeasonalUnits(DataClassORJSONMixin):
 
 
 @dataclass
-class Seasonal(DataClassORJSONMixin):
-    """Seasonal forecast."""
+class SeasonalBase(DataClassORJSONMixin):
+    """Seasonal forecast, of all models together or of a single model."""
 
     elevation: float
     generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
@@ -643,5 +642,10 @@ class Seasonal(DataClassORJSONMixin):
     monthly_units: MonthlySeasonalUnits | None = None
     monthly: MonthlySeasonal | None = None
 
+
+@dataclass
+class Seasonal(SeasonalBase):
+    """Seasonal forecast."""
+
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, Seasonal] | None = None
+    models: dict[str, SeasonalBase] | None = None

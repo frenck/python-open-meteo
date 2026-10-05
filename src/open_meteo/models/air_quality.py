@@ -1,7 +1,6 @@
 """Models for the Open-Meteo air quality API."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -323,8 +322,8 @@ class HourlyAirQualityUnits(DataClassORJSONMixin):
 
 
 @dataclass
-class AirQuality(DataClassORJSONMixin):
-    """Air quality forecast."""
+class AirQualityBase(DataClassORJSONMixin):
+    """Air quality forecast, of all models together or of a single model."""
 
     elevation: float
     generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
@@ -338,5 +337,10 @@ class AirQuality(DataClassORJSONMixin):
     hourly_units: HourlyAirQualityUnits | None = None
     hourly: HourlyAirQuality | None = None
 
+
+@dataclass
+class AirQuality(AirQualityBase):
+    """Air quality forecast."""
+
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, AirQuality] | None = None
+    models: dict[str, AirQualityBase] | None = None

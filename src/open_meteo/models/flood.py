@@ -1,7 +1,6 @@
 """Models for the Open-Meteo flood API."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date
@@ -37,8 +36,8 @@ class FloodParameters(StrEnum):
 
 
 @dataclass
-class DailyFlood(DataClassORJSONMixin):
-    """Daily river discharge data."""
+class DailyFloodBase(DataClassORJSONMixin):
+    """Daily river discharge data, of the forecast or of a single member."""
 
     time: list[date]
     river_discharge: list[float | None] | None = None
@@ -49,8 +48,13 @@ class DailyFlood(DataClassORJSONMixin):
     river_discharge_p25: list[float | None] | None = None
     river_discharge_p75: list[float | None] | None = None
 
+
+@dataclass
+class DailyFlood(DailyFloodBase):
+    """Daily river discharge data."""
+
     # Only set when ensemble members were requested, keyed by member number
-    members: dict[int, DailyFlood] | None = None
+    members: dict[int, DailyFloodBase] | None = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -78,8 +82,8 @@ class DailyFloodUnits(DataClassORJSONMixin):
 
 
 @dataclass
-class Flood(DataClassORJSONMixin):
-    """River discharge forecast."""
+class FloodBase(DataClassORJSONMixin):
+    """River discharge forecast, of all models together or of a single model."""
 
     elevation: float
     generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
@@ -91,5 +95,10 @@ class Flood(DataClassORJSONMixin):
     daily_units: DailyFloodUnits | None = None
     daily: DailyFlood | None = None
 
+
+@dataclass
+class Flood(FloodBase):
+    """River discharge forecast."""
+
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, Flood] | None = None
+    models: dict[str, FloodBase] | None = None

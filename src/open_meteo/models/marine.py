@@ -1,7 +1,6 @@
 """Models for the Open-Meteo marine weather API."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -159,8 +158,8 @@ class CurrentMarineUnits(DataClassORJSONMixin):
 
 
 @dataclass
-class HourlyMarine(DataClassORJSONMixin):
-    """Hourly marine data."""
+class HourlyMarineBase(DataClassORJSONMixin):
+    """Hourly marine data, of the forecast or of a single ensemble member."""
 
     time: list[datetime]
     wave_height: list[float | None] | None = None
@@ -187,8 +186,13 @@ class HourlyMarine(DataClassORJSONMixin):
     ocean_current_velocity: list[float | None] | None = None
     ocean_current_direction: list[int | None] | None = None
 
+
+@dataclass
+class HourlyMarine(HourlyMarineBase):
+    """Hourly marine data."""
+
     # Only set for ensemble models, keyed by member number
-    members: dict[int, HourlyMarine] | None = None
+    members: dict[int, HourlyMarineBase] | None = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -242,8 +246,8 @@ class Minutely15MarineUnits(HourlyMarineUnits):
 
 
 @dataclass
-class DailyMarine(DataClassORJSONMixin):
-    """Daily marine data."""
+class DailyMarineBase(DataClassORJSONMixin):
+    """Daily marine data, of the forecast or of a single ensemble member."""
 
     time: list[date]
     wave_height_max: list[float | None] | None = None
@@ -258,8 +262,13 @@ class DailyMarine(DataClassORJSONMixin):
     swell_wave_period_max: list[float | None] | None = None
     swell_wave_peak_period_max: list[float | None] | None = None
 
+
+@dataclass
+class DailyMarine(DailyMarineBase):
+    """Daily marine data."""
+
     # Only set for ensemble models, keyed by member number
-    members: dict[int, DailyMarine] | None = None
+    members: dict[int, DailyMarineBase] | None = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -291,8 +300,8 @@ class DailyMarineUnits(DataClassORJSONMixin):
 
 
 @dataclass
-class Marine(DataClassORJSONMixin):
-    """Marine forecast."""
+class MarineBase(DataClassORJSONMixin):
+    """Marine forecast, of all models together or of a single model."""
 
     elevation: float
     generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
@@ -310,5 +319,10 @@ class Marine(DataClassORJSONMixin):
     daily_units: DailyMarineUnits | None = None
     daily: DailyMarine | None = None
 
+
+@dataclass
+class Marine(MarineBase):
+    """Marine forecast."""
+
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, Marine] | None = None
+    models: dict[str, MarineBase] | None = None
