@@ -36,7 +36,7 @@ pip install open-meteo
 ## Usage
 
 The client is an async context manager; every API call is a coroutine. A
-quick example that shows the current temperature in Enschede:
+quick example that gets the current and hourly temperature in Enschede:
 
 ```python
 import asyncio
@@ -51,6 +51,7 @@ async def main() -> None:
             latitude=52.27,
             longitude=6.87417,
             current=[HourlyParameters.TEMPERATURE_2M],
+            hourly=[HourlyParameters.TEMPERATURE_2M],
         )
         print(f"It is {forecast.current.temperature_2m} °C in Enschede")
 
@@ -71,6 +72,17 @@ for time, temperature in zip(
 ):
     if temperature is not None:
         print(time, temperature)
+```
+
+Timestamps are local time in the requested `timezone`, UTC by default, as
+naive datetimes. The offset to UTC is on the response, to make them aware
+when you need to compare them with other times:
+
+```python
+from datetime import timedelta, timezone
+
+offset = timezone(timedelta(seconds=forecast.utc_offset_seconds))
+observed_at = forecast.current.time.replace(tzinfo=offset)
 ```
 
 ### Weather forecast
@@ -241,9 +253,11 @@ async with OpenMeteo() as open_meteo:
 
 ### Previous model runs
 
-The previous runs API shows what earlier runs of the weather models forecasted
-for the same hours, up to seven days earlier. That shows how a forecast
-changed, or how accurate forecasts were.
+The previous runs API shows what the weather models forecasted for each hour,
+one to seven days before it. `previous_days[1]` holds, for every hour, the
+forecast made about a day earlier, so one series combines several model runs.
+That shows how a forecast changed, or how accurate forecasts were. For one
+complete run of a model, use the single runs API instead.
 
 ```python
 from open_meteo import HourlyParameters, OpenMeteo
@@ -376,7 +390,9 @@ async with OpenMeteo() as open_meteo:
 ### Marine
 
 The marine API forecasts waves, swell, ocean currents, sea surface temperature,
-and sea level. It only has data at sea; on land, all values are `None`.
+and sea level. It only has data at sea: by default, the nearest sea grid cell
+is used, so locations near the coast get data too. Further inland, all values
+are `None`.
 
 ```python
 from open_meteo import MarineDailyParameters, MarineParameters, OpenMeteo
@@ -459,7 +475,13 @@ async with OpenMeteo() as open_meteo:
         print(result.name, result.country, result.latitude, result.longitude)
 ```
 
-`results` is `None` when nothing matches.
+`results` is `None` when nothing matches. A result can be looked up again
+later by its ID, which returns that single result:
+
+```python
+location = await open_meteo.geocoding_by_id(location_id=result.geo_id)
+print(location.name, location.timezone)
+```
 
 ### Elevation
 
@@ -518,9 +540,11 @@ except OpenMeteoError:
     ...
 ```
 
-Every exception is a subclass of `OpenMeteoError`, so catching that alone
-handles all of them. The request timeout covers the whole request, including
-reading the response.
+Every exception for a failed request or an unexpected response is a subclass
+of `OpenMeteoError`, so catching that alone handles all of them. Invalid
+combinations of arguments raise a `ValueError` before anything is requested,
+like only one of `pressure_level_variables` and `pressure_levels`. The request
+timeout covers the whole request, including reading the response.
 
 ## Changelog & Releases
 

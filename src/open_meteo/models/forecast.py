@@ -722,7 +722,8 @@ class CurrentForecast(DataClassORJSONMixin):
     wind_speed_70m: float | None = None
     wind_speed_80m: float | None = None
 
-    # Only set for previous model runs, keyed by how many days ago it ran
+    # Only set for previous model runs, keyed by how many days before each
+    # hour the forecast was made
     previous_days: dict[int, CurrentForecast] | None = None
 
     # Only set for ensemble mean models: the spread over the members
@@ -1358,7 +1359,8 @@ class HourlyForecast(DataClassORJSONMixin):
     # Only set for ensemble data, keyed by member number
     members: dict[int, HourlyForecast] | None = None
 
-    # Only set for previous model runs, keyed by how many days ago it ran
+    # Only set for previous model runs, keyed by how many days before each
+    # hour the forecast was made
     previous_days: dict[int, HourlyForecast] | None = None
 
     # Only set for ensemble mean models: the spread over the members

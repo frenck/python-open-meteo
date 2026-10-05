@@ -1035,21 +1035,23 @@ class OpenMeteo:
     ) -> Forecast:
         """Get what earlier runs of the weather models forecasted.
 
-        For the same hours, this returns the forecast of the latest model run
-        as the regular values, and what the runs of one or more days earlier
-        forecasted, in previous_days of the current, 15-minutely, and hourly
-        data, keyed by how many days earlier the model ran. This shows how a
-        forecast changed, or how accurate forecasts were. There is no daily
-        data and no data on pressure levels.
+        This returns the forecast of the latest model runs as the regular
+        values, and what was forecasted for each hour one or more days before
+        it, in previous_days of the current, 15-minutely, and hourly data,
+        keyed by the number of days. previous_days[1] holds, for every hour,
+        the forecast made about 24 hours earlier, so one series combines
+        several model runs; use single_run for one complete run. This shows
+        how a forecast changed, or how accurate forecasts were. There is no
+        daily data and no data on pressure levels.
 
         Args:
         ----
             latitude: Latitude of the location.
             longitude: Longitude of the location.
-            previous_days: How many days earlier the model runs to include
-                ran, from 1 to 7, like [1, 2] for the runs of one and two days
-                earlier. Models that forecast fewer days ahead only have data
-                for fewer days back.
+            previous_days: How many days before each hour the forecasts to
+                include were made, from 1 to 7, like [1, 2] for those of one
+                and two days earlier. Models that forecast fewer days ahead
+                only have data for fewer days back.
             timezone: All timestamps are returned as local time and data is
                 returned starting at 0:00 local time.
             current: A list of weather variables to get the current
@@ -1629,7 +1631,9 @@ class OpenMeteo:
     ) -> Marine:
         """Get the marine forecast: waves, swell, ocean currents, and sea level.
 
-        Marine data is only available at sea; on land, all values are None.
+        Marine data is only available at sea. By default, the nearest sea
+        grid cell is used, so locations near the coast get data too; further
+        inland, all values are None.
         Which variables have data depends on the location and the marine
         model. Data goes back to 1940.
 
