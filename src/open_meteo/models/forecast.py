@@ -1,7 +1,6 @@
 """Models for the Open-Meteo weather forecast APIs."""
 
 # pylint: disable=too-many-instance-attributes
-from __future__ import annotations
 
 import dataclasses
 import re
@@ -542,404 +541,6 @@ class DailyParameters(StrEnum):
     WIND_SPEED_200M_MIN = "wind_speed_200m_min"
 
 
-@dataclass
-class CurrentForecast(DataClassORJSONMixin):
-    """Current weather conditions."""
-
-    time: datetime
-    interval: int
-    air_density_2m: float | None = None
-    albedo: float | None = None
-    apparent_temperature: float | None = None
-    boundary_layer_height: float | None = None
-    cape: float | None = None
-    cloud_base: float | None = None
-    cloud_cover: int | None = None
-    cloud_cover_2m: int | None = None
-    cloud_cover_high: int | None = None
-    cloud_cover_low: int | None = None
-    cloud_cover_mid: int | None = None
-    cloud_top: float | None = None
-    convective_cloud_base: float | None = None
-    convective_cloud_top: float | None = None
-    convective_inhibition: float | None = None
-    dew_point_2m: float | None = None
-    diffuse_radiation: float | None = None
-    diffuse_radiation_instant: float | None = None
-    direct_normal_irradiance: float | None = None
-    direct_normal_irradiance_instant: float | None = None
-    direct_radiation: float | None = None
-    direct_radiation_instant: float | None = None
-    et0_fao_evapotranspiration: float | None = None
-    evapotranspiration: float | None = None
-    freezing_level_height: float | None = None
-    freezing_rain_probability: int | None = None
-    global_tilted_irradiance: float | None = None
-    global_tilted_irradiance_instant: float | None = None
-    growing_degree_days_base_0_limit_50: float | None = None
-    hail: float | None = None
-    ice_pellets_probability: int | None = None
-    is_day: bool | None = None
-    k_index: float | None = None
-    latent_heat_flux: float | None = None
-    leaf_wetness_probability: int | None = None
-    lifted_index: float | None = None
-    lightning_density: float | None = None
-    lightning_potential: float | None = None
-    mass_density_8m: float | None = None
-    ocean_current_direction: float | None = None
-    ocean_current_velocity: float | None = None
-    potential_evapotranspiration: float | None = None
-    precipitation: float | None = None
-    precipitation_probability: int | None = None
-    precipitation_type: int | None = None
-    pressure_msl: float | None = None
-    rain: float | None = None
-    rain_probability: int | None = None
-    relative_humidity_2m: int | None = None
-    roughness_length: float | None = None
-    runoff: float | None = None
-    sea_ice_thickness: float | None = None
-    sea_level_height_msl: float | None = None
-    sea_surface_temperature: float | None = None
-    sea_water_salinity: float | None = None
-    sensible_heat_flux: float | None = None
-    shortwave_radiation: float | None = None
-    shortwave_radiation_clear_sky: float | None = None
-    shortwave_radiation_clear_sky_instant: float | None = None
-    shortwave_radiation_instant: float | None = None
-    showers: float | None = None
-    snow_density: float | None = None
-    snow_depth: float | None = None
-    snow_depth_water_equivalent: float | None = None
-    snow_height: float | None = None
-    snowfall: float | None = None
-    snowfall_height: float | None = None
-    snowfall_probability: int | None = None
-    snowfall_water_equivalent: float | None = None
-    soil_moisture_0_to_100cm: float | None = None
-    soil_moisture_0_to_10cm: float | None = None
-    soil_moisture_0_to_1cm: float | None = None
-    soil_moisture_0_to_7cm: float | None = None
-    soil_moisture_100_to_200cm: float | None = None
-    soil_moisture_100_to_255cm: float | None = None
-    soil_moisture_100_to_300cm: float | None = None
-    soil_moisture_10_to_35cm: float | None = None
-    soil_moisture_10_to_40cm: float | None = None
-    soil_moisture_1_to_3cm: float | None = None
-    soil_moisture_243_to_729cm: float | None = None
-    soil_moisture_27_to_81cm: float | None = None
-    soil_moisture_28_to_100cm: float | None = None
-    soil_moisture_35_to_100cm: float | None = None
-    soil_moisture_3_to_9cm: float | None = None
-    soil_moisture_40_to_100cm: float | None = None
-    soil_moisture_729_to_2187cm: float | None = None
-    soil_moisture_7_to_28cm: float | None = None
-    soil_moisture_81_to_243cm: float | None = None
-    soil_moisture_9_to_27cm: float | None = None
-    soil_moisture_index_0_to_100cm: float | None = None
-    soil_moisture_index_0_to_7cm: float | None = None
-    soil_moisture_index_100_to_255cm: float | None = None
-    soil_moisture_index_28_to_100cm: float | None = None
-    soil_moisture_index_7_to_28cm: float | None = None
-    soil_temperature_0_to_100cm: float | None = None
-    soil_temperature_0_to_10cm: float | None = None
-    soil_temperature_0_to_7cm: float | None = None
-    soil_temperature_0cm: float | None = None
-    soil_temperature_100_to_200cm: float | None = None
-    soil_temperature_100_to_255cm: float | None = None
-    soil_temperature_100_to_300cm: float | None = None
-    soil_temperature_10_to_35cm: float | None = None
-    soil_temperature_10_to_40cm: float | None = None
-    soil_temperature_1458cm: float | None = None
-    soil_temperature_162cm: float | None = None
-    soil_temperature_18cm: float | None = None
-    soil_temperature_28_to_100cm: float | None = None
-    soil_temperature_35_to_100cm: float | None = None
-    soil_temperature_40_to_100cm: float | None = None
-    soil_temperature_486cm: float | None = None
-    soil_temperature_54cm: float | None = None
-    soil_temperature_6cm: float | None = None
-    soil_temperature_7_to_28cm: float | None = None
-    sunshine_duration: float | None = None
-    surface_pressure: float | None = None
-    surface_temperature: float | None = None
-    temperature_100m: float | None = None
-    temperature_120m: float | None = None
-    temperature_150m: float | None = None
-    temperature_180m: float | None = None
-    temperature_200m: float | None = None
-    temperature_20m: float | None = None
-    temperature_2m: float | None = None
-    temperature_2m_max: float | None = None
-    temperature_2m_min: float | None = None
-    temperature_40m: float | None = None
-    temperature_50m: float | None = None
-    temperature_80m: float | None = None
-    terrestrial_radiation: float | None = None
-    terrestrial_radiation_instant: float | None = None
-    thunderstorm_probability: int | None = None
-    total_column_integrated_water_vapour: float | None = None
-    total_column_water: float | None = None
-    updraft: float | None = None
-    uv_index: float | None = None
-    uv_index_clear_sky: float | None = None
-    vapour_pressure_deficit: float | None = None
-    visibility: float | None = None
-    wave_direction: int | None = None
-    wave_height: float | None = None
-    wave_peak_period: float | None = None
-    wave_period: float | None = None
-    weather_code: int | None = None
-    wet_bulb_temperature_2m: float | None = None
-    wind_direction_100m: int | None = None
-    wind_direction_10m: int | None = None
-    wind_direction_120m: int | None = None
-    wind_direction_140m: int | None = None
-    wind_direction_150m: int | None = None
-    wind_direction_160m: int | None = None
-    wind_direction_180m: int | None = None
-    wind_direction_200m: int | None = None
-    wind_direction_20m: int | None = None
-    wind_direction_30m: int | None = None
-    wind_direction_40m: int | None = None
-    wind_direction_50m: int | None = None
-    wind_direction_70m: int | None = None
-    wind_direction_80m: int | None = None
-    wind_gusts_10m: float | None = None
-    wind_speed_100m: float | None = None
-    wind_speed_10m: float | None = None
-    wind_speed_120m: float | None = None
-    wind_speed_140m: float | None = None
-    wind_speed_150m: float | None = None
-    wind_speed_160m: float | None = None
-    wind_speed_180m: float | None = None
-    wind_speed_200m: float | None = None
-    wind_speed_20m: float | None = None
-    wind_speed_30m: float | None = None
-    wind_speed_40m: float | None = None
-    wind_speed_50m: float | None = None
-    wind_speed_70m: float | None = None
-    wind_speed_80m: float | None = None
-
-    # Only set for previous model runs, keyed by how many days before each
-    # hour the forecast was made
-    previous_days: dict[int, CurrentForecast] | None = None
-
-    # Only set for ensemble mean models: the spread over the members
-    spread: CurrentForecast | None = None
-
-    # Pressure level data, keyed by the pressure level in hPa
-    pressure_levels: dict[int, PressureLevelCurrent] | None = None
-
-    # Height level data, keyed by the height above ground in meters
-    height_levels: dict[int, HeightLevelCurrent] | None = None
-
-    @classmethod
-    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group previous runs, the spread, and pressure and height levels."""
-        return _split_height_levels(
-            _split_pressure_levels(_split_spread(_split_previous_days(d))), cls
-        )
-
-
-@dataclass
-class CurrentForecastUnits(DataClassORJSONMixin):
-    """Current weather conditions units."""
-
-    time: TimeFormat | None = None
-    interval: str | None = None
-    air_density_2m: str | None = None
-    albedo: str | None = None
-    apparent_temperature: str | None = None
-    boundary_layer_height: str | None = None
-    cape: str | None = None
-    cloud_base: str | None = None
-    cloud_cover: str | None = None
-    cloud_cover_2m: str | None = None
-    cloud_cover_high: str | None = None
-    cloud_cover_low: str | None = None
-    cloud_cover_mid: str | None = None
-    cloud_top: str | None = None
-    convective_cloud_base: str | None = None
-    convective_cloud_top: str | None = None
-    convective_inhibition: str | None = None
-    dew_point_2m: str | None = None
-    diffuse_radiation: str | None = None
-    diffuse_radiation_instant: str | None = None
-    direct_normal_irradiance: str | None = None
-    direct_normal_irradiance_instant: str | None = None
-    direct_radiation: str | None = None
-    direct_radiation_instant: str | None = None
-    et0_fao_evapotranspiration: str | None = None
-    evapotranspiration: str | None = None
-    freezing_level_height: str | None = None
-    freezing_rain_probability: str | None = None
-    global_tilted_irradiance: str | None = None
-    global_tilted_irradiance_instant: str | None = None
-    growing_degree_days_base_0_limit_50: str | None = None
-    hail: str | None = None
-    ice_pellets_probability: str | None = None
-    is_day: str | None = None
-    k_index: str | None = None
-    latent_heat_flux: str | None = None
-    leaf_wetness_probability: str | None = None
-    lifted_index: str | None = None
-    lightning_density: str | None = None
-    lightning_potential: str | None = None
-    mass_density_8m: str | None = None
-    ocean_current_direction: str | None = None
-    ocean_current_velocity: str | None = None
-    potential_evapotranspiration: str | None = None
-    precipitation: str | None = None
-    precipitation_probability: str | None = None
-    precipitation_type: str | None = None
-    pressure_msl: str | None = None
-    rain: str | None = None
-    rain_probability: str | None = None
-    relative_humidity_2m: str | None = None
-    roughness_length: str | None = None
-    runoff: str | None = None
-    sea_ice_thickness: str | None = None
-    sea_level_height_msl: str | None = None
-    sea_surface_temperature: str | None = None
-    sea_water_salinity: str | None = None
-    sensible_heat_flux: str | None = None
-    shortwave_radiation: str | None = None
-    shortwave_radiation_clear_sky: str | None = None
-    shortwave_radiation_clear_sky_instant: str | None = None
-    shortwave_radiation_instant: str | None = None
-    showers: str | None = None
-    snow_density: str | None = None
-    snow_depth: str | None = None
-    snow_depth_water_equivalent: str | None = None
-    snow_height: str | None = None
-    snowfall: str | None = None
-    snowfall_height: str | None = None
-    snowfall_probability: str | None = None
-    snowfall_water_equivalent: str | None = None
-    soil_moisture_0_to_100cm: str | None = None
-    soil_moisture_0_to_10cm: str | None = None
-    soil_moisture_0_to_1cm: str | None = None
-    soil_moisture_0_to_7cm: str | None = None
-    soil_moisture_100_to_200cm: str | None = None
-    soil_moisture_100_to_255cm: str | None = None
-    soil_moisture_100_to_300cm: str | None = None
-    soil_moisture_10_to_35cm: str | None = None
-    soil_moisture_10_to_40cm: str | None = None
-    soil_moisture_1_to_3cm: str | None = None
-    soil_moisture_243_to_729cm: str | None = None
-    soil_moisture_27_to_81cm: str | None = None
-    soil_moisture_28_to_100cm: str | None = None
-    soil_moisture_35_to_100cm: str | None = None
-    soil_moisture_3_to_9cm: str | None = None
-    soil_moisture_40_to_100cm: str | None = None
-    soil_moisture_729_to_2187cm: str | None = None
-    soil_moisture_7_to_28cm: str | None = None
-    soil_moisture_81_to_243cm: str | None = None
-    soil_moisture_9_to_27cm: str | None = None
-    soil_moisture_index_0_to_100cm: str | None = None
-    soil_moisture_index_0_to_7cm: str | None = None
-    soil_moisture_index_100_to_255cm: str | None = None
-    soil_moisture_index_28_to_100cm: str | None = None
-    soil_moisture_index_7_to_28cm: str | None = None
-    soil_temperature_0_to_100cm: str | None = None
-    soil_temperature_0_to_10cm: str | None = None
-    soil_temperature_0_to_7cm: str | None = None
-    soil_temperature_0cm: str | None = None
-    soil_temperature_100_to_200cm: str | None = None
-    soil_temperature_100_to_255cm: str | None = None
-    soil_temperature_100_to_300cm: str | None = None
-    soil_temperature_10_to_35cm: str | None = None
-    soil_temperature_10_to_40cm: str | None = None
-    soil_temperature_1458cm: str | None = None
-    soil_temperature_162cm: str | None = None
-    soil_temperature_18cm: str | None = None
-    soil_temperature_28_to_100cm: str | None = None
-    soil_temperature_35_to_100cm: str | None = None
-    soil_temperature_40_to_100cm: str | None = None
-    soil_temperature_486cm: str | None = None
-    soil_temperature_54cm: str | None = None
-    soil_temperature_6cm: str | None = None
-    soil_temperature_7_to_28cm: str | None = None
-    sunshine_duration: str | None = None
-    surface_pressure: str | None = None
-    surface_temperature: str | None = None
-    temperature_100m: str | None = None
-    temperature_120m: str | None = None
-    temperature_150m: str | None = None
-    temperature_180m: str | None = None
-    temperature_200m: str | None = None
-    temperature_20m: str | None = None
-    temperature_2m: str | None = None
-    temperature_2m_max: str | None = None
-    temperature_2m_min: str | None = None
-    temperature_40m: str | None = None
-    temperature_50m: str | None = None
-    temperature_80m: str | None = None
-    terrestrial_radiation: str | None = None
-    terrestrial_radiation_instant: str | None = None
-    thunderstorm_probability: str | None = None
-    total_column_integrated_water_vapour: str | None = None
-    total_column_water: str | None = None
-    updraft: str | None = None
-    uv_index: str | None = None
-    uv_index_clear_sky: str | None = None
-    vapour_pressure_deficit: str | None = None
-    visibility: str | None = None
-    wave_direction: str | None = None
-    wave_height: str | None = None
-    wave_peak_period: str | None = None
-    wave_period: str | None = None
-    weather_code: str | None = None
-    wet_bulb_temperature_2m: str | None = None
-    wind_direction_100m: str | None = None
-    wind_direction_10m: str | None = None
-    wind_direction_120m: str | None = None
-    wind_direction_140m: str | None = None
-    wind_direction_150m: str | None = None
-    wind_direction_160m: str | None = None
-    wind_direction_180m: str | None = None
-    wind_direction_200m: str | None = None
-    wind_direction_20m: str | None = None
-    wind_direction_30m: str | None = None
-    wind_direction_40m: str | None = None
-    wind_direction_50m: str | None = None
-    wind_direction_70m: str | None = None
-    wind_direction_80m: str | None = None
-    wind_gusts_10m: str | None = None
-    wind_speed_100m: str | None = None
-    wind_speed_10m: str | None = None
-    wind_speed_120m: str | None = None
-    wind_speed_140m: str | None = None
-    wind_speed_150m: str | None = None
-    wind_speed_160m: str | None = None
-    wind_speed_180m: str | None = None
-    wind_speed_200m: str | None = None
-    wind_speed_20m: str | None = None
-    wind_speed_30m: str | None = None
-    wind_speed_40m: str | None = None
-    wind_speed_50m: str | None = None
-    wind_speed_70m: str | None = None
-    wind_speed_80m: str | None = None
-
-    # Pressure level units, keyed by the pressure level in hPa
-    pressure_levels: dict[int, PressureLevelForecastUnits] | None = None
-
-    # Height level units, keyed by the height above ground in meters
-    height_levels: dict[int, HeightLevelForecastUnits] | None = None
-
-    # Only set for ensemble mean models: the units of the spread
-    spread: CurrentForecastUnits | None = None
-
-    @classmethod
-    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
-        """Group the levels and spread, and drop previous run units."""
-        return _split_height_levels(
-            _split_pressure_levels(_split_spread(_drop_suffixed(d))), cls
-        )
-
-
 class PressureLevelVariable(StrEnum):
     """Enum to represent the variables available on pressure levels.
 
@@ -1172,8 +773,435 @@ class HeightLevelForecastUnits(DataClassORJSONMixin):
 
 
 @dataclass
-class HourlyForecast(DataClassORJSONMixin):
-    """Hourly weather data."""
+class CurrentForecastBase(DataClassORJSONMixin):
+    """Current weather conditions, of the forecast or of one of its groups.
+
+    The groups, the previous model runs and the spread, have the same
+    variables as the forecast, but no groups of their own.
+    """
+
+    time: datetime
+    interval: int
+    air_density_2m: float | None = None
+    albedo: float | None = None
+    apparent_temperature: float | None = None
+    boundary_layer_height: float | None = None
+    cape: float | None = None
+    cloud_base: float | None = None
+    cloud_cover: int | None = None
+    cloud_cover_2m: int | None = None
+    cloud_cover_high: int | None = None
+    cloud_cover_low: int | None = None
+    cloud_cover_mid: int | None = None
+    cloud_top: float | None = None
+    convective_cloud_base: float | None = None
+    convective_cloud_top: float | None = None
+    convective_inhibition: float | None = None
+    dew_point_2m: float | None = None
+    diffuse_radiation: float | None = None
+    diffuse_radiation_instant: float | None = None
+    direct_normal_irradiance: float | None = None
+    direct_normal_irradiance_instant: float | None = None
+    direct_radiation: float | None = None
+    direct_radiation_instant: float | None = None
+    et0_fao_evapotranspiration: float | None = None
+    evapotranspiration: float | None = None
+    freezing_level_height: float | None = None
+    freezing_rain_probability: int | None = None
+    global_tilted_irradiance: float | None = None
+    global_tilted_irradiance_instant: float | None = None
+    growing_degree_days_base_0_limit_50: float | None = None
+    hail: float | None = None
+    ice_pellets_probability: int | None = None
+    is_day: bool | None = None
+    k_index: float | None = None
+    latent_heat_flux: float | None = None
+    leaf_wetness_probability: int | None = None
+    lifted_index: float | None = None
+    lightning_density: float | None = None
+    lightning_potential: float | None = None
+    mass_density_8m: float | None = None
+    ocean_current_direction: float | None = None
+    ocean_current_velocity: float | None = None
+    potential_evapotranspiration: float | None = None
+    precipitation: float | None = None
+    precipitation_probability: int | None = None
+    precipitation_type: int | None = None
+    pressure_msl: float | None = None
+    rain: float | None = None
+    rain_probability: int | None = None
+    relative_humidity_2m: int | None = None
+    roughness_length: float | None = None
+    runoff: float | None = None
+    sea_ice_thickness: float | None = None
+    sea_level_height_msl: float | None = None
+    sea_surface_temperature: float | None = None
+    sea_water_salinity: float | None = None
+    sensible_heat_flux: float | None = None
+    shortwave_radiation: float | None = None
+    shortwave_radiation_clear_sky: float | None = None
+    shortwave_radiation_clear_sky_instant: float | None = None
+    shortwave_radiation_instant: float | None = None
+    showers: float | None = None
+    snow_density: float | None = None
+    snow_depth: float | None = None
+    snow_depth_water_equivalent: float | None = None
+    snow_height: float | None = None
+    snowfall: float | None = None
+    snowfall_height: float | None = None
+    snowfall_probability: int | None = None
+    snowfall_water_equivalent: float | None = None
+    soil_moisture_0_to_100cm: float | None = None
+    soil_moisture_0_to_10cm: float | None = None
+    soil_moisture_0_to_1cm: float | None = None
+    soil_moisture_0_to_7cm: float | None = None
+    soil_moisture_100_to_200cm: float | None = None
+    soil_moisture_100_to_255cm: float | None = None
+    soil_moisture_100_to_300cm: float | None = None
+    soil_moisture_10_to_35cm: float | None = None
+    soil_moisture_10_to_40cm: float | None = None
+    soil_moisture_1_to_3cm: float | None = None
+    soil_moisture_243_to_729cm: float | None = None
+    soil_moisture_27_to_81cm: float | None = None
+    soil_moisture_28_to_100cm: float | None = None
+    soil_moisture_35_to_100cm: float | None = None
+    soil_moisture_3_to_9cm: float | None = None
+    soil_moisture_40_to_100cm: float | None = None
+    soil_moisture_729_to_2187cm: float | None = None
+    soil_moisture_7_to_28cm: float | None = None
+    soil_moisture_81_to_243cm: float | None = None
+    soil_moisture_9_to_27cm: float | None = None
+    soil_moisture_index_0_to_100cm: float | None = None
+    soil_moisture_index_0_to_7cm: float | None = None
+    soil_moisture_index_100_to_255cm: float | None = None
+    soil_moisture_index_28_to_100cm: float | None = None
+    soil_moisture_index_7_to_28cm: float | None = None
+    soil_temperature_0_to_100cm: float | None = None
+    soil_temperature_0_to_10cm: float | None = None
+    soil_temperature_0_to_7cm: float | None = None
+    soil_temperature_0cm: float | None = None
+    soil_temperature_100_to_200cm: float | None = None
+    soil_temperature_100_to_255cm: float | None = None
+    soil_temperature_100_to_300cm: float | None = None
+    soil_temperature_10_to_35cm: float | None = None
+    soil_temperature_10_to_40cm: float | None = None
+    soil_temperature_1458cm: float | None = None
+    soil_temperature_162cm: float | None = None
+    soil_temperature_18cm: float | None = None
+    soil_temperature_28_to_100cm: float | None = None
+    soil_temperature_35_to_100cm: float | None = None
+    soil_temperature_40_to_100cm: float | None = None
+    soil_temperature_486cm: float | None = None
+    soil_temperature_54cm: float | None = None
+    soil_temperature_6cm: float | None = None
+    soil_temperature_7_to_28cm: float | None = None
+    sunshine_duration: float | None = None
+    surface_pressure: float | None = None
+    surface_temperature: float | None = None
+    temperature_100m: float | None = None
+    temperature_120m: float | None = None
+    temperature_150m: float | None = None
+    temperature_180m: float | None = None
+    temperature_200m: float | None = None
+    temperature_20m: float | None = None
+    temperature_2m: float | None = None
+    temperature_2m_max: float | None = None
+    temperature_2m_min: float | None = None
+    temperature_40m: float | None = None
+    temperature_50m: float | None = None
+    temperature_80m: float | None = None
+    terrestrial_radiation: float | None = None
+    terrestrial_radiation_instant: float | None = None
+    thunderstorm_probability: int | None = None
+    total_column_integrated_water_vapour: float | None = None
+    total_column_water: float | None = None
+    updraft: float | None = None
+    uv_index: float | None = None
+    uv_index_clear_sky: float | None = None
+    vapour_pressure_deficit: float | None = None
+    visibility: float | None = None
+    wave_direction: int | None = None
+    wave_height: float | None = None
+    wave_peak_period: float | None = None
+    wave_period: float | None = None
+    weather_code: int | None = None
+    wet_bulb_temperature_2m: float | None = None
+    wind_direction_100m: int | None = None
+    wind_direction_10m: int | None = None
+    wind_direction_120m: int | None = None
+    wind_direction_140m: int | None = None
+    wind_direction_150m: int | None = None
+    wind_direction_160m: int | None = None
+    wind_direction_180m: int | None = None
+    wind_direction_200m: int | None = None
+    wind_direction_20m: int | None = None
+    wind_direction_30m: int | None = None
+    wind_direction_40m: int | None = None
+    wind_direction_50m: int | None = None
+    wind_direction_70m: int | None = None
+    wind_direction_80m: int | None = None
+    wind_gusts_10m: float | None = None
+    wind_speed_100m: float | None = None
+    wind_speed_10m: float | None = None
+    wind_speed_120m: float | None = None
+    wind_speed_140m: float | None = None
+    wind_speed_150m: float | None = None
+    wind_speed_160m: float | None = None
+    wind_speed_180m: float | None = None
+    wind_speed_200m: float | None = None
+    wind_speed_20m: float | None = None
+    wind_speed_30m: float | None = None
+    wind_speed_40m: float | None = None
+    wind_speed_50m: float | None = None
+    wind_speed_70m: float | None = None
+    wind_speed_80m: float | None = None
+
+    # Pressure level data, keyed by the pressure level in hPa
+    pressure_levels: dict[int, PressureLevelCurrent] | None = None
+
+    # Height level data, keyed by the height above ground in meters
+    height_levels: dict[int, HeightLevelCurrent] | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the pressure and height levels."""
+        return _split_height_levels(_split_pressure_levels(d), cls)
+
+
+@dataclass
+class CurrentForecast(CurrentForecastBase):
+    """Current weather conditions."""
+
+    # Only set for previous model runs, keyed by how many days before each
+    # hour the forecast was made
+    previous_days: dict[int, CurrentForecastBase] | None = None
+
+    # Only set for ensemble mean models: the spread over the members
+    spread: CurrentForecastBase | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group previous runs, the spread, and pressure and height levels."""
+        return _split_height_levels(
+            _split_pressure_levels(_split_spread(_split_previous_days(d))), cls
+        )
+
+
+@dataclass
+class CurrentForecastUnitsBase(DataClassORJSONMixin):
+    """Current weather conditions units, of the forecast or of its spread."""
+
+    time: TimeFormat | None = None
+    interval: str | None = None
+    air_density_2m: str | None = None
+    albedo: str | None = None
+    apparent_temperature: str | None = None
+    boundary_layer_height: str | None = None
+    cape: str | None = None
+    cloud_base: str | None = None
+    cloud_cover: str | None = None
+    cloud_cover_2m: str | None = None
+    cloud_cover_high: str | None = None
+    cloud_cover_low: str | None = None
+    cloud_cover_mid: str | None = None
+    cloud_top: str | None = None
+    convective_cloud_base: str | None = None
+    convective_cloud_top: str | None = None
+    convective_inhibition: str | None = None
+    dew_point_2m: str | None = None
+    diffuse_radiation: str | None = None
+    diffuse_radiation_instant: str | None = None
+    direct_normal_irradiance: str | None = None
+    direct_normal_irradiance_instant: str | None = None
+    direct_radiation: str | None = None
+    direct_radiation_instant: str | None = None
+    et0_fao_evapotranspiration: str | None = None
+    evapotranspiration: str | None = None
+    freezing_level_height: str | None = None
+    freezing_rain_probability: str | None = None
+    global_tilted_irradiance: str | None = None
+    global_tilted_irradiance_instant: str | None = None
+    growing_degree_days_base_0_limit_50: str | None = None
+    hail: str | None = None
+    ice_pellets_probability: str | None = None
+    is_day: str | None = None
+    k_index: str | None = None
+    latent_heat_flux: str | None = None
+    leaf_wetness_probability: str | None = None
+    lifted_index: str | None = None
+    lightning_density: str | None = None
+    lightning_potential: str | None = None
+    mass_density_8m: str | None = None
+    ocean_current_direction: str | None = None
+    ocean_current_velocity: str | None = None
+    potential_evapotranspiration: str | None = None
+    precipitation: str | None = None
+    precipitation_probability: str | None = None
+    precipitation_type: str | None = None
+    pressure_msl: str | None = None
+    rain: str | None = None
+    rain_probability: str | None = None
+    relative_humidity_2m: str | None = None
+    roughness_length: str | None = None
+    runoff: str | None = None
+    sea_ice_thickness: str | None = None
+    sea_level_height_msl: str | None = None
+    sea_surface_temperature: str | None = None
+    sea_water_salinity: str | None = None
+    sensible_heat_flux: str | None = None
+    shortwave_radiation: str | None = None
+    shortwave_radiation_clear_sky: str | None = None
+    shortwave_radiation_clear_sky_instant: str | None = None
+    shortwave_radiation_instant: str | None = None
+    showers: str | None = None
+    snow_density: str | None = None
+    snow_depth: str | None = None
+    snow_depth_water_equivalent: str | None = None
+    snow_height: str | None = None
+    snowfall: str | None = None
+    snowfall_height: str | None = None
+    snowfall_probability: str | None = None
+    snowfall_water_equivalent: str | None = None
+    soil_moisture_0_to_100cm: str | None = None
+    soil_moisture_0_to_10cm: str | None = None
+    soil_moisture_0_to_1cm: str | None = None
+    soil_moisture_0_to_7cm: str | None = None
+    soil_moisture_100_to_200cm: str | None = None
+    soil_moisture_100_to_255cm: str | None = None
+    soil_moisture_100_to_300cm: str | None = None
+    soil_moisture_10_to_35cm: str | None = None
+    soil_moisture_10_to_40cm: str | None = None
+    soil_moisture_1_to_3cm: str | None = None
+    soil_moisture_243_to_729cm: str | None = None
+    soil_moisture_27_to_81cm: str | None = None
+    soil_moisture_28_to_100cm: str | None = None
+    soil_moisture_35_to_100cm: str | None = None
+    soil_moisture_3_to_9cm: str | None = None
+    soil_moisture_40_to_100cm: str | None = None
+    soil_moisture_729_to_2187cm: str | None = None
+    soil_moisture_7_to_28cm: str | None = None
+    soil_moisture_81_to_243cm: str | None = None
+    soil_moisture_9_to_27cm: str | None = None
+    soil_moisture_index_0_to_100cm: str | None = None
+    soil_moisture_index_0_to_7cm: str | None = None
+    soil_moisture_index_100_to_255cm: str | None = None
+    soil_moisture_index_28_to_100cm: str | None = None
+    soil_moisture_index_7_to_28cm: str | None = None
+    soil_temperature_0_to_100cm: str | None = None
+    soil_temperature_0_to_10cm: str | None = None
+    soil_temperature_0_to_7cm: str | None = None
+    soil_temperature_0cm: str | None = None
+    soil_temperature_100_to_200cm: str | None = None
+    soil_temperature_100_to_255cm: str | None = None
+    soil_temperature_100_to_300cm: str | None = None
+    soil_temperature_10_to_35cm: str | None = None
+    soil_temperature_10_to_40cm: str | None = None
+    soil_temperature_1458cm: str | None = None
+    soil_temperature_162cm: str | None = None
+    soil_temperature_18cm: str | None = None
+    soil_temperature_28_to_100cm: str | None = None
+    soil_temperature_35_to_100cm: str | None = None
+    soil_temperature_40_to_100cm: str | None = None
+    soil_temperature_486cm: str | None = None
+    soil_temperature_54cm: str | None = None
+    soil_temperature_6cm: str | None = None
+    soil_temperature_7_to_28cm: str | None = None
+    sunshine_duration: str | None = None
+    surface_pressure: str | None = None
+    surface_temperature: str | None = None
+    temperature_100m: str | None = None
+    temperature_120m: str | None = None
+    temperature_150m: str | None = None
+    temperature_180m: str | None = None
+    temperature_200m: str | None = None
+    temperature_20m: str | None = None
+    temperature_2m: str | None = None
+    temperature_2m_max: str | None = None
+    temperature_2m_min: str | None = None
+    temperature_40m: str | None = None
+    temperature_50m: str | None = None
+    temperature_80m: str | None = None
+    terrestrial_radiation: str | None = None
+    terrestrial_radiation_instant: str | None = None
+    thunderstorm_probability: str | None = None
+    total_column_integrated_water_vapour: str | None = None
+    total_column_water: str | None = None
+    updraft: str | None = None
+    uv_index: str | None = None
+    uv_index_clear_sky: str | None = None
+    vapour_pressure_deficit: str | None = None
+    visibility: str | None = None
+    wave_direction: str | None = None
+    wave_height: str | None = None
+    wave_peak_period: str | None = None
+    wave_period: str | None = None
+    weather_code: str | None = None
+    wet_bulb_temperature_2m: str | None = None
+    wind_direction_100m: str | None = None
+    wind_direction_10m: str | None = None
+    wind_direction_120m: str | None = None
+    wind_direction_140m: str | None = None
+    wind_direction_150m: str | None = None
+    wind_direction_160m: str | None = None
+    wind_direction_180m: str | None = None
+    wind_direction_200m: str | None = None
+    wind_direction_20m: str | None = None
+    wind_direction_30m: str | None = None
+    wind_direction_40m: str | None = None
+    wind_direction_50m: str | None = None
+    wind_direction_70m: str | None = None
+    wind_direction_80m: str | None = None
+    wind_gusts_10m: str | None = None
+    wind_speed_100m: str | None = None
+    wind_speed_10m: str | None = None
+    wind_speed_120m: str | None = None
+    wind_speed_140m: str | None = None
+    wind_speed_150m: str | None = None
+    wind_speed_160m: str | None = None
+    wind_speed_180m: str | None = None
+    wind_speed_200m: str | None = None
+    wind_speed_20m: str | None = None
+    wind_speed_30m: str | None = None
+    wind_speed_40m: str | None = None
+    wind_speed_50m: str | None = None
+    wind_speed_70m: str | None = None
+    wind_speed_80m: str | None = None
+
+    # Pressure level units, keyed by the pressure level in hPa
+    pressure_levels: dict[int, PressureLevelForecastUnits] | None = None
+
+    # Height level units, keyed by the height above ground in meters
+    height_levels: dict[int, HeightLevelForecastUnits] | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the pressure and height levels."""
+        return _split_height_levels(_split_pressure_levels(d), cls)
+
+
+@dataclass
+class CurrentForecastUnits(CurrentForecastUnitsBase):
+    """Current weather conditions units."""
+
+    # Only set for ensemble mean models: the units of the spread
+    spread: CurrentForecastUnitsBase | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the levels and spread, and drop previous run units."""
+        return _split_height_levels(
+            _split_pressure_levels(_split_spread(_drop_suffixed(d))), cls
+        )
+
+
+@dataclass
+class HourlyForecastBase(DataClassORJSONMixin):
+    """Hourly weather data, of the forecast or of one of its groups.
+
+    The groups, the ensemble members, the previous model runs, and the
+    spread, have the same variables as the forecast, but no groups of their
+    own; only a member can have a spread.
+    """
 
     time: list[datetime]
     air_density_2m: list[float | None] | None = None
@@ -1356,15 +1384,38 @@ class HourlyForecast(DataClassORJSONMixin):
     # Height level data, keyed by the height above ground in meters
     height_levels: dict[int, HeightLevelForecast] | None = None
 
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the pressure and height levels."""
+        return _split_height_levels(_split_pressure_levels(d), cls)
+
+
+@dataclass
+class HourlyForecastMember(HourlyForecastBase):
+    """Hourly weather data of a single ensemble member."""
+
+    # Only set for ensemble mean models: the spread of this member
+    spread: HourlyForecastBase | None = None
+
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the spread, and the pressure and height levels."""
+        return _split_height_levels(_split_pressure_levels(_split_spread(d)), cls)
+
+
+@dataclass
+class HourlyForecast(HourlyForecastBase):
+    """Hourly weather data."""
+
     # Only set for ensemble data, keyed by member number
-    members: dict[int, HourlyForecast] | None = None
+    members: dict[int, HourlyForecastMember] | None = None
 
     # Only set for previous model runs, keyed by how many days before each
     # hour the forecast was made
-    previous_days: dict[int, HourlyForecast] | None = None
+    previous_days: dict[int, HourlyForecastBase] | None = None
 
     # Only set for ensemble mean models: the spread over the members
-    spread: HourlyForecast | None = None
+    spread: HourlyForecastBase | None = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -1383,8 +1434,8 @@ class HourlyForecast(DataClassORJSONMixin):
 
 
 @dataclass
-class HourlyForecastUnits(DataClassORJSONMixin):
-    """Hourly weather data units."""
+class HourlyForecastUnitsBase(DataClassORJSONMixin):
+    """Hourly weather data units, of the forecast or of its spread."""
 
     time: TimeFormat | None = None
     air_density_2m: str | None = None
@@ -1567,8 +1618,18 @@ class HourlyForecastUnits(DataClassORJSONMixin):
     # Height level units, keyed by the height above ground in meters
     height_levels: dict[int, HeightLevelForecastUnits] | None = None
 
+    @classmethod
+    def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
+        """Group the pressure and height levels."""
+        return _split_height_levels(_split_pressure_levels(d), cls)
+
+
+@dataclass
+class HourlyForecastUnits(HourlyForecastUnitsBase):
+    """Hourly weather data units."""
+
     # Only set for ensemble mean models: the units of the spread
-    spread: HourlyForecastUnits | None = None
+    spread: HourlyForecastUnitsBase | None = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -1593,8 +1654,8 @@ class Minutely15ForecastUnits(HourlyForecastUnits):
 
 
 @dataclass
-class DailyForecast(DataClassORJSONMixin):
-    """Daily weather data."""
+class DailyForecastBase(DataClassORJSONMixin):
+    """Daily weather data, of the forecast or of a single ensemble member."""
 
     time: list[date]
     apparent_temperature_max: list[float | None] | None = None
@@ -1691,8 +1752,13 @@ class DailyForecast(DataClassORJSONMixin):
     wind_speed_200m_mean: list[float | None] | None = None
     wind_speed_200m_min: list[float | None] | None = None
 
+
+@dataclass
+class DailyForecast(DailyForecastBase):
+    """Daily weather data."""
+
     # Only set for ensemble data, keyed by member number
-    members: dict[int, DailyForecast] | None = None
+    members: dict[int, DailyForecastBase] | None = None
 
     @classmethod
     def __pre_deserialize__(cls, d: dict[Any, Any]) -> dict[Any, Any]:
@@ -1806,8 +1872,8 @@ class DailyForecastUnits(DataClassORJSONMixin):
 
 
 @dataclass
-class Forecast(DataClassORJSONMixin):
-    """Weather forecast."""
+class ForecastBase(DataClassORJSONMixin):
+    """Weather forecast, of all models together or of a single model."""
 
     elevation: float
     generation_time_ms: float = field(metadata=field_options(alias="generationtime_ms"))
@@ -1825,5 +1891,10 @@ class Forecast(DataClassORJSONMixin):
     minutely_15_units: Minutely15ForecastUnits | None = None
     minutely_15: Minutely15Forecast | None = None
 
+
+@dataclass
+class Forecast(ForecastBase):
+    """Weather forecast."""
+
     # Only set when multiple models were requested, keyed by the model name
-    models: dict[str, Forecast] | None = None
+    models: dict[str, ForecastBase] | None = None
