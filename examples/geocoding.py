@@ -13,6 +13,13 @@ async def main() -> None:
         )
         print(search)
 
+        # A result can be looked up again later, by its ID
+        if search.results:
+            location = await open_meteo.geocoding_by_id(
+                location_id=search.results[0].geo_id,
+            )
+            print(location)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
