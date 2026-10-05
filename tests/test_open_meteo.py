@@ -600,6 +600,49 @@ async def test_forecast_height_levels_incomplete(
         )
 
 
+async def test_forecast_precipitation_probabilities(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the precipitation type probabilities parse as whole percentages.
+
+    Only NBM CONUS has these, so the other fixtures have no data for them.
+    """
+    mock_endpoint(responses, FORECAST_URL, "forecast_precipitation_probabilities.json")
+
+    forecast = await open_meteo_client.forecast(
+        latitude=40.71,
+        longitude=-74.01,
+        timezone="America/New_York",
+        models=["ncep_nbm_conus"],
+        hourly=[
+            HourlyParameters.FREEZING_RAIN_PROBABILITY,
+            HourlyParameters.ICE_PELLETS_PROBABILITY,
+            HourlyParameters.RAIN_PROBABILITY,
+            HourlyParameters.SNOWFALL_PROBABILITY,
+            HourlyParameters.THUNDERSTORM_PROBABILITY,
+        ],
+        forecast_days=1,
+    )
+
+    hourly = forecast.hourly
+    assert hourly is not None
+    assert hourly.rain_probability is not None
+    assert hourly.rain_probability[:4] == [24, 3, 0, 0]
+    for values in (
+        hourly.freezing_rain_probability,
+        hourly.ice_pellets_probability,
+        hourly.rain_probability,
+        hourly.snowfall_probability,
+        hourly.thunderstorm_probability,
+    ):
+        assert values is not None
+        assert all(isinstance(value, int) for value in values)
+
+    assert forecast.hourly_units is not None
+    assert forecast.hourly_units.rain_probability == "%"
+
+
 async def test_forecast_pressure_level_sections(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
@@ -1185,6 +1228,41 @@ async def test_marine_ensemble_members(
     assert ecmwf.daily_units.wave_height_max == "m"
 
 
+async def test_marine_tertiary_swell(
+    responses: aioresponses,
+    open_meteo_client: OpenMeteo,
+) -> None:
+    """Test the tertiary swell parses, of the only model that has it.
+
+    The direction is in whole degrees, the height and period are not.
+    """
+    mock_endpoint(responses, MARINE_URL, "marine_tertiary_swell.json")
+
+    marine = await open_meteo_client.marine(
+        latitude=45.0,
+        longitude=-20.0,
+        models=["ncep_gfswave025"],
+        hourly=[
+            MarineParameters.TERTIARY_SWELL_WAVE_HEIGHT,
+            MarineParameters.TERTIARY_SWELL_WAVE_DIRECTION,
+            MarineParameters.TERTIARY_SWELL_WAVE_PERIOD,
+        ],
+        forecast_days=1,
+    )
+
+    hourly = marine.hourly
+    assert hourly is not None
+    assert hourly.tertiary_swell_wave_direction is not None
+    assert hourly.tertiary_swell_wave_direction[:4] == [278, 278, 279, 213]
+    assert hourly.tertiary_swell_wave_height is not None
+    assert hourly.tertiary_swell_wave_height[:4] == [0.4, 0.4, 0.4, 0.38]
+    assert hourly.tertiary_swell_wave_period is not None
+    assert hourly.tertiary_swell_wave_period[:4] == [7.35, 7.3, 7.25, 6.75]
+
+    assert marine.hourly_units is not None
+    assert marine.hourly_units.tertiary_swell_wave_direction == "°"
+
+
 async def test_flood(
     responses: aioresponses,
     open_meteo_client: OpenMeteo,
@@ -1360,9 +1438,20 @@ async def test_ensemble(
         forecast_days=1,
     )
 
-    query = requested_query(responses)
-    assert query["models"] == "cmc_gem_geps"
-    assert query["hourly"] == "temperature_2m,temperature_850hPa"
+    # The whole query, so a parameter the ensemble doesn't pass on shows up
+    assert requested_query(responses) == {
+        "daily": "temperature_2m_max",
+        "forecast_days": "1",
+        "hourly": "temperature_2m,temperature_850hPa",
+        "latitude": "52.27",
+        "longitude": "6.87417",
+        "models": "cmc_gem_geps",
+        "precipitation_unit": "mm",
+        "temperature_unit": "celsius",
+        "timeformat": "iso8601",
+        "timezone": "UTC",
+        "wind_speed_unit": "kmh",
+    }
 
     hourly = forecast.hourly
     assert hourly is not None
@@ -1794,12 +1883,26 @@ async def test_seasonal(
         forecast_days=31,
     )
 
-    query = requested_query(responses)
-    assert query["weekly"] == (
-        "temperature_2m_mean,temperature_2m_anomaly,"
-        "temperature_2m_anomaly_gt1,temperature_2m_efi"
-    )
-    assert query["monthly"] == "temperature_2m_mean,precipitation_anomaly"
+    # The whole query, so a parameter the seasonal forecast doesn't pass on
+    # shows up
+    assert requested_query(responses) == {
+        "daily": "temperature_2m_max",
+        "forecast_days": "31",
+        "hourly": "temperature_2m",
+        "latitude": "52.27",
+        "longitude": "6.87417",
+        "models": "ecmwf_seasonal_seamless",
+        "monthly": "temperature_2m_mean,precipitation_anomaly",
+        "precipitation_unit": "mm",
+        "temperature_unit": "celsius",
+        "timeformat": "iso8601",
+        "timezone": "UTC",
+        "weekly": (
+            "temperature_2m_mean,temperature_2m_anomaly,"
+            "temperature_2m_anomaly_gt1,temperature_2m_efi"
+        ),
+        "wind_speed_unit": "kmh",
+    }
 
     # The 6-hourly and daily data have the ensemble members
     assert seasonal.hourly is not None
